@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Enimory - A memory game by ENI</title>
+    <link rel="stylesheet" href="./css/style.css"/>
+    <link rel="stylesheet" href="./css/remixicon.css" />
+    <script src="./js/main.js" type="module"></script>
+    <script src="./js/common/show-password-form.js" type="module"></script>
+</head>
+<body>
+<header class="header">
+    <div class="container">
+        <div class="header__container">
+            <a href="/" class="logo">
+                <span>Auction</span>
+            </a>
+
+            <nav id="nav" class="nav" role="navigation">
+                <ul class="nav__list">
+                    <li class="visually-hidden">
+                        <a href="/" aria-current="page">Home</a>
+                    </li>
+
+                    <li>
+                        <a
+                                href="user-auth.html"
+                                class="nav__link"
+                                aria-current="page"
+                        >Sign Up</a
+                        >
+                    </li>
+
+                    <li>
+                        <a
+                                href="user-auth.html"
+                                class="nav__link"
+                                aria-current="page"
+                        >Login</a
+                        >
+                    </li>
+
+                    <li>
+                        <a href="settings.html" class="nav__link"
+                        >Settings</a
+                        >
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="nav__btns">
+                <i class="ri-sun-line" id="theme-toggle"></i>
+                <a
+                        href="enimory.html"
+                        class="button button--outline button--small"
+                >Play</a
+                >
+                <i
+                        class="ri-menu-3-line nav__toggle"
+                        id="nav-toggle"
+                ></i>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="main">
+    <section class="section-content auth__section">
+        <div class="container">
+            <div class="auth__container">
+                <div class="auth__login">
+                    <h2 class="auth__title">Login</h2>
+
+                    <form method="POST" th:action="@{/login}" id="auth__form-login" class="auth-form">
+                        <div class="auth-form__group">
+                            <div class="auth-form__field">
+                                <input
+                                        type="text"
+                                        id="username-login"
+                                        name="username"
+                                        required
+                                        class="auth-form__input"
+                                        placeholder=""
+                                        value="Gaétan"
+                                />
+
+                                <label
+                                        for="username"
+                                        class="auth-form__label"
+                                >Username</label
+                                >
+                            </div>
+
+                            <div class="auth-form__field">
+                                <input
+                                        type="password"
+                                        id="password-login"
+                                        name="password"
+                                        required
+                                        class="auth-form__input"
+                                        placeholder=""
+                                        value="password"
+                                />
+
+                                <label
+                                        for="password-login"
+                                        class="auth-form__label"
+                                >Password</label
+                                >
+                            </div>
+                        </div>
+
+                        <div class="auth-form__actions">
+                            <button
+                                    class="button button--small"
+                                    type="submit"
+                            >
+                                Login
+                            </button>
+                        </div>
+
+                        <p
+                                class="auth-form__message auth-form__message--login"
+                        ></p>
+                    </form>
+                </div>
+
+                <div class="auth__register">
+                    <h2 class="auth__title">Register</h2>
+
+                    <form id="auth__form-register" class="auth-form">
+                        <div class="auth-form__group">
+                            <div class="auth-form__field">
+                                <input
+                                        type="text"
+                                        id="username"
+                                        name="username"
+                                        required
+                                        class="auth-form__input"
+                                        placeholder=""
+                                />
+
+                                <label
+                                        for="username"
+                                        class="auth-form__label"
+                                >Username</label
+                                >
+                            </div>
+
+                            <div class="auth-form__field">
+                                <input
+                                        type="email"
+                                        id="email-register"
+                                        name="email"
+                                        required
+                                        class="auth-form__input"
+                                        placeholder=""
+                                />
+
+                                <label
+                                        for="email-register"
+                                        class="auth-form__label"
+                                >Email</label
+                                >
+                            </div>
+
+                            <div class="auth-form__field">
+                                <input
+                                        type="password"
+                                        id="password-register"
+                                        name="password"
+                                        required
+                                        class="auth-form__input"
+                                        placeholder=""
+                                />
+
+                                <label
+                                        for="password-register"
+                                        class="auth-form__label"
+                                >Password</label
+                                >
+
+                                <i
+                                        id="auth-form__icon"
+                                        class="ri-eye-line"
+                                ></i>
+
+                                <div
+                                        id="password-strength-meter"
+                                        class="strength-meter"
+                                >
+                                    <div
+                                            id="strength-bar"
+                                            class="strength-meter__bar"
+                                    ></div>
+                                </div>
+                            </div>
+
+                            <div class="auth-form__field">
+                                <input
+                                        type="password"
+                                        id="passwordConfirm"
+                                        name="passwordConfirm"
+                                        required
+                                        class="auth-form__input"
+                                        placeholder=""
+                                />
+
+                                <label
+                                        for="passwordConfirm"
+                                        class="auth-form__label"
+                                >Password confirmation</label
+                                >
+                            </div>
+                        </div>
+
+                        <div class="auth-form__actions">
+                            <button
+                                    class="button button--small"
+                                    type="submit"
+                            >
+                                Register
+                            </button>
+
+                            <button
+                                    class="button button--outline button--small"
+                                    type="reset"
+                            >
+                                Reset
+                            </button>
+                        </div>
+
+                        <p
+                                class="auth-form__message auth-form__message--register"
+                        ></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="footer">
+    <div class="container">
+        <div class="footer__container">
+            <p>2024 &copy; All rights reserved</p>
+            <p>
+                Design & development by Cléa, Jean-Baptiste, François et Gaétan (le best)
+            </p>
+        </div>
+    </div>
+</footer>
+</body>
+</html>
