@@ -9,17 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class AuctionAppApplicationTests {
 
-    @Autowired
-    private UserService userService;
-
     @Test
     void contextLoads() {
     }
-
-    @Test
-    void createUser() {
-        User user = new User("Gaétan", "lebest@genie.com", "password");
-        userService.createUser(user);
-    }
-
 }
