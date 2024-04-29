@@ -1,0 +1,84 @@
+/* LOGIN FORM */
+.auth__container {
+    margin-top: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    align-items: center;
+    max-width: var(--max-width-4);
+    margin-inline: auto;
+}
+
+.auth__login,
+.auth__register {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    width: 100%;
+    background-color: var(--text15);
+    border-radius: var(--border-radius-2);
+    padding: var(--space-4);
+}
+
+.auth__register {
+    background-color: initial;
+    padding: 0;
+}
+
+.auth__title {
+    font-size: var(--h5);
+    margin-bottom: var(--space-1);
+}
+
+.auth-form__group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.auth-form__field {
+    position: relative;
+}
+
+.auth-form__input {
+    width: 100%;
+    padding: var(--space-1) 0;
+    margin-bottom: var(--space-2);
+    font-size: var(--body-fs);
+    color: var(--text);
+    border: none;
+    border-bottom: 0.0625rem solid var(--text30);
+    outline: none;
+    background: transparent;
+}
+
+.auth-form__label,
+#auth-form__icon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size: var(--body-fs);
+    pointer-events: none;
+    transition: 0.3s;
+}
+
+#auth-form__icon {
+    left: unset;
+    right: 0;
+    pointer-events: initial;
+    cursor: pointer;
+}
+
+.auth-form__field input:focus + label,
+.auth-form__field input:not(:placeholder-shown) + label {
+    top: -1rem;
+    left: 0;
+    color: var(--primary);
+    font-size: var(--text-small);
+}
+
+.auth-form__actions {
+    margin-top: var(--space-3);
+    display: flex;
+    gap: var(--space-2);
+}

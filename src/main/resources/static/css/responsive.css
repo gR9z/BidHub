@@ -1,0 +1,56 @@
+@media screen and (min-width: 768px) {
+    /* ============================== */
+    /* ======== HEADER & NAV ======== */
+    /* ============================== */
+    .nav {
+        position: initial;
+        margin-left: auto;
+        opacity: 1;
+    }
+
+    .nav__list {
+        display: flex;
+        padding: 0;
+        background-color: initial;
+        gap: var(--space-4);
+    }
+
+    .nav__list li:not(:last-child)::after {
+        content: none;
+    }
+
+    .nav__list a {
+        color: var(--primary);
+    }
+
+    .nav__toggle {
+        display: none;
+    }
+
+    /* ============================== */
+    /* =========== FOOTER =========== */
+    /* ============================== */
+    .footer__container {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    /* ==================================== */
+    /* =========== LANDING PAGE =========== */
+    /* ==================================== */
+    /* ===================================== */
+    /* ============= USER AUTH ============= */
+    /* ===================================== */
+    .auth__container {
+        flex-direction: row;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    /* ===================================== */
+    /* ============= USER AUTH ============= */
+    /* ===================================== */
+    .auth-form__input {
+        margin-bottom: var(--space-1);
+    }
+}
