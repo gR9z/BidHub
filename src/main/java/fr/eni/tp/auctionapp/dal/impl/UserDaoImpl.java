@@ -4,10 +4,13 @@ import fr.eni.tp.auctionapp.bo.User;
 import fr.eni.tp.auctionapp.dal.UserDao;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Optional;
 
 @Repository
@@ -27,7 +30,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Optional<User> selectUserByUsername(String username) {
-        User user = this.jdbcTemplate.queryForObject(SELECT_BY_USERNAME, new BeanPropertyRowMapper<>(User.class), username);
+        User user = this.jdbcTemplate.queryForObject(SELECT_BY_USERNAME, new UserRowMapper(), username);
         return Optional.ofNullable(user);
     }
 
@@ -51,5 +54,25 @@ public class UserDaoImpl implements UserDao {
                 INSERT,
                 namedParameters
         );
+    }
+
+    public class UserRowMapper implements RowMapper<User> {
+        @Override
+        public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+
+           return new User(
+                    rs.getString("username"),
+                    rs.getString("lastname"),
+                    rs.getString("firstname"),
+                    rs.getString("email"),
+                    rs.getString("phone"),
+                    rs.getString("street"),
+                    rs.getString("zipcode"),
+                    rs.getString("city"),
+                    rs.getString("password"),
+                    rs.getInt("credit"),
+                    rs.getBoolean("isAdmin")
+            );
+        }
     }
 }

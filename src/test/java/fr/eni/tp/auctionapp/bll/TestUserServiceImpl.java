@@ -1,9 +1,11 @@
 package fr.eni.tp.auctionapp.bll;
 
 import fr.eni.tp.auctionapp.bo.User;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -14,6 +16,14 @@ public class TestUserServiceImpl {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    @BeforeEach
+    public void setUp() {
+        jdbcTemplate.update("DELETE FROM users");
+    }
+
     @Test
     void contextLoads() {
     }
@@ -21,7 +31,7 @@ public class TestUserServiceImpl {
     @Test
     void createUser() {
         User user = new User(
-                "Gaétan",
+                "user",
                 "Dupont",
                 "Jean",
                 "lebest@genie.com",
@@ -48,13 +58,17 @@ public class TestUserServiceImpl {
                 true
         );
 
-//        userService.createUser(user);
-//        userService.createUser(admin);
+        userService.createUser(user);
+        UserDetails loadedUser = userService.loadUserByUsername("user");
+        User castLoadedUser = (User) loadedUser;
 
-        UserDetails userDetails = userService.loadUserByUsername(user.getUsername());
-        UserDetails adminDetails = userService.loadUserByUsername(admin.getUsername());
+        userService.createUser(admin);
+        UserDetails loadedAdminUser = userService.loadUserByUsername("admin");
+        User castLoadedAdminUser = (User) loadedAdminUser;
 
-        assertThat(userDetails.getUsername()).isEqualTo(user.getUsername());
-        assertThat(adminDetails.getUsername()).isEqualTo(admin.getUsername());
+        assertThat(castLoadedUser.getUsername()).isEqualTo(user.getUsername());
+        assertThat(castLoadedUser.isAdmin()).isFalse();
+        assertThat(castLoadedAdminUser.getUsername()).isEqualTo(admin.getUsername());
+        assertThat(castLoadedAdminUser.isAdmin()).isTrue();
     }
 }
