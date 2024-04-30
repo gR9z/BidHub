@@ -15,28 +15,28 @@
     <h2>My Profile</h2>
 
     <label for="username-input">Pseudo :</label>
-    <input type="text" name="username" id="username-input" disabled th:text="${user.username}">
+    <input type="text" name="username" id="username-input" disabled th:value="${user.username}">
 
     <label for="name-input">Name :</label>
-    <input type="text" name="name" id="name-input" disabled th:text="${user.lastname}">
+    <input type="text" name="name" id="name-input" disabled th:value="${user.lastName}">
 
     <label for="firstname-input">Firstname :</label>
-    <input type="text" name="firstname" id="firstname-input" disabled th:text="${user.firstName}">
+    <input type="text" name="firstname" id="firstname-input" disabled th:value="${user.firstName}">
 
     <label for="email-input">Email :</label>
-    <input type="text" name="email" id="email-input" disabled th:text="${user.email}">
+    <input type="text" name="email" id="email-input" disabled th:value="${user.email}">
 
     <label for="phone-input">Phone :</label>
-    <input type="number" name="phone" id="phone-input" disabled th:text="${user.phone}">
+    <input type="number" name="phone" id="phone-input" disabled th:value="${user.phone}">
 
     <label for="street-input">Street</label>
-    <input type="text" name="street" id="street-input" disabled th:text="${user.street}">
+    <input type="text" name="street" id="street-input" disabled th:value="${user.street}">
 
     <label for="zipcode-input">Zip Code :</label>
-    <input type="number" name="username" id="zipcode-input" disabled th:text="${user.zipCode}">
+    <input type="number" name="username" id="zipcode-input" disabled th:value="${user.zipCode}">
 
     <label for="city-input">City :</label>
-    <input type="text" name="city" id="city-input" disabled th:text="${user.city}">
+    <input type="text" name="city" id="city-input" disabled th:value="${user.city}">
 
     <div class="submit-btns">
         <button type="submit" id="edit-account">Edit</button>

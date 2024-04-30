@@ -16,7 +16,7 @@ import java.util.Optional;
 @Repository
 public class UserDaoImpl implements UserDao {
 
-    private String SELECT_BY_USERNAME = "SELECT * FROM users WHERE username = ?;";
+    private String SELECT_BY_USERNAME = "SELECT * FROM USERS WHERE username = ?;";
     private String INSERT = "INSERT INTO users (username, lastName, firstName, email, phone, street, zipCode, city, password, credit, isAdmin) " +
             "VALUES (:username, :lastName, :firstName, :email, :phone, :street, :zipCode, :city, :password, :credit, :isAdmin);";
 
@@ -61,6 +61,7 @@ public class UserDaoImpl implements UserDao {
         public User mapRow(ResultSet rs, int rowNum) throws SQLException {
 
            return new User(
+                    rs.getInt("userId"),
                     rs.getString("username"),
                     rs.getString("lastname"),
                     rs.getString("firstname"),
