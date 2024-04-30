@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        lang="en"
+        th:fragment="layout-main(pageContent, title)"
+>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title th:replace="${title} ?: ~{}">Auction</title>
+<!--    <link rel="stylesheet" th:href="@{./css/style.css}"/>-->
+<!--    <link rel="stylesheet" th:href="@{./css/remixicon.css}"/>-->
+        <link rel="stylesheet" href="./css/style.css"/>
+        <link rel="stylesheet" href="./css/remixicon.css"/>
+</head>
+
+<body>
+    
+    <header>
+        <div th:replace="~{fragments/fragment-navigation :: frag-navigation}"></div>
+    </header>
+    
+    <main th:replace="${pageContent} ?: ~{}">
+        Contenu de la page
+    </main>
+    
+    <footer>
+        <div th:replace="~{fragments/fragment-footer :: frag-footer}"></div>
+    </footer>
+    
+    <script src="/static/js/main.js" type="module"></script>
+    <script src="/static/js/common/show-password-form.js" type="module"></script>
+</body>
+</html>
