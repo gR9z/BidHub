@@ -1,69 +1,16 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
-<head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Auction House</title>
-    <link rel="stylesheet" href="./css/style.css"/>
-    <link rel="stylesheet" href="./css/remixicon.css" />
-    <script src="./js/main.js" type="module"></script>
-    <script src="./js/common/show-password-form.js" type="module"></script>
-</head>
+<html 
+    lang="en" data-theme="light"
+    xmlns:th="http://www.thymeleaf.org"
+    th:replace="~{layouts/layout :: layout-main(
+        pageContent=~{:: .main},
+        title=~{:: .main-title}
+    )}"
+>
+
 <body>
-<header class="header">
-    <div class="container">
-        <div class="header__container">
-            <a href="/" class="logo">
-                <span>Auction</span>
-            </a>
 
-            <nav id="nav" class="nav" role="navigation">
-                <ul class="nav__list">
-                    <li class="visually-hidden">
-                        <a href="/" aria-current="page">Home</a>
-                    </li>
 
-                    <li>
-                        <a
-                                href="user-auth.html"
-                                class="nav__link"
-                                aria-current="page"
-                        >Sign Up</a
-                        >
-                    </li>
-
-                    <li>
-                        <a
-                                href="user-auth.html"
-                                class="nav__link"
-                                aria-current="page"
-                        >Login</a
-                        >
-                    </li>
-
-                    <li>
-                        <a href="settings.html" class="nav__link"
-                        >Settings</a
-                        >
-                    </li>
-                </ul>
-            </nav>
-
-            <div class="nav__btns">
-                <i class="ri-sun-line" id="theme-toggle"></i>
-                <a
-                        href="#"
-                        class="button button--outline button--small"
-                >Auction!</a
-                >
-                <i
-                        class="ri-menu-3-line nav__toggle"
-                        id="nav-toggle"
-                ></i>
-            </div>
-        </div>
-    </div>
-</header>
 
 <main class="main">
     <section class="section-content auth__section">
@@ -241,15 +188,6 @@
     </section>
 </main>
 
-<footer class="footer">
-    <div class="container">
-        <div class="footer__container">
-            <p>2024 &copy; All rights reserved</p>
-            <p>
-                Design & development by Cléa, Jean-Baptiste, François et Gaétan (le best)
-            </p>
-        </div>
-    </div>
-</footer>
+
 </body>
 </html>
