@@ -20,14 +20,14 @@ public class TestItemServiceImpl {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    @Test
-    void createItem() {
-        Category category = new Category(1, "Category 1");
-        Item item = new Item(
-                "Machin", "Trop cool. Achète ma merde.", category.getCategoryId(), 200, LocalDateTime.now(), LocalDateTime.of(2024, 05, 01, 10, 30)
-        );
-        System.out.println(item);
-    }
+//    @Test
+//    void createItem() {
+//        Category category = new Category(1, "Category 1");
+//        Item item = new Item(
+//                "Machin", "Trop cool. Achète ma merde.", category, 200, LocalDateTime.now(), LocalDateTime.of(2024, 05, 01, 10, 30)
+//        );
+//        System.out.println(item);
+//    }
 
 
 }

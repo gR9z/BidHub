@@ -19,7 +19,7 @@ import java.util.List;
 @Repository
 public class ItemDAOImpl implements ItemDAO {
 
-    private static final String INSERT = "INSERT INTO ITEMS (itemName, description, categoryId, startingPrice, auctionStartingDate, auctionEndingDate) VALUES (:itemName, :description, :startingPrice, :auctionStartingDate, :auctionEndingDate)";
+    private static final String INSERT = "INSERT INTO ITEMS (itemName, description, categoryId, startingPrice, auctionStartingDate, auctionEndingDate, userId) VALUES (:itemName, :description, :categoryId, :startingPrice, :auctionStartingDate, :auctionEndingDate, :userId)";
     private static final String SELECT_BY_ID = "SELECT it.itemId,it.itemName, it.description, cat.label, cat.categoryID, it.sellingPrice, it.startingPrice, it.auctionStartingDate, it.auctionEndingDate, wth.street, wth.zipCode, wth.city, us.username FROM ITEMS AS it" +
             "   INNER JOIN CATEGORIES AS cat ON it.categoryId = cat.categoryId" +
             "   INNER JOIN WITHDRAWALS AS wth ON it.itemId = wth.itemId" +
@@ -51,6 +51,7 @@ public class ItemDAOImpl implements ItemDAO {
         namedParameters.addValue("description", item.getDescription());
         namedParameters.addValue("categoryId", item.getCategory().getCategoryId());
         namedParameters.addValue("startingPrice", item.getStartingPrice());
+        namedParameters.addValue("userId", item.getSeller().getUserId());
         namedParameters.addValue("auctionStartingDate", item.getAuctionStartingDate());
         namedParameters.addValue("auctionEndingDate", item.getAuctionEndingDate());
 

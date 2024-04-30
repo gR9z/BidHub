@@ -55,13 +55,14 @@ public class Item {
         this.withdrawal = withdrawal;
     }
 
-    public Item(String itemName, String description, Category category, int startingPrice, LocalDateTime auctionStartingDate, LocalDateTime auctionEndingDate) {
+    public Item(String itemName, String description, Category category, int startingPrice, LocalDateTime auctionStartingDate, LocalDateTime auctionEndingDate, User seller) {
         this.itemName = itemName;
         this.description = description;
         this.category = category;
         this.startingPrice = startingPrice;
         this.auctionStartingDate = auctionStartingDate;
         this.auctionEndingDate = auctionEndingDate;
+        this.seller = seller;
     }
 
     public Item(int itemId, String itemName, String description, Category category, int sellingPrice,  int startingPrice, LocalDateTime auctionStartingDate, LocalDateTime auctionEndingDate, User seller) {
