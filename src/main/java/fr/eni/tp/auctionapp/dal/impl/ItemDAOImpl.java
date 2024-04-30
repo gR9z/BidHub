@@ -25,6 +25,8 @@ public class ItemDAOImpl implements ItemDAO {
             "   INNER JOIN WITHDRAWALS AS wth ON it.itemId = wth.itemId" +
             "   INNER JOIN USERS AS us ON it.userId = us.userId" +
             "   WHERE it.itemId = :id";
+    private static final String UPDATE = "UPDATE ITEMS SET itemName = :name, description = :description, categoryId = :categoryId, startingPrice = :startingPrice, auctionStartingDate = :auctionStartingDate, auctionEndingDate = :auctionEndingDate WHERE itemId = :itemId";
+    private static final String DELETE = "DELETE FROM ITEMS WHERE itemId = :itemId";
     private static final String SELECT_ALL = "SELECT it.itemName, it.startingPrice, it.auctionEndingDate, us.username, cat.categoryId, cat.label FROM ITEMS AS it" +
             "   INNER JOIN CATEGORIES AS cat ON it.categoryId = cat.categoryId" +
             "   INNER JOIN USERS AS us ON it.userId = us.userId";
@@ -76,12 +78,24 @@ public class ItemDAOImpl implements ItemDAO {
 
     @Override
     public void update(Item item) {
+        MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+        namedParameters.addValue("itemId", item.getItemId());
+        namedParameters.addValue("itemName", item.getItemName());
+        namedParameters.addValue("description", item.getDescription());
+        namedParameters.addValue("categoryId", item.getCategory().getCategoryId());
+        namedParameters.addValue("startingPrice", item.getStartingPrice());
+        namedParameters.addValue("auctionStartingDate", item.getAuctionStartingDate());
+        namedParameters.addValue("auctionEndingDate", item.getAuctionEndingDate());
 
+        namedParameterJdbcTemplate.update(UPDATE, namedParameters);
     }
 
     @Override
     public void delete(Item item) {
+        MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+        namedParameters.addValue("id", item.getItemId());
 
+        namedParameterJdbcTemplate.update(DELETE, namedParameters);
     }
 
     @Override
