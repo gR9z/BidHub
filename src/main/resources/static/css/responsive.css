@@ -44,6 +44,10 @@
     .auth__container {
         flex-direction: row;
     }
+
+    .auth-form__field-row {
+        flex-direction: row;
+    }
 }
 
 @media screen and (min-width: 1024px) {

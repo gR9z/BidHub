@@ -10,7 +10,7 @@
 }
 
 .logo {
-    width: clamp(2.5rem, 1.071rem + 3.81vw, 4.5rem);
+    width: clamp(10rem, 7rem + 8vw, 14rem);
     display: flex;
     align-items: center;
     gap: var(--space-3);

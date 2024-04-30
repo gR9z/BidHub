@@ -80,11 +80,6 @@
     --border-radius-8: 6rem;
     --border-radius-circle: 50%;
 
-    /* ===== Box Shadow ===== */
-    --box-shadow: 6.7px 6.7px 5.3px rgba(0, 0, 0, 0.028),
-    22.3px 22.3px 17.9px rgba(0, 0, 0, 0.042),
-    100px 100px 80px rgba(0, 0, 0, 0.07);
-
     /* ===== Max Width ===== */
     --max-width-1: 20rem;
     --max-width-2: 30rem;
@@ -183,6 +178,12 @@
     --accent85: hsl(22, 85%, 49%, 85%);
     --accent90: hsl(22, 85%, 49%, 90%);
     --accent95: hsl(22, 85%, 49%, 95%);
+
+    /* ===== Box Shadow ===== */
+    --box-shadow: 0px 2px 3.6px rgba(0, 0, 0, 0.024),
+    0px 5.6px 10px rgba(0, 0, 0, 0.035),
+    0px 13.6px 24.1px rgba(0, 0, 0, 0.046),
+    0px 45px 80px rgba(0, 0, 0, 0.07);
 }
 
 /* ========================================= */
@@ -275,7 +276,13 @@
     --accent85: hsl(22, 85%, 51%, 85%);
     --accent90: hsl(22, 85%, 51%, 90%);
     --accent95: hsl(22, 85%, 51%, 95%);
+
+    --box-shadow: 0px 2px 3.6px rgba(255, 255, 255, 0.024),
+    0px 5.6px 10px rgba(255, 255, 255, 0.035),
+    0px 13.6px 24.1px rgba(255, 255, 255, 0.046),
+    0px 45px 80px rgba(255, 255, 255, 0.07);
 }
+
 
 /* ==================================== */
 /* =============== BASE =============== */
@@ -341,7 +348,6 @@ h6 {
 a {
     color: var(--primary);
     text-decoration: none;
-    text-align: center;
 }
 
 /* ====================================== */
@@ -401,12 +407,13 @@ a {
 
 .button {
     display: inline-flex;
+    transition: all .3s ease-in-out;
     border: none;
     padding: var(--space-2) var(--space-4);
     border-radius: var(--border-radius-8);
     box-shadow: 0 0.625rem 1.25rem 0 rgba(0, 0, 0, 0.15);
     font-size: var(--h6);
-    background: var(--primary);
+    background: var(--accent);
     cursor: pointer;
     font-family: inherit;
     font-weight: var(--bold);
@@ -414,8 +421,8 @@ a {
     color: var(--bg);
 }
 
-.button--outline {
-    background: var(--accent);
+.button--secondary {
+    background: var(--primary);
     border: none;
 }
 
