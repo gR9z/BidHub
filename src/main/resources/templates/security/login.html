@@ -1,16 +1,14 @@
 <!DOCTYPE html>
-<html 
-    lang="en" data-theme="light"
-    xmlns:th="http://www.thymeleaf.org"
-    th:replace="~{layouts/layout :: layout-main(
+<html
+        lang="en" data-theme="light"
+        xmlns:th="http://www.thymeleaf.org"
+        th:replace="~{layouts/layout :: layout-main(
         pageContent=~{:: .main},
         title=~{:: .main-title}
     )}"
 >
 
 <body>
-
-
 
 <main class="main">
     <section class="section-content auth__section">
@@ -186,8 +184,9 @@
             </div>
         </div>
     </section>
-</main>
 
+    <script src="/js/common/show-password-form.js"></script>
+</main>
 
 </body>
 </html>
