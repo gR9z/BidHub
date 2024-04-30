@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        lang="en"
+        th:fragment="layout-main(pageContent, title)"
+>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title th:replace="${title} ?: ~{}">Auction</title>
+    <link rel="stylesheet" th:href="@{./css/style.css}"/>
+    <link rel="stylesheet" th:href="@{./css/remixicon.css}"/>
+    <script th:src="@{./js/main.js}" type="module"></script>
+</head>
+
+<body>
+
+    <div th:replace="~{fragments/fragment-navigation :: frag-navigation}"></div>
+
+    <main th:replace="${pageContent} ?: ~{}">
+        Contenu de la page
+    </main>
+
+    <div th:replace="~{fragments/fragment-footer :: frag-footer}"></div>
+
+</body>
+</html>
