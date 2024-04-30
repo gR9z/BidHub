@@ -1,6 +1,6 @@
 package fr.eni.tp.auctionapp.bo;
 
-public class Withdrawal{
+public class Withdrawal {
     private int itemId;
     private String street;
     private String zipCode;
