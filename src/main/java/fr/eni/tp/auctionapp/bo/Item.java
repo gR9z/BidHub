@@ -17,13 +17,13 @@ public class Item {
     private List<Auction> auctions;
     private User buyer;
     private User seller;
-    private Collect collect;
+    private Withdrawal withdrawal;
 
 
     public Item(long itemId) {}
 
 
-    public Item(String itemName, String description, LocalDateTime auctionStartingDate, LocalDateTime auctionEndingDate, int startingPrice, int sellingPrice, String saleStatus, Category category, List<Auction> auctions, User buyer, User seller, Collect collect) {
+    public Item(String itemName, String description, LocalDateTime auctionStartingDate, LocalDateTime auctionEndingDate, int startingPrice, int sellingPrice, String saleStatus, Category category, List<Auction> auctions, User buyer, User seller, Withdrawal withdrawal) {
         this.itemName = itemName;
         this.description = description;
         this.auctionStartingDate = auctionStartingDate;
@@ -35,11 +35,11 @@ public class Item {
         this.auctions = auctions;
         this.buyer = buyer;
         this.seller = seller;
-        this.collect = collect;
+        this.withdrawal = withdrawal;
     }
 
 
-    public Item(long itemId, String itemName, String description, LocalDateTime auctionStartingDate, LocalDateTime auctionEndingDate, int startingPrice, int sellingPrice, String saleStatus, Category category, List<Auction> auctions, User buyer, User seller, Collect collect) {
+    public Item(long itemId, String itemName, String description, LocalDateTime auctionStartingDate, LocalDateTime auctionEndingDate, int startingPrice, int sellingPrice, String saleStatus, Category category, List<Auction> auctions, User buyer, User seller, Withdrawal withdrawal) {
         this.itemId = itemId;
         this.itemName = itemName;
         this.description = description;
@@ -52,7 +52,7 @@ public class Item {
         this.auctions = auctions;
         this.buyer = buyer;
         this.seller = seller;
-        this.collect = collect;
+        this.withdrawal = withdrawal;
     }
 
 
@@ -152,12 +152,30 @@ public class Item {
         this.seller = seller;
     }
 
-
-    public Collect getCollect() {
-        return collect;
+    public Withdrawal getWithdrawal() {
+        return withdrawal;
     }
 
-    public void setCollect(Collect collect) {
-        this.collect = collect;
+    public void setWithdrawal(Withdrawal withdrawal) {
+        this.withdrawal = withdrawal;
+    }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "itemId=" + itemId +
+                ", itemName='" + itemName + '\'' +
+                ", description='" + description + '\'' +
+                ", auctionStartingDate=" + auctionStartingDate +
+                ", auctionEndingDate=" + auctionEndingDate +
+                ", startingPrice=" + startingPrice +
+                ", sellingPrice=" + sellingPrice +
+                ", saleStatus='" + saleStatus + '\'' +
+                ", category=" + category +
+                ", auctions=" + auctions +
+                ", buyer=" + buyer +
+                ", seller=" + seller +
+                ", withdrawal=" + withdrawal +
+                '}';
     }
 }
