@@ -30,7 +30,7 @@ public class Category {
 
     @Override
     public String toString() {
-        return "Categories{" +
+        return "Category{" +
                 "categoryId=" + categoryId +
                 ", label='" + label + '\'' +
                 '}';

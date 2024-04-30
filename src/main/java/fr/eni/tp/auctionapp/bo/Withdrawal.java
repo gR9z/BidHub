@@ -51,7 +51,7 @@ public class Withdrawal {
 
     @Override
     public String toString() {
-        return "Withdrawals{" +
+        return "Withdrawal{" +
                 "itemId=" + itemId +
                 ", street='" + street + '\'' +
                 ", zipCode='" + zipCode + '\'' +

@@ -50,7 +50,7 @@ public class Auction {
 
     @Override
     public String toString() {
-        return "Auctions{" +
+        return "Auction{" +
                 "userId=" + userId +
                 ", itemId=" + itemId +
                 ", auctionDate=" + auctionDate +
