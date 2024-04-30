@@ -7,7 +7,7 @@ import java.util.List;
 public interface ItemDAO {
     void insert(Item item);
 
-    Item read(long id);
+    Item read(int id);
 
     void update(Item item);
 

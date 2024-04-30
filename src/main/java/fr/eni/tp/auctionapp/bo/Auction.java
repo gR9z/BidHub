@@ -1,15 +1,15 @@
 package fr.eni.tp.auctionapp.bo;
 
-public class Auctions {
+public class Auction {
     private int userId;
     private int itemId;
     private int auctionDate;
     private int auctionPrice;
 
-    public Auctions() {
+    public Auction() {
     }
 
-    public Auctions(int userId, int itemId, int auctionDate, int auctionPrice) {
+    public Auction(int userId, int itemId, int auctionDate, int auctionPrice) {
         this.userId = userId;
         this.itemId = itemId;
         this.auctionDate = auctionDate;

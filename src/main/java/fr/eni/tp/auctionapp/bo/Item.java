@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class Item {
-    private long itemId;
+    private int itemId;
     private String itemName;
     private String description;
     private LocalDateTime auctionStartingDate;
@@ -20,7 +20,7 @@ public class Item {
     private Withdrawal withdrawal;
 
 
-    public Item(long itemId) {}
+    public Item() {}
 
 
     public Item(String itemName, String description, LocalDateTime auctionStartingDate, LocalDateTime auctionEndingDate, int startingPrice, int sellingPrice, String saleStatus, Category category, List<Auction> auctions, User buyer, User seller, Withdrawal withdrawal) {
@@ -39,7 +39,7 @@ public class Item {
     }
 
 
-    public Item(long itemId, String itemName, String description, LocalDateTime auctionStartingDate, LocalDateTime auctionEndingDate, int startingPrice, int sellingPrice, String saleStatus, Category category, List<Auction> auctions, User buyer, User seller, Withdrawal withdrawal) {
+    public Item(int itemId, String itemName, String description, LocalDateTime auctionStartingDate, LocalDateTime auctionEndingDate, int startingPrice, int sellingPrice, String saleStatus, Category category, List<Auction> auctions, User buyer, User seller, Withdrawal withdrawal) {
         this.itemId = itemId;
         this.itemName = itemName;
         this.description = description;
@@ -55,12 +55,33 @@ public class Item {
         this.withdrawal = withdrawal;
     }
 
+    public Item(String itemName, String description, Category category, int startingPrice, LocalDateTime auctionStartingDate, LocalDateTime auctionEndingDate) {
+        this.itemName = itemName;
+        this.description = description;
+        this.category = category;
+        this.startingPrice = startingPrice;
+        this.auctionStartingDate = auctionStartingDate;
+        this.auctionEndingDate = auctionEndingDate;
+    }
 
-    public long getItemId() {
+    public Item(int itemId, String itemName, String description, Category category, int sellingPrice,  int startingPrice, LocalDateTime auctionStartingDate, LocalDateTime auctionEndingDate, User seller) {
+        this.itemId = itemId;
+        this.itemName = itemName;
+        this.description = description;
+        this.category = category;
+        this.sellingPrice = sellingPrice;
+        this.startingPrice = startingPrice;
+        this.auctionStartingDate = auctionStartingDate;
+        this.auctionEndingDate = auctionEndingDate;
+        this.seller = seller;
+    }
+
+
+    public int getItemId() {
         return itemId;
     }
 
-    public void setItemId(long itemId) {
+    public void setItemId(int itemId) {
         this.itemId = itemId;
     }
 

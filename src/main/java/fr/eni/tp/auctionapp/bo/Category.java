@@ -1,13 +1,13 @@
 package fr.eni.tp.auctionapp.bo;
 
-public class Categories {
+public class Category {
     private int categoryId;
     private String label;
 
-    public Categories() {
+    public Category() {
     }
 
-    public Categories(int categoryId, String label) {
+    public Category(int categoryId, String label) {
         this.categoryId = categoryId;
         this.label = label;
     }

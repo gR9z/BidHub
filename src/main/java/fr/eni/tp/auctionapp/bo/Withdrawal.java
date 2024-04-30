@@ -1,15 +1,15 @@
 package fr.eni.tp.auctionapp.bo;
 
-public class Withdrawals{
+public class Withdrawal {
     private int itemId;
     private String street;
     private String zipCode;
     private String city;
 
-    public Withdrawals() {
+    public Withdrawal() {
     }
 
-    public Withdrawals(int itemId, String street, String zipCode, String city) {
+    public Withdrawal(int itemId, String street, String zipCode, String city) {
         this.itemId = itemId;
         this.street = street;
         this.zipCode = zipCode;
