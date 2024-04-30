@@ -13,8 +13,10 @@ public class LoginController {
             @RequestParam(name = "error", required = false) String error,
             Model model
     ) {
-        if(error != null) {
-           model.addAttribute("error", error);
+        if (error != null) {
+            String errorMessage = "Invalid username or password!";
+            model.addAttribute("error", errorMessage);
+            System.out.println(model);
         }
 
         return "security/login";
