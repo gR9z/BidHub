@@ -2,7 +2,6 @@ package fr.eni.tp.auctionapp.dal.impl;
 
 import fr.eni.tp.auctionapp.bo.User;
 import fr.eni.tp.auctionapp.dal.UserDao;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -19,6 +18,20 @@ public class UserDaoImpl implements UserDao {
     private String SELECT_BY_USERNAME = "SELECT * FROM USERS WHERE username = ?;";
     private String INSERT = "INSERT INTO users (username, lastName, firstName, email, phone, street, zipCode, city, password, credit, isAdmin) " +
             "VALUES (:username, :lastName, :firstName, :email, :phone, :street, :zipCode, :city, :password, :credit, :isAdmin);";
+    private String EDIT_VALUES_BY_USERNAME = "UPDATE USERS\n" +
+            "SET username = :username,\n" +
+            "    lastName = :lasName,\n" +
+            "    firstName = :firstName,\n" +
+            "    email = :email,\n" +
+            "    phone = :phone,\n" +
+            "    street = :street,\n" +
+            "    zipCode = :zipCode,\n" +
+            "    city = :city,\n" +
+            "    password = :password,\n" +
+            "    credit = :credit,\n" +
+            "    isAdmin = :isAdmin" +
+            "WHERE username = ?;";
+
 
     private JdbcTemplate jdbcTemplate;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -32,6 +45,25 @@ public class UserDaoImpl implements UserDao {
     public Optional<User> selectUserByUsername(String username) {
         User user = this.jdbcTemplate.queryForObject(SELECT_BY_USERNAME, new UserRowMapper(), username);
         return Optional.ofNullable(user);
+    }
+
+    @Override
+    public void editUserProfile(User user, String originalUsername) {
+        MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+        namedParameters.addValue("username", user.getUsername());
+        namedParameters.addValue("lastName", user.getLastName());
+        namedParameters.addValue("firstName", user.getFirstName());
+        namedParameters.addValue("email", user.getEmail());
+        namedParameters.addValue("phone", user.getPhone());
+        namedParameters.addValue("street", user.getStreet());
+        namedParameters.addValue("zipCode", user.getZipCode());
+        namedParameters.addValue("city", user.getCity());
+        namedParameters.addValue("password", user.getPassword());
+        namedParameters.addValue("credit", user.getCredit());
+        namedParameters.addValue("isAdmin", user.isAdmin());
+        namedParameters.addValue("originalUsername", originalUsername);
+
+        namedParameterJdbcTemplate.update(EDIT_VALUES_BY_USERNAME, namedParameters);
     }
 
     @Override
@@ -55,6 +87,8 @@ public class UserDaoImpl implements UserDao {
                 namedParameters
         );
     }
+
+
 
     public class UserRowMapper implements RowMapper<User> {
         @Override

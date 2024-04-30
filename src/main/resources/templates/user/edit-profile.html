@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html
+        lang="en" data-theme="light"
+        xmlns:th="http://www.thymeleaf.org"
+        th:replace="~{layouts/layout :: layout-main(
+        pageContent=~{:: .main},
+        title=~{:: .main-title}
+    )}"
+>
+
+<body>
+
+<main class="main">
+
+    <h2>Edit my Profile</h2>
+
+    <form action="#" method="post">
+
+        <label for="username-input">Pseudo :</label>
+        <input type="text" name="username" id="username-input" disabled th:value="${user.username}">
+
+        <label for="name-input">Name :</label>
+        <input type="text" name="name" id="name-input" disabled th:value="${user.lastName}">
+
+        <label for="firstname-input">Firstname :</label>
+        <input type="text" name="firstname" id="firstname-input" disabled th:value="${user.firstName}">
+
+        <label for="email-input">Email :</label>
+        <input type="text" name="email" id="email-input" disabled th:value="${user.email}">
+
+        <label for="phone-input">Phone :</label>
+        <input type="number" name="phone" id="phone-input" disabled th:value="${user.phone}">
+
+        <label for="street-input">Street</label>
+        <input type="text" name="street" id="street-input" disabled th:value="${user.street}">
+
+        <label for="zipcode-input">Zip Code :</label>
+        <input type="number" name="username" id="zipcode-input" disabled th:value="${user.zipCode}">
+
+        <label for="city-input">City :</label>
+        <input type="text" name="city" id="city-input" disabled th:value="${user.city}">
+    </form>
+
+    <div class="submit-btns">
+        <button type="submit" id="edit-account">Edit</button>
+    </div>
+
+
+</main>
+</body>
+</html>

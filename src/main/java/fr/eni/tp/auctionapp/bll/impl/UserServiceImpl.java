@@ -3,6 +3,7 @@ package fr.eni.tp.auctionapp.bll.impl;
 import fr.eni.tp.auctionapp.bll.UserService;
 import fr.eni.tp.auctionapp.bo.User;
 import fr.eni.tp.auctionapp.dal.UserDao;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,7 +14,9 @@ import java.util.Optional;
 @Service
 public class UserServiceImpl implements UserService {
 
+    @Autowired
     private final UserDao userDao;
+
     PasswordEncoder passwordEncoder;
 
     public UserServiceImpl(UserDao userDao, PasswordEncoder passwordEncoder) {
@@ -43,4 +46,15 @@ public class UserServiceImpl implements UserService {
 
        return optUser.get();
     }
+
+
+
+    public void editUserProfile(User user, String originalUsername) {
+
+
+        userDao.editUserProfile(user, originalUsername);
+    }
+
+
+
 }
