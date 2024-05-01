@@ -2,47 +2,35 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       th:replace="~{layouts/layout :: layout-main(
-            pageContent=~{:: .main-content},
-            title=~{:: .main-title}
+            pageContent=~{:: .main},
+            title='BidHub - Home of Exciting Online Auctions',
+            cssPath='css/home.css',
+            jsPath=null
         )}"
 >
 
-<title class="main-title">Home</title>
-<body>
-    <h1 class="main-content" th:text="#{Welcome to the Auction App}"></h1>
+<main class="main">
+    <section class="section-content">
+        <div class="container hero">
+            <div class="hero__content">
+                <h1 class="hero__title">
+                    The <span class="text-stroke">Hottest Auctions</span> in Your Area!
+                </h1>
 
-    <h2>
-        Filtres :
-    </h2>
+            </div>
 
-    <label for="category-select">Catégories</label>
-    <select name="categories" id="category-select">
-        <option value="">-- All categories --</option>
-        <option value="XXX">1</option>
-        <option value="XXX">1</option>
-        <option value="XXX">1</option>
-    </select>
+            <div class="hero__image">
+                <img
+                        src="./images/home_hero-banner.jpg"
+                        alt="Auction room with spotlighted art piece and excited bidders."
+                />
+            </div>
+        </div>
+    </section>
 
-    <div class="input-container">
-        <img src="#">
-        <input type="search" id="search-bar" placeholder="The name of the item contains...">
+    <div class="container">
+        <span class="separator"></span>
     </div>
 
-    <button>Search</button>
-    
-    <div class="item-container">
-        <div class="left-container">
-            <img src="#" alt="item-photo">
-        </div>
-        <div class="right-container">
-            <div class="title-item">AAA</div>
-            <div class="price-item">Price : </div>
-            <div class="rank-item">Rank : </div>
-            <div class="endDate-item">End of auction : </div>
-            <div class="adress-item">Pick-up point : </div>
-            <div class="seller-name">Seller :</div>
-        </div>
-    </div>
-
-</body>
+</main>
 </html>

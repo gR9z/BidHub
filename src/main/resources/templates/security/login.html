@@ -4,7 +4,9 @@
         xmlns:th="http://www.thymeleaf.org"
         th:replace="~{layouts/layout :: layout-main(
         pageContent=~{:: .main},
-        title=~{:: .main-title}
+        title='Login to BidHub - Access Your Auction Account',
+        cssPath=null,
+        jsPath=null
     )}"
 >
 
@@ -56,7 +58,7 @@
 
                         <div class="auth-form__actions">
                             <button
-                                    class="button button--small"
+                                    class="button"
                                     type="submit"
                             >
                                 Login
@@ -69,10 +71,12 @@
                     </form>
                 </div>
 
-                <a class="auth__account-creation-link" th:href="@{/create-account}">Don't have an <strong>account?</strong><br>Create one fo <strong>free</strong>!</a>
+                <a class="auth__account-creation-link" th:href="@{/create-account}">Don't have an
+                    <strong>account?</strong><br>Create one for <strong>free</strong>!</a>
             </div>
         </div>
     </section>
 
 </main>
+
 </html>

@@ -60,7 +60,8 @@ public class UserDaoImpl implements UserDao {
         @Override
         public User mapRow(ResultSet rs, int rowNum) throws SQLException {
 
-           return new User(
+            return new User(
+                    rs.getInt("userId"),
                     rs.getString("username"),
                     rs.getString("lastname"),
                     rs.getString("firstname"),

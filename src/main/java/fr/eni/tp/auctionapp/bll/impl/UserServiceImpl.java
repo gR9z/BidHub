@@ -4,6 +4,8 @@ import fr.eni.tp.auctionapp.bll.UserService;
 import fr.eni.tp.auctionapp.bo.User;
 import fr.eni.tp.auctionapp.dal.UserDao;
 import fr.eni.tp.auctionapp.exceptions.BusinessException;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,11 +17,13 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserDao userDao;
-    PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
+    private final HttpServletRequest request;
 
-    public UserServiceImpl(UserDao userDao, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserDao userDao, PasswordEncoder passwordEncoder, HttpServletRequest request) {
         this.userDao = userDao;
         this.passwordEncoder = passwordEncoder;
+        this.request = request;
     }
 
     @Override
@@ -37,8 +41,11 @@ public class UserServiceImpl implements UserService {
           try {
               user.setPassword(this.passwordEncoder.encode(user.getPassword()));
               userDao.insertUser(user);
+              request.login(user.getUsername(), confirmPassword);
           } catch(BusinessException dalBusinessException) {
               throw dalBusinessException;
+          } catch (ServletException e) {
+              throw new RuntimeException("Login failed", e);
           }
         } else {
             throw businessException;

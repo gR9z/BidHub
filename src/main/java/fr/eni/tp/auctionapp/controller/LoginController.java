@@ -32,42 +32,4 @@ public class LoginController {
 
         return "security/login";
     }
-
-    @GetMapping("/create-account")
-    public String showCreateAccountForm(Model model) {
-        model.addAttribute("user", new User());
-
-        return "user/create-account.html";
-    }
-
-    @PostMapping("/create-account")
-    public String createUserAccount(
-            User user,
-            @RequestParam("passwordConfirm") String passwordConfirm,
-            BindingResult bindingResult
-    ) {
-
-        if (bindingResult.hasErrors()) {
-            System.out.println("ca passe");
-            return "user/create-account.html";
-        }
-
-        try {
-            user.setCredit(0);
-            user.setAdmin(false);
-            userService.createUser(user, passwordConfirm);
-
-        } catch (BusinessException businessException) {
-
-            businessException.getKeys().forEach(key -> {
-                ObjectError error = new ObjectError("global", key);
-                bindingResult.addError(error);
-            });
-
-            return "user/create-account.html";
-        }
-
-        return "user/profile-account.html";
-
-    }
 }

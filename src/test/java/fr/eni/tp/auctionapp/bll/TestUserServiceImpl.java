@@ -1,74 +1,65 @@
 package fr.eni.tp.auctionapp.bll;
 
+import com.github.javafaker.Faker;
+import fr.eni.tp.auctionapp.TestDatabaseService;
 import fr.eni.tp.auctionapp.bo.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
+@Transactional
 public class TestUserServiceImpl {
 
     @Autowired
     private UserService userService;
 
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private TestDatabaseService testDatabaseService;
+
+    User adminUser;
+    private final Faker faker = new Faker();
 
     @BeforeEach
     public void setUp() {
-        jdbcTemplate.update("DELETE FROM users");
+        testDatabaseService.clearDatabase();
+        adminUser = testDatabaseService.insertUserInDatabase(testDatabaseService.createRandomAdmin());
     }
 
     @Test
-    void contextLoads() {
-    }
+    void test_createUser() {
+        User adminUser = new User();
+        adminUser.setUsername(faker.name().username());
+        adminUser.setLastName(faker.name().lastName());
+        adminUser.setFirstName(faker.name().firstName());
+        adminUser.setEmail(faker.internet().emailAddress());
+        adminUser.setPhone(faker.phoneNumber().phoneNumber());
+        adminUser.setStreet(faker.address().streetAddress());
+        adminUser.setZipCode(faker.address().zipCode());
+        adminUser.setCity(faker.address().city());
+        adminUser.setPassword(faker.internet().password());
+        adminUser.setCredit(10000);
+        adminUser.setAdmin(true);
 
-    @Test
-    void createUser() {
-        User user = new User(
-                "user",
-                "Dupont",
-                "Jean",
-                "lebest@genie.com",
-                "0123456789",
-                "123 rue de Test",
-                "75001",
-                "Paris",
-                "password",
-                100,
-                false
-        );
-
-        User admin = new User(
-                "admin",
-                "admin",
-                "admin",
-                "admin@admin.com",
-                "0666666666",
-                "6 rue de l'admin",
-                "29000",
-                "Quimper",
-                "admin",
-                10000,
-                true
-        );
-
-        userService.createUser(user);
-        UserDetails loadedUser = userService.loadUserByUsername("user");
-        User castLoadedUser = (User) loadedUser;
-
-        userService.createUser(admin);
-        UserDetails loadedAdminUser = userService.loadUserByUsername("admin");
+        userService.createUser(adminUser);
+        UserDetails loadedAdminUser = userService.loadUserByUsername(adminUser.getUsername());
         User castLoadedAdminUser = (User) loadedAdminUser;
 
-        assertThat(castLoadedUser.getUsername()).isEqualTo(user.getUsername());
-        assertThat(castLoadedUser.isAdmin()).isFalse();
-        assertThat(castLoadedAdminUser.getUsername()).isEqualTo(admin.getUsername());
+        assertThat(castLoadedAdminUser.getUsername()).isEqualTo(adminUser.getUsername());
         assertThat(castLoadedAdminUser.isAdmin()).isTrue();
+    }
+
+    @Test
+    void test_loadUserByUsername() {
+        UserDetails loadedUser = userService.loadUserByUsername(adminUser.getUsername());
+        User castLoadedUser = (User) loadedUser;
+
+        assertThat(castLoadedUser.getUsername()).isEqualTo(adminUser.getUsername());
+        assertThat(castLoadedUser.isAdmin()).isTrue();
     }
 }

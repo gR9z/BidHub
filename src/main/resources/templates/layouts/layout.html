@@ -2,26 +2,28 @@
 <html
         xmlns:th="http://www.thymeleaf.org"
         lang="en"
-        th:fragment="layout-main(pageContent, title)"
+        th:fragment="layout-main(pageContent, title, cssPath, jsPath)"
 >
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title th:replace="${title} ?: ~{}">Auction</title>
+    <title th:text="${title} ?: 'BidHub - Your Auction Platform'"></title>
     <link rel="stylesheet" th:href="@{./css/style.css}"/>
     <link rel="stylesheet" th:href="@{./css/remixicon.css}"/>
+    <link th:if="${cssPath}" rel="stylesheet" th:href="@{${cssPath}}"/>
     <script th:src="@{./js/main.js}" type="module"></script>
+    <script th:if="${jsPath}" th:src="@{${jsPath}}" type="module"></script>
 </head>
 
 <body>
 
-    <div th:replace="~{fragments/fragment-navigation :: frag-navigation}"></div>
+<div th:replace="~{fragments/fragment-navigation :: frag-navigation}"></div>
 
-    <main th:replace="${pageContent} ?: ~{}">
-        Contenu de la page
-    </main>
+<main th:replace="${pageContent} ?: ~{}">
+    Contenu de la page
+</main>
 
-    <div th:replace="~{fragments/fragment-footer :: frag-footer}"></div>
+<div th:replace="~{fragments/fragment-footer :: frag-footer}"></div>
 
 </body>
 </html>
