@@ -4,25 +4,25 @@
         xmlns:th="http://www.thymeleaf.org"
         th:replace="~{layouts/layout :: layout-main(
         pageContent=~{:: .main},
-        title=~{:: .main-title}
+        title='Login to BidHub - Access Your Auction Account',
+        cssPath=null,
+        jsPath=null
     )}"
 >
-
-<body>
 
 <main class="main">
     <section class="section-content auth__section">
         <div class="container">
             <div class="auth__container">
                 <div class="auth__login">
-                    <h2 class="auth__title">Login</h2>
+                    <h1 class="auth__title">Login</h1>
 
                     <form method="POST" th:action="@{/login}" id="auth__form-login" class="auth-form">
                         <div class="auth-form__group">
                             <div class="auth-form__field">
                                 <input
                                         type="text"
-                                        id="username-login"
+                                        id="username"
                                         name="username"
                                         required
                                         class="auth-form__input"
@@ -40,7 +40,7 @@
                             <div class="auth-form__field">
                                 <input
                                         type="password"
-                                        id="password-login"
+                                        id="password"
                                         name="password"
                                         required
                                         class="auth-form__input"
@@ -49,16 +49,16 @@
                                 />
 
                                 <label
-                                        for="password-login"
+                                        for="password"
                                         class="auth-form__label"
-                                >Password</label
-                                >
+                                >Password
+                                </label>
                             </div>
                         </div>
 
                         <div class="auth-form__actions">
                             <button
-                                    class="button button--small"
+                                    class="button"
                                     type="submit"
                             >
                                 Login
@@ -71,122 +71,12 @@
                     </form>
                 </div>
 
-                <div class="auth__register">
-                    <h2 class="auth__title">Register</h2>
-
-                    <form id="auth__form-register" class="auth-form">
-                        <div class="auth-form__group">
-                            <div class="auth-form__field">
-                                <input
-                                        type="text"
-                                        id="username"
-                                        name="username"
-                                        required
-                                        class="auth-form__input"
-                                        placeholder=""
-                                />
-
-                                <label
-                                        for="username"
-                                        class="auth-form__label"
-                                >Username</label
-                                >
-                            </div>
-
-                            <div class="auth-form__field">
-                                <input
-                                        type="email"
-                                        id="email-register"
-                                        name="email"
-                                        required
-                                        class="auth-form__input"
-                                        placeholder=""
-                                />
-
-                                <label
-                                        for="email-register"
-                                        class="auth-form__label"
-                                >Email</label
-                                >
-                            </div>
-
-                            <div class="auth-form__field">
-                                <input
-                                        type="password"
-                                        id="password-register"
-                                        name="password"
-                                        required
-                                        class="auth-form__input"
-                                        placeholder=""
-                                />
-
-                                <label
-                                        for="password-register"
-                                        class="auth-form__label"
-                                >Password</label
-                                >
-
-                                <i
-                                        id="auth-form__icon"
-                                        class="ri-eye-line"
-                                ></i>
-
-                                <div
-                                        id="password-strength-meter"
-                                        class="strength-meter"
-                                >
-                                    <div
-                                            id="strength-bar"
-                                            class="strength-meter__bar"
-                                    ></div>
-                                </div>
-                            </div>
-
-                            <div class="auth-form__field">
-                                <input
-                                        type="password"
-                                        id="passwordConfirm"
-                                        name="passwordConfirm"
-                                        required
-                                        class="auth-form__input"
-                                        placeholder=""
-                                />
-
-                                <label
-                                        for="passwordConfirm"
-                                        class="auth-form__label"
-                                >Password confirmation</label
-                                >
-                            </div>
-                        </div>
-
-                        <div class="auth-form__actions">
-                            <button
-                                    class="button button--small"
-                                    type="submit"
-                            >
-                                Register
-                            </button>
-
-                            <button
-                                    class="button button--outline button--small"
-                                    type="reset"
-                            >
-                                Reset
-                            </button>
-                        </div>
-
-                        <p
-                                class="auth-form__message auth-form__message--register"
-                        ></p>
-                    </form>
-                </div>
+                <a class="auth__account-creation-link" th:href="@{/create-account}">Don't have an
+                    <strong>account?</strong><br>Create one for <strong>free</strong>!</a>
             </div>
         </div>
     </section>
 
-    <script src="/js/common/show-password-form.js"></script>
 </main>
 
-</body>
 </html>

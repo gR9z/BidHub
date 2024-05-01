@@ -1,3 +1,14 @@
+@media screen and (min-width: 480px) {
+    .auth-form__group {
+        gap: var(--space-5);
+    }
+
+    .auth-form__field-row {
+        gap: var(--space-5);
+    }
+}
+
+
 @media screen and (min-width: 768px) {
     /* ============================== */
     /* ======== HEADER & NAV ======== */
@@ -44,13 +55,15 @@
     .auth__container {
         flex-direction: row;
     }
+
+    .auth-form__field-row {
+        flex-direction: row;
+    }
 }
 
 @media screen and (min-width: 1024px) {
     /* ===================================== */
     /* ============= USER AUTH ============= */
     /* ===================================== */
-    .auth-form__input {
-        margin-bottom: var(--space-1);
-    }
+
 }

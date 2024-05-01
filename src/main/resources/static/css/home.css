@@ -1,0 +1,7 @@
+.hero__content {
+    max-width: var(--max-width-3);
+}
+
+.hero__title {
+    font-size: var(--h2);
+}
