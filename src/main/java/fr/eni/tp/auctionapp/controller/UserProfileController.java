@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.security.Principal;
 
 @Controller
-public class UserController {
+public class UserProfileController {
 
     private UserService userService;
 
-    public UserController(UserService userService) {
+    public UserProfileController(UserService userService) {
         this.userService = userService;
     }
 

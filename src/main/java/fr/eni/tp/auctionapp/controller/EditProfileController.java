@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class EditProfileController {
 
-    @Autowired
+
     private UserService userService;
 
     @GetMapping("/edit-profile")
