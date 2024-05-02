@@ -35,7 +35,7 @@ public class TestItemDAO {
     @Test
     void update(){
         Category category = new Category(1, "Category 1");
-        Item test1 = new Item("Machin", "Moins bien", 2, 250, LocalDateTime.now(), LocalDateTime.of(2024, 05, 01, 10, 30);
+        Item test1 = new Item("Machin", "Moins bien", category, 250, LocalDateTime.now(), LocalDateTime.of(2024, 05, 01, 10, 30));
 
         itemDAO.update(test1);
 
