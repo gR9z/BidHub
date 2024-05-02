@@ -3,12 +3,13 @@ package fr.eni.tp.auctionapp.dal.impl;
 import fr.eni.tp.auctionapp.bo.Category;
 import fr.eni.tp.auctionapp.bo.Item;
 import fr.eni.tp.auctionapp.bo.User;
-import fr.eni.tp.auctionapp.bo.Withdrawal;
 import fr.eni.tp.auctionapp.dal.ItemDAO;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
@@ -20,14 +21,14 @@ import java.util.List;
 public class ItemDAOImpl implements ItemDAO {
 
     private static final String INSERT = "INSERT INTO ITEMS (itemName, description, categoryId, startingPrice, auctionStartingDate, auctionEndingDate, userId) VALUES (:itemName, :description, :categoryId, :startingPrice, :auctionStartingDate, :auctionEndingDate, :userId)";
-    private static final String SELECT_BY_ID = "SELECT it.itemId,it.itemName, it.description, cat.label, cat.categoryID, it.sellingPrice, it.startingPrice, it.auctionStartingDate, it.auctionEndingDate, wth.street, wth.zipCode, wth.city, us.username FROM ITEMS AS it" +
+    private static final String SELECT_BY_ID = "SELECT it.itemId, itemName, description, label, it.categoryID, sellingPrice, startingPrice, auctionStartingDate, auctionEndingDate, wth.street, wth.zipCode, wth.city, us.username FROM ITEMS AS it" +
             "   INNER JOIN CATEGORIES AS cat ON it.categoryId = cat.categoryId" +
             "   INNER JOIN WITHDRAWALS AS wth ON it.itemId = wth.itemId" +
             "   INNER JOIN USERS AS us ON it.userId = us.userId" +
             "   WHERE it.itemId = :id";
     private static final String UPDATE = "UPDATE ITEMS SET itemName = :name, description = :description, categoryId = :categoryId, startingPrice = :startingPrice, auctionStartingDate = :auctionStartingDate, auctionEndingDate = :auctionEndingDate WHERE itemId = :itemId";
     private static final String DELETE = "DELETE FROM ITEMS WHERE itemId = :itemId";
-    private static final String SELECT_ALL = "SELECT it.itemName, it.startingPrice, it.auctionEndingDate, us.username, cat.categoryId, cat.label FROM ITEMS AS it" +
+    private static final String SELECT_ALL = "SELECT it.itemName, startingPrice, auctionEndingDate, us.username, cat.categoryId, cat.label FROM ITEMS AS it" +
             "   INNER JOIN CATEGORIES AS cat ON it.categoryId = cat.categoryId" +
             "   INNER JOIN USERS AS us ON it.userId = us.userId";
 
@@ -55,11 +56,16 @@ public class ItemDAOImpl implements ItemDAO {
         namedParameters.addValue("auctionStartingDate", item.getAuctionStartingDate());
         namedParameters.addValue("auctionEndingDate", item.getAuctionEndingDate());
 
+        KeyHolder keyHolder = new GeneratedKeyHolder();
 
         namedParameterJdbcTemplate.update(
                 INSERT,
                 namedParameters
         );
+
+        if (keyHolder.getKey() != null) {
+            item.setItemId(keyHolder.getKey().intValue());
+        }
 
     }
 
@@ -92,9 +98,9 @@ public class ItemDAOImpl implements ItemDAO {
     }
 
     @Override
-    public void delete(Item item) {
+    public void delete(int itemId) {
         MapSqlParameterSource namedParameters = new MapSqlParameterSource();
-        namedParameters.addValue("id", item.getItemId());
+        namedParameters.addValue("id", itemId);
 
         namedParameterJdbcTemplate.update(DELETE, namedParameters);
     }

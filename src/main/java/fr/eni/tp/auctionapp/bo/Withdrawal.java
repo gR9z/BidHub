@@ -5,15 +5,17 @@ public class Withdrawal {
     private String street;
     private String zipCode;
     private String city;
+    private Item item;
 
     public Withdrawal() {
     }
 
-    public Withdrawal(int itemId, String street, String zipCode, String city) {
+    public Withdrawal(int itemId, String street, String zipCode, String city, Item item) {
         this.itemId = itemId;
         this.street = street;
         this.zipCode = zipCode;
         this.city = city;
+        this.item = item;
     }
 
     public int getItemId() {
@@ -48,6 +50,13 @@ public class Withdrawal {
         this.city = city;
     }
 
+    public Item getItem() {
+        return item;
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
+    }
 
     @Override
     public String toString() {

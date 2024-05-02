@@ -11,7 +11,7 @@ public interface ItemDAO {
 
     void update(Item item);
 
-    void delete(Item item);
+    void delete(int itemId);
 
     List<Item> findAll();
 }
