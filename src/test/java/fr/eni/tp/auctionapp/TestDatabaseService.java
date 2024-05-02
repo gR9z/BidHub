@@ -2,6 +2,7 @@ package fr.eni.tp.auctionapp;
 
 import com.github.javafaker.Faker;
 import fr.eni.tp.auctionapp.bll.UserService;
+import fr.eni.tp.auctionapp.bo.Category;
 import fr.eni.tp.auctionapp.bo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -54,5 +55,11 @@ public class TestDatabaseService {
     public User insertUserInDatabase(User user) {
         userService.createUser(user);
         return user;
+    }
+
+    public Category createRandomCategory() {
+        Category category = new Category();
+        category.setLabel(faker.commerce().department());
+        return category;
     }
 }
