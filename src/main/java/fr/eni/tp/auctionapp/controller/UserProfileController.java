@@ -19,7 +19,7 @@ public class UserProfileController {
     }
 
 
-    @GetMapping("/error")
+    @GetMapping("/error-profile")
     public String userError(
             @RequestParam(name = "error", required = false) String error,
             Model model

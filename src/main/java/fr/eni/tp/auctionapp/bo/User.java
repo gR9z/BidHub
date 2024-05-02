@@ -22,6 +22,7 @@ public class User implements UserDetails {
     private Integer credit;
     private boolean isAdmin;
 
+
     private Collection<SimpleGrantedAuthority> authorities;
 
     public User() {}
@@ -146,6 +147,7 @@ public class User implements UserDetails {
     public void setUserId(Integer userId) {
         this.userId = userId;
     }
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

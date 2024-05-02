@@ -31,6 +31,7 @@ public class UserDaoImpl implements UserDao {
             "    credit = :credit,\n" +
             "    isAdmin = :isAdmin" +
             "WHERE username = ?;";
+    private String DELETE_BY_USERNAME = "DELETE FROM USERS WHERE username = ?";
 
 
     private JdbcTemplate jdbcTemplate;
@@ -86,6 +87,10 @@ public class UserDaoImpl implements UserDao {
                 INSERT,
                 namedParameters
         );
+    }
+
+    public void deleteUser(String username) {
+        jdbcTemplate.update(DELETE_BY_USERNAME, username);
     }
 
 
