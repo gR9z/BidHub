@@ -3,8 +3,7 @@ package fr.eni.tp.auctionapp.dal.impl;
 import fr.eni.tp.auctionapp.bo.Category;
 import fr.eni.tp.auctionapp.bo.Item;
 import fr.eni.tp.auctionapp.bo.User;
-import fr.eni.tp.auctionapp.bo.Withdrawal;
-import fr.eni.tp.auctionapp.dal.ItemDAO;
+import fr.eni.tp.auctionapp.dal.ItemDao;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -17,7 +16,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public class ItemDAOImpl implements ItemDAO {
+public class ItemDaoImpl implements ItemDao {
 
     private static final String INSERT = "INSERT INTO ITEMS (itemName, description, categoryId, startingPrice, auctionStartingDate, auctionEndingDate) VALUES (:itemName, :description, :startingPrice, :auctionStartingDate, :auctionEndingDate)";
     private static final String SELECT_BY_ID = "SELECT it.itemId,it.itemName, it.description, cat.label, cat.categoryID, it.sellingPrice, it.startingPrice, it.auctionStartingDate, it.auctionEndingDate, wth.street, wth.zipCode, wth.city, us.username FROM ITEMS AS it" +
@@ -35,7 +34,7 @@ public class ItemDAOImpl implements ItemDAO {
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private JdbcTemplate jdbcTemplate;
 
-    public ItemDAOImpl(
+    public ItemDaoImpl(
             NamedParameterJdbcTemplate namedParameterJdbcTemplate,
             JdbcTemplate jdbcTemplate
     ) {
@@ -49,17 +48,18 @@ public class ItemDAOImpl implements ItemDAO {
         MapSqlParameterSource namedParameters = new MapSqlParameterSource();
         namedParameters.addValue("itemName", item.getItemName());
         namedParameters.addValue("description", item.getDescription());
-        namedParameters.addValue("categoryId", item.getCategory().getCategoryId());
-        namedParameters.addValue("startingPrice", item.getStartingPrice());
         namedParameters.addValue("auctionStartingDate", item.getAuctionStartingDate());
         namedParameters.addValue("auctionEndingDate", item.getAuctionEndingDate());
+        namedParameters.addValue("startingPrice", item.getStartingPrice());
+        namedParameters.addValue("sellingPrice", item.getSellingPrice());
 
+        namedParameters.addValue("userId", item.getSeller().getUserId());
+        namedParameters.addValue("categoryId", item.getCategory());
 
         namedParameterJdbcTemplate.update(
                 INSERT,
                 namedParameters
         );
-
     }
 
     @Override

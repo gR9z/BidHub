@@ -13,17 +13,16 @@ public class Item {
     private int startingPrice;
     private int sellingPrice;
     private String saleStatus;
+
     private Category category;
     private List<Auction> auctions;
     private User buyer;
     private User seller;
     private Withdrawal withdrawal;
 
-
     public Item() {}
 
-
-    public Item(String itemName, String description, LocalDateTime auctionStartingDate, LocalDateTime auctionEndingDate, int startingPrice, int sellingPrice, String saleStatus, Category category, List<Auction> auctions, User buyer, User seller, Withdrawal withdrawal) {
+    public Item(String itemName, String description, LocalDateTime auctionStartingDate, LocalDateTime auctionEndingDate, int startingPrice, int sellingPrice, String saleStatus) {
         this.itemName = itemName;
         this.description = description;
         this.auctionStartingDate = auctionStartingDate;
@@ -31,51 +30,12 @@ public class Item {
         this.startingPrice = startingPrice;
         this.sellingPrice = sellingPrice;
         this.saleStatus = saleStatus;
-        this.category = category;
-        this.auctions = auctions;
-        this.buyer = buyer;
-        this.seller = seller;
-        this.withdrawal = withdrawal;
     }
 
-
-    public Item(int itemId, String itemName, String description, LocalDateTime auctionStartingDate, LocalDateTime auctionEndingDate, int startingPrice, int sellingPrice, String saleStatus, Category category, List<Auction> auctions, User buyer, User seller, Withdrawal withdrawal) {
+    public Item(int itemId, String itemName, String description, LocalDateTime auctionStartingDate, LocalDateTime auctionEndingDate, int startingPrice, int sellingPrice, String saleStatus) {
+        this(itemName, description, auctionStartingDate, auctionEndingDate, startingPrice, sellingPrice, saleStatus);
         this.itemId = itemId;
-        this.itemName = itemName;
-        this.description = description;
-        this.auctionStartingDate = auctionStartingDate;
-        this.auctionEndingDate = auctionEndingDate;
-        this.startingPrice = startingPrice;
-        this.sellingPrice = sellingPrice;
-        this.saleStatus = saleStatus;
-        this.category = category;
-        this.auctions = auctions;
-        this.buyer = buyer;
-        this.seller = seller;
-        this.withdrawal = withdrawal;
     }
-
-    public Item(String itemName, String description, Category category, int startingPrice, LocalDateTime auctionStartingDate, LocalDateTime auctionEndingDate) {
-        this.itemName = itemName;
-        this.description = description;
-        this.category = category;
-        this.startingPrice = startingPrice;
-        this.auctionStartingDate = auctionStartingDate;
-        this.auctionEndingDate = auctionEndingDate;
-    }
-
-    public Item(int itemId, String itemName, String description, Category category, int sellingPrice,  int startingPrice, LocalDateTime auctionStartingDate, LocalDateTime auctionEndingDate, User seller) {
-        this.itemId = itemId;
-        this.itemName = itemName;
-        this.description = description;
-        this.category = category;
-        this.sellingPrice = sellingPrice;
-        this.startingPrice = startingPrice;
-        this.auctionStartingDate = auctionStartingDate;
-        this.auctionEndingDate = auctionEndingDate;
-        this.seller = seller;
-    }
-
 
     public int getItemId() {
         return itemId;
@@ -183,20 +143,21 @@ public class Item {
 
     @Override
     public String toString() {
-        return "Item{" +
-                "itemId=" + itemId +
-                ", itemName='" + itemName + '\'' +
-                ", description='" + description + '\'' +
-                ", auctionStartingDate=" + auctionStartingDate +
-                ", auctionEndingDate=" + auctionEndingDate +
-                ", startingPrice=" + startingPrice +
-                ", sellingPrice=" + sellingPrice +
-                ", saleStatus='" + saleStatus + '\'' +
-                ", category=" + category +
-                ", auctions=" + auctions +
-                ", buyer=" + buyer +
-                ", seller=" + seller +
-                ", withdrawal=" + withdrawal +
-                '}';
+        final StringBuilder sb = new StringBuilder("Item{");
+        sb.append("itemId=").append(itemId);
+        sb.append(", itemName='").append(itemName).append('\'');
+        sb.append(", description='").append(description).append('\'');
+        sb.append(", auctionStartingDate=").append(auctionStartingDate);
+        sb.append(", auctionEndingDate=").append(auctionEndingDate);
+        sb.append(", startingPrice=").append(startingPrice);
+        sb.append(", sellingPrice=").append(sellingPrice);
+        sb.append(", saleStatus='").append(saleStatus).append('\'');
+        sb.append(", category=").append(category);
+        sb.append(", auctions=").append(auctions);
+        sb.append(", buyer=").append(buyer);
+        sb.append(", seller=").append(seller);
+        sb.append(", withdrawal=").append(withdrawal);
+        sb.append('}');
+        return sb.toString();
     }
 }

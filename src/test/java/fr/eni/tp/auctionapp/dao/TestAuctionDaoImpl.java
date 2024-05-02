@@ -26,7 +26,5 @@ public class TestAuctionDaoImpl {
     }
 
     @Test
-    void test_insertAuction() {
-//        auctionDao.insert();
-    }
+    void test_insertAuction() {}
 }

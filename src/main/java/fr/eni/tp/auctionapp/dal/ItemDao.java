@@ -4,7 +4,7 @@ import fr.eni.tp.auctionapp.bo.Item;
 
 import java.util.List;
 
-public interface ItemDAO {
+public interface ItemDao {
     void insert(Item item);
 
     Item read(int id);

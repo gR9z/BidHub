@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Repository
 public class AuctionDaoImpl implements AuctionDao {
 
-    private String INSERT = "INSERT INTO AUCTIONS (userId, itemId, auctionPrice) VALUES (:userId, :itemId, :auctionPrice);";
+    private String INSERT = "INSERT INTO AUCTIONS (userId, itemId, bidAmount) VALUES (:userId, :itemId, :bidAmount);";
 
     private JdbcTemplate jdbcTemplate;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -23,11 +23,11 @@ public class AuctionDaoImpl implements AuctionDao {
     }
 
     @Override
-    public void insert(Item item, int auctionPrice) {
+    public void insert(Item item, int bidAmount) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("userId", item.getBuyer().getUserId());
         params.addValue("itemId", item.getItemId());
-        params.addValue("auctionPrice", auctionPrice);
+        params.addValue("bidAmount", bidAmount);
     }
 
     @Override

@@ -2,15 +2,15 @@ package fr.eni.tp.auctionapp.bll.impl;
 
 import fr.eni.tp.auctionapp.bll.ItemService;
 import fr.eni.tp.auctionapp.bo.Item;
-import fr.eni.tp.auctionapp.dal.ItemDAO;
+import fr.eni.tp.auctionapp.dal.ItemDao;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ItemServiceImpl implements ItemService {
 
-    private ItemDAO itemDAO;
+    private ItemDao itemDAO;
 
-    public ItemServiceImpl(ItemDAO itemDAO) {
+    public ItemServiceImpl(ItemDao itemDAO) {
         this.itemDAO = itemDAO;
     }
 

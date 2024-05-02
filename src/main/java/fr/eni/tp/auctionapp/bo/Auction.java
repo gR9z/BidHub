@@ -5,25 +5,25 @@ public class Auction {
     private int userId;
     private int itemId;
     private int auctionDate;
-    private int auctionPrice;
+    private int bidAmount;
 
     public Auction() {
     }
 
-    public Auction(int userId, int itemId, int auctionPrice) {
+    public Auction(int userId, int itemId, int bidAmount) {
         this.userId = userId;
         this.itemId = itemId;
-        this.auctionPrice = auctionPrice;
+        this.bidAmount = bidAmount;
     }
 
-    public Auction(int userId, int itemId, int auctionDate, int auctionPrice) {
-        this(userId, itemId, auctionPrice);
+    public Auction(int userId, int itemId, int auctionDate, int bidAmount) {
+        this(userId, itemId, bidAmount);
         this.auctionDate = auctionDate;
 
     }
 
-    public Auction(int auctionId, int userId, int itemId, int auctionDate, int auctionPrice) {
-        this(userId, itemId, auctionDate, auctionPrice);
+    public Auction(int auctionId, int userId, int itemId, int auctionDate, int bidAmount) {
+        this(userId, itemId, auctionDate, bidAmount);
         this.auctionId = auctionId;
     }
 
@@ -60,11 +60,11 @@ public class Auction {
     }
 
     public int getAuctionPrice() {
-        return auctionPrice;
+        return bidAmount;
     }
 
-    public void setAuctionPrice(int auctionPrice) {
-        this.auctionPrice = auctionPrice;
+    public void setAuctionPrice(int bidAmount) {
+        this.bidAmount = bidAmount;
     }
 
     @Override
@@ -74,7 +74,7 @@ public class Auction {
         sb.append(", userId=").append(userId);
         sb.append(", itemId=").append(itemId);
         sb.append(", auctionDate=").append(auctionDate);
-        sb.append(", auctionPrice=").append(auctionPrice);
+        sb.append(", bidAmount=").append(bidAmount);
         sb.append('}');
         return sb.toString();
     }
