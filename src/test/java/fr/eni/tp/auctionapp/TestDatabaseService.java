@@ -25,7 +25,7 @@ public class TestDatabaseService {
 
     public void clearDatabase() {
 
-        String[] tables = new String[]{"auctions", "categories", "items", "users", "withdrawals"};
+        String[] tables = new String[]{"auctions", "withdrawals", "items", "categories", "users"};
 
         for (String table : tables) {
             jdbcTemplate.execute("DELETE FROM " + table);

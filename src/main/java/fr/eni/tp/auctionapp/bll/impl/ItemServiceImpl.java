@@ -5,6 +5,8 @@ import fr.eni.tp.auctionapp.bo.Item;
 import fr.eni.tp.auctionapp.dal.ItemDao;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class ItemServiceImpl implements ItemService {
 
@@ -22,7 +24,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Item read(int id) {
+    public Optional<Item> read(int id) {
         return itemDAO.read(id);
     }
 }

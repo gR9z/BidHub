@@ -2,7 +2,9 @@ package fr.eni.tp.auctionapp.dao;
 
 import com.github.javafaker.Faker;
 import fr.eni.tp.auctionapp.TestDatabaseService;
+import fr.eni.tp.auctionapp.bo.Category;
 import fr.eni.tp.auctionapp.bo.Item;
+import fr.eni.tp.auctionapp.bo.User;
 import fr.eni.tp.auctionapp.dal.ItemDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 public class TestItemDaoImpl {
@@ -30,6 +34,12 @@ public class TestItemDaoImpl {
 
     @Test
     void test_createItem() {
+        User seller = testDatabaseService.createRandomUser();
+        testDatabaseService.insertUserInDatabase(seller);
+
+        Category category = testDatabaseService.createRandomCategory();
+        testDatabaseService.insertCategoryInDatabase(category);
+
         Item item = new Item();
 
         item.setItemName(faker.commerce().productName());
@@ -40,5 +50,20 @@ public class TestItemDaoImpl {
         int startingPrice = faker.number().numberBetween(100, 1000);
         item.setStartingPrice(startingPrice);
         item.setSellingPrice(startingPrice + faker.number().numberBetween(1, 500));
+        item.setImageUrl(faker.internet().url());
+
+        item.setSeller(seller);
+        item.setCategory(category);
+
+        itemDao.insert(item);
+
+        Optional<Item> optionalItem = itemDao.read(item.getItemId());
+        assertThat(optionalItem.isPresent()).isTrue();
+        Item itemRead = optionalItem.get();
+
+        System.out.println(itemRead);
+        assertThat(itemRead.getItemId()).isEqualTo(item.getItemId());
+        assertThat(itemRead.getItemName()).isEqualTo(item.getItemName());
+        assertThat(itemRead.getDescription()).isEqualTo(item.getDescription());
     }
 }

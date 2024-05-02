@@ -12,6 +12,8 @@ public class Item {
     private LocalDateTime auctionEndingDate;
     private int startingPrice;
     private int sellingPrice;
+    private String imageUrl;
+
     private String saleStatus;
 
     private Category category;
@@ -22,18 +24,18 @@ public class Item {
 
     public Item() {}
 
-    public Item(String itemName, String description, LocalDateTime auctionStartingDate, LocalDateTime auctionEndingDate, int startingPrice, int sellingPrice, String saleStatus) {
+    public Item(String itemName, String description, LocalDateTime auctionStartingDate, LocalDateTime auctionEndingDate, int startingPrice, int sellingPrice, String imageUrl) {
         this.itemName = itemName;
         this.description = description;
         this.auctionStartingDate = auctionStartingDate;
         this.auctionEndingDate = auctionEndingDate;
         this.startingPrice = startingPrice;
         this.sellingPrice = sellingPrice;
-        this.saleStatus = saleStatus;
+        this.imageUrl = imageUrl;
     }
 
-    public Item(int itemId, String itemName, String description, LocalDateTime auctionStartingDate, LocalDateTime auctionEndingDate, int startingPrice, int sellingPrice, String saleStatus) {
-        this(itemName, description, auctionStartingDate, auctionEndingDate, startingPrice, sellingPrice, saleStatus);
+    public Item(int itemId, String itemName, String description, LocalDateTime auctionStartingDate, LocalDateTime auctionEndingDate, int startingPrice, int sellingPrice, String imageUrl) {
+        this(itemName, description, auctionStartingDate, auctionEndingDate, startingPrice, sellingPrice, imageUrl);
         this.itemId = itemId;
     }
 
@@ -91,6 +93,14 @@ public class Item {
 
     public void setSellingPrice(int sellingPrice) {
         this.sellingPrice = sellingPrice;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String getSaleStatus() {
