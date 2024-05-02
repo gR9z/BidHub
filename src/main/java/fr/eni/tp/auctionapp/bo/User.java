@@ -4,6 +4,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -21,6 +22,9 @@ public class User implements UserDetails {
     private String password;
     private Integer credit;
     private boolean isAdmin;
+
+    private List<Item> boughtItems = new ArrayList<Item>();
+    private List<Item> soldItems = new ArrayList<Item>();
 
     private Collection<SimpleGrantedAuthority> authorities;
 
@@ -145,6 +149,22 @@ public class User implements UserDetails {
 
     public void setUserId(Integer userId) {
         this.userId = userId;
+    }
+
+    public List<Item> getSoldItems() {
+        return soldItems;
+    }
+
+    public void setSoldItems(List<Item> soldItems) {
+        this.soldItems = soldItems;
+    }
+
+    public List<Item> getBoughtItems() {
+        return boughtItems;
+    }
+
+    public void setBoughtItems(List<Item> boughtItems) {
+        this.boughtItems = boughtItems;
     }
 
     @Override
