@@ -2,7 +2,6 @@ package fr.eni.tp.auctionapp.controller;
 
 import fr.eni.tp.auctionapp.bll.UserService;
 import fr.eni.tp.auctionapp.bo.User;
-import fr.eni.tp.auctionapp.dal.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,15 +11,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
+import java.util.Objects;
 
 @Controller
 public class EditProfileController {
 
-    private UserDao userDao;
+    private UserService userService;
 
     @Autowired
-    public EditProfileController(UserDao userDao) {
-        this.userDao = userDao;
+    public EditProfileController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping("/error")
@@ -41,7 +41,7 @@ public class EditProfileController {
             Principal principal,
             Model model
     ) {
-        User user = userDao.selectUserByUsername(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = Objects.requireNonNull(UserService.selectUserByUsername(principal.getName())).orElseThrow(() -> new RuntimeException("User not found"));
         model.addAttribute("user", user);
         return "user/edit-profile";
     }
@@ -53,11 +53,15 @@ public class EditProfileController {
             Model model){
 
         if ("save".equals(action)) {
-            userDao.editUserProfile(user, user.getUsername());
+
+            userService.editUserProfile(user);
             return "redirect:/profile";
+
         } else if ("delete".equals(action)) {
-            userDao.deleteUser(user.getUsername());
+
+            userService.deleteUser(user);
             return "redirect:/delete-account";
+
         } else if ("cancel".equals(action)) {
             return "redirect:/profile";
         }

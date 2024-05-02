@@ -20,7 +20,7 @@ public class UserDaoImpl implements UserDao {
             "VALUES (:username, :lastName, :firstName, :email, :phone, :street, :zipCode, :city, :password, :credit, :isAdmin);";
     private String EDIT_VALUES_BY_USERNAME = "UPDATE USERS\n" +
             "SET username = :username,\n" +
-            "    lastName = :lasName,\n" +
+            "    lastName = :lastName,\n" +
             "    firstName = :firstName,\n" +
             "    email = :email,\n" +
             "    phone = :phone,\n" +
@@ -29,8 +29,8 @@ public class UserDaoImpl implements UserDao {
             "    city = :city,\n" +
             "    password = :password,\n" +
             "    credit = :credit,\n" +
-            "    isAdmin = :isAdmin" +
-            "WHERE username = ?;";
+            "    isAdmin = :isAdmin\n" +
+            "WHERE username = :username;";
     private String DELETE_BY_USERNAME = "DELETE FROM USERS WHERE username = ?";
 
 
@@ -49,7 +49,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void editUserProfile(User user, String originalUsername) {
+    public void editUserProfile(User user) {
         MapSqlParameterSource namedParameters = new MapSqlParameterSource();
         namedParameters.addValue("username", user.getUsername());
         namedParameters.addValue("lastName", user.getLastName());
@@ -62,7 +62,6 @@ public class UserDaoImpl implements UserDao {
         namedParameters.addValue("password", user.getPassword());
         namedParameters.addValue("credit", user.getCredit());
         namedParameters.addValue("isAdmin", user.isAdmin());
-        namedParameters.addValue("originalUsername", originalUsername);
 
         namedParameterJdbcTemplate.update(EDIT_VALUES_BY_USERNAME, namedParameters);
     }
@@ -95,7 +94,7 @@ public class UserDaoImpl implements UserDao {
 
 
 
-    public class UserRowMapper implements RowMapper<User> {
+    public static class UserRowMapper implements RowMapper<User> {
         @Override
         public User mapRow(ResultSet rs, int rowNum) throws SQLException {
 

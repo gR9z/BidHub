@@ -30,7 +30,7 @@ public class SecurityConfiguration {
         http.formLogin(login -> {
             login.loginPage("/login").permitAll();
             login.failureUrl("/login?error");
-            login.defaultSuccessUrl("/my-account").permitAll();
+            login.defaultSuccessUrl("/profile").permitAll();
         });
 
         http.logout(logout -> {

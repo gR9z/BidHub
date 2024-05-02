@@ -7,7 +7,7 @@ import java.util.Optional;
 public interface UserDao {
     Optional<User> selectUserByUsername(String username);
 
-    void editUserProfile(User user, String originalUsername);
+    void editUserProfile(User user);
 
     void insertUser(User user);
 
