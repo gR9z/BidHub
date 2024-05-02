@@ -29,5 +29,4 @@ public class TestAuctionDaoImpl {
     void test_insertAuction() {
 //        auctionDao.insert();
     }
-
 }

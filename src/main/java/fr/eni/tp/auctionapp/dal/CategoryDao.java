@@ -4,12 +4,13 @@ import fr.eni.tp.auctionapp.bo.Category;
 import fr.eni.tp.auctionapp.bo.Item;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CategoryDao {
 
     void insert(Category category);
 
-    Category read(int id);
+    Optional<Category> read(int id);
 
     void update(Category category);
 

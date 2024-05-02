@@ -6,6 +6,7 @@ import fr.eni.tp.auctionapp.dal.CategoryDao;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -22,7 +23,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category read(int id) {
+    public Optional<Category> read(int id) {
         return categoryDao.read(id);
     }
 

@@ -2,6 +2,7 @@ package fr.eni.tp.auctionapp.dal.impl;
 
 import fr.eni.tp.auctionapp.bo.Category;
 import fr.eni.tp.auctionapp.dal.CategoryDao;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -11,14 +12,15 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class CategoryDaoImpl implements CategoryDao {
 
     private static final String INSERT = "INSERT INTO categories (label) VALUES (:label);";
     private static final String SELECT_BY_ID = "SELECT categoryId, label FROM categories WHERE categoryId = :categoryId;";
-    private static final String UPDATE = "UPDATE categories SET label = :label WHERE id = :categoryId;";
-    private static final String DELETE = "DELETE FROM categories WHERE id = :categoryId;";
+    private static final String UPDATE = "UPDATE categories SET label = :label WHERE categoryId = :categoryId;";
+    private static final String DELETE = "DELETE FROM categories WHERE categoryId = :categoryId;";
     private static final String SELECT_ALL = "SELECT categoryId, label FROM categories;";
 
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -49,11 +51,25 @@ public class CategoryDaoImpl implements CategoryDao {
     }
 
     @Override
-    public Category read(int id) {
+    public Optional<Category> read(int id) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("categoryId", id);
 
-        return namedParameterJdbcTemplate.queryForObject(SELECT_BY_ID, params, Category.class);
+        try {
+            Category category = namedParameterJdbcTemplate.queryForObject(
+                    SELECT_BY_ID,
+                    params,
+                    (rs, rowNum) -> {
+                        Category cat = new Category();
+                        cat.setCategoryId(rs.getInt("categoryId"));
+                        cat.setLabel(rs.getString("label"));
+                        return cat;
+                    }
+            );
+            return Optional.ofNullable(category);
+        } catch (IncorrectResultSizeDataAccessException ex) {
+            return Optional.empty();
+        }
     }
 
     @Override
