@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -61,9 +62,27 @@ public class TestItemDaoImpl {
         assertThat(optionalItem.isPresent()).isTrue();
         Item itemRead = optionalItem.get();
 
-        System.out.println(itemRead);
         assertThat(itemRead.getItemId()).isEqualTo(item.getItemId());
         assertThat(itemRead.getItemName()).isEqualTo(item.getItemName());
         assertThat(itemRead.getDescription()).isEqualTo(item.getDescription());
     }
+
+    @Test
+    void test_findAll() {
+        User seller = testDatabaseService.createRandomUser();
+        testDatabaseService.insertUserInDatabase(seller);
+
+        Category category = testDatabaseService.createRandomCategory();
+        testDatabaseService.insertCategoryInDatabase(category);
+
+        for (int i = 0; i < 10; i++) {
+            testDatabaseService.insertItemInDatabase(testDatabaseService.createRandomItem(seller, category));
+        }
+
+        List<Item> listItems = itemDao.findAll();
+        System.out.println(listItems);
+        assertThat(listItems.size()).isEqualTo(10);
+    }
+
+
 }

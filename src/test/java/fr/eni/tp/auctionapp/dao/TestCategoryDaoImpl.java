@@ -85,7 +85,7 @@ public class TestCategoryDaoImpl {
             testDatabaseService.insertCategoryInDatabase(testDatabaseService.createRandomCategory());
         }
 
-        List<Category> listCategory = categoryDao.findAll();
-        assertThat(listCategory.size()).isEqualTo(11);
+        List<Category> categories = categoryDao.findAll();
+        assertThat(categories.size()).isEqualTo(11);
     }
 }

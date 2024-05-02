@@ -10,12 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.InstanceOfAssertFactories.LIST;
 
 @SpringBootTest
-@Transactional
 public class TestUserDaoImpl {
 
     @Autowired
@@ -60,4 +61,17 @@ public class TestUserDaoImpl {
         assertThat(optionalNewUser.isPresent()).isTrue();
         assertThat(optionalNewUser.get().getFirstName()).isEqualTo(newUser.getFirstName());
     }
+
+    @Test
+    void test_findAll() {
+
+        for (int i = 0; i < 10; i++) {
+            testDatabaseService.insertUserInDatabase(testDatabaseService.createRandomUser());
+        }
+
+        List<User> users = userDao.findAll();
+        assertThat(users.size()).isEqualTo(11);
+    }
+
+
 }

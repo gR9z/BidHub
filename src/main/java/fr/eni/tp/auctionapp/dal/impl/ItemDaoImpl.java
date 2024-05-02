@@ -1,7 +1,10 @@
 package fr.eni.tp.auctionapp.dal.impl;
 
+import fr.eni.tp.auctionapp.bo.Category;
 import fr.eni.tp.auctionapp.bo.Item;
+import fr.eni.tp.auctionapp.bo.User;
 import fr.eni.tp.auctionapp.dal.ItemDao;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -20,7 +23,8 @@ import java.util.Optional;
 public class ItemDaoImpl implements ItemDao {
 
     private static final String INSERT = "INSERT INTO ITEMS (itemName, description, auctionStartingDate, auctionEndingDate, startingPrice, sellingPrice, imageUrl, userId, categoryId) VALUES (:itemName, :description, :auctionStartingDate, :auctionEndingDate, :startingPrice, :sellingPrice, :imageUrl, :userId, :categoryId);";
-    private static final String SELECT_BY_ID = "SELECT itemId, itemName, description, auctionStartingDate, auctionEndingDate, startingPrice, sellingPrice, imageUrl FROM ITEMS WHERE itemId = :itemId;";
+    private static final String SELECT_BY_ID = "SELECT itemId, itemName, description, auctionStartingDate, auctionEndingDate, startingPrice, sellingPrice, imageUrl, userId, categoryId FROM ITEMS WHERE itemId = :itemId;";
+    private static final String SELECT_ALL = "SELECT itemId, itemName, description, auctionStartingDate, auctionEndingDate, startingPrice, sellingPrice, imageUrl, userId, categoryId FROM ITEMS;";
 
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private JdbcTemplate jdbcTemplate;
@@ -83,7 +87,7 @@ public class ItemDaoImpl implements ItemDao {
 
     @Override
     public List<Item> findAll() {
-        return List.of();
+        return jdbcTemplate.query(SELECT_ALL, new ItemRowMapper());
     }
 
     private static class ItemRowMapper implements RowMapper<Item> {
@@ -102,6 +106,14 @@ public class ItemDaoImpl implements ItemDao {
             item.setStartingPrice(rs.getInt("startingPrice"));
             item.setSellingPrice(rs.getInt("sellingPrice"));
             item.setImageUrl(rs.getString("imageUrl"));
+
+            Category category = new Category();
+            category.setCategoryId(rs.getInt("categoryId"));
+            item.setCategory(category);
+
+            User seller = new User();
+            seller.setId(rs.getInt("userId"));
+            item.setSeller(seller);
 
             return item;
         }

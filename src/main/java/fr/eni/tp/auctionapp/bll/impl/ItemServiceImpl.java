@@ -18,8 +18,6 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public void createItem(Item item) {
-        //Faire tout les isValid
-
         itemDAO.insert(item);
     }
 

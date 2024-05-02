@@ -2,12 +2,16 @@ package fr.eni.tp.auctionapp;
 
 import com.github.javafaker.Faker;
 import fr.eni.tp.auctionapp.bll.CategoryService;
+import fr.eni.tp.auctionapp.bll.ItemService;
 import fr.eni.tp.auctionapp.bll.UserService;
 import fr.eni.tp.auctionapp.bo.Category;
+import fr.eni.tp.auctionapp.bo.Item;
 import fr.eni.tp.auctionapp.bo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 @Service
 public class TestDatabaseService {
@@ -20,6 +24,9 @@ public class TestDatabaseService {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private ItemService itemService;
 
     private Faker faker = new Faker();
 
@@ -71,6 +78,30 @@ public class TestDatabaseService {
     public Category insertCategoryInDatabase(Category category) {
         categoryService.createCategory(category);
         return category;
+    }
+
+    public Item createRandomItem(User seller, Category category) {
+        Item item = new Item();
+
+        item.setItemName(faker.commerce().productName());
+        item.setDescription(faker.lorem().sentence());
+        item.setAuctionStartingDate(LocalDateTime.now());
+        item.setAuctionEndingDate(LocalDateTime.now().plusDays(7));
+
+        int startingPrice = faker.number().numberBetween(100, 1000);
+        item.setStartingPrice(startingPrice);
+        item.setSellingPrice(startingPrice + faker.number().numberBetween(1, 500));
+        item.setImageUrl(faker.internet().url());
+
+        item.setSeller(seller);
+        item.setCategory(category);
+
+        return item;
+    }
+
+    public Item insertItemInDatabase(Item item) {
+        itemService.createItem(item);
+        return item;
     }
 
 }

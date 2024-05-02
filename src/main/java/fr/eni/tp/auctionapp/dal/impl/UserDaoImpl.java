@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -21,6 +22,7 @@ public class UserDaoImpl implements UserDao {
     private String SELECT_BY_USERNAME = "SELECT * FROM users WHERE username = ?;";
     private String INSERT = "INSERT INTO users (username, lastName, firstName, email, phone, street, zipCode, city, password, credit, isAdmin) " +
             "VALUES (:username, :lastName, :firstName, :email, :phone, :street, :zipCode, :city, :password, :credit, :isAdmin);";
+    private String SELECT_ALL = "SELECT * FROM users;";
 
     private JdbcTemplate jdbcTemplate;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -67,7 +69,12 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
-    public class UserRowMapper implements RowMapper<User> {
+    @Override
+    public List<User> findAll() {
+        return jdbcTemplate.query(SELECT_ALL, new UserRowMapper());
+    }
+
+    public static class UserRowMapper implements RowMapper<User> {
         @Override
         public User mapRow(ResultSet rs, int rowNum) throws SQLException {
 
