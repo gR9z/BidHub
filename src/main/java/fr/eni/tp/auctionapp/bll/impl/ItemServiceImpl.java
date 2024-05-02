@@ -4,6 +4,8 @@ import fr.eni.tp.auctionapp.bll.ItemService;
 import fr.eni.tp.auctionapp.bo.Category;
 import fr.eni.tp.auctionapp.bo.Item;
 import fr.eni.tp.auctionapp.dal.ItemDAO;
+import fr.eni.tp.auctionapp.exceptions.BusinessCode;
+import fr.eni.tp.auctionapp.exceptions.BusinessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,7 +36,7 @@ public class ItemServiceImpl implements ItemService {
         isValid &= isItemNameValid(item.getItemName(), businessException);
         isValid &= isDescriptionValid(item.getDescription(), businessException);
         isValid &= isAuctionStartingDateValid(item.getAuctionStartingDate(), businessException);
-        isValid &= isAuctionEndingDateValid(item.getAuctionEndingDate(), businessException);
+        isValid &= isAuctionEndingDateValid(item.getAuctionEndingDate(), item.getAuctionStartingDate(), businessException);
         isValid &= isCategoryValid(item.getCategory(), businessException);
 
         if(isValid){
@@ -53,7 +55,7 @@ public class ItemServiceImpl implements ItemService {
 
     //Item Name
     private boolean isItemNameValid(String itemName, BusinessException businessException){
-        if(itemName == null || itemName.blank()){
+        if(itemName == null || itemName.isBlank()){
             businessException.addKey(BusinessCode.VALIDATION_ITEM_NAME_NULL);
             return false;
         }
@@ -69,7 +71,7 @@ public class ItemServiceImpl implements ItemService {
 
     //Description
     private boolean isDescriptionValid(String description, BusinessException businessException){
-        if(description == null || description.blank()){
+        if(description == null || description.isBlank()){
             businessException.addKey(BusinessCode.VALIDATION_DESCRIPTION_NULL);
             return false;
         }
@@ -85,7 +87,7 @@ public class ItemServiceImpl implements ItemService {
 
     //Auction Starting Date
     private boolean isAuctionStartingDateValid(LocalDateTime auctionStartingDate, BusinessException businessException){
-        if(auctionStartingDate == null || auctionStartingDate.blank()){
+        if(auctionStartingDate == null){
             businessException.addKey(BusinessCode.VALIDATION_AUCTION_STARTING_DATE_NULL);
             return false;
         }
@@ -95,13 +97,13 @@ public class ItemServiceImpl implements ItemService {
 
 
     //Auction Ending Date
-    private boolean isAuctionEndingDateValid(LocalDateTime auctionStartingDate, LocalDateTime auctionEndingDate, BusinessException businessException){
-        if(auctionEndingDate == null || auctionEndingDate.blank()){
+    private boolean isAuctionEndingDateValid(LocalDateTime auctionEndingDate, LocalDateTime auctionStartingDate, BusinessException businessException){
+        if(auctionEndingDate == null){
             businessException.addKey(BusinessCode.VALIDATION_AUCTION_ENDING_DATE_NULL);
             return false;
         }
 
-        if(auctionEndingDate.before(auctionStartingDate) ){
+        if(auctionEndingDate.isBefore(auctionStartingDate) ){
             businessException.addKey(BusinessCode.VALIDATION_AUCTION_ENDING_DATE_AFTER_AUCTION_STARTING_DATE);
             return false;
         }
@@ -112,7 +114,7 @@ public class ItemServiceImpl implements ItemService {
 
     //Category
     private boolean isCategoryValid(Category category, BusinessException businessException){
-        if(category == null || category.blank()){
+        if(category == null){
             businessException.addKey(BusinessCode.VALIDATION_CATEGORY_NULL);
             return false;
         }
