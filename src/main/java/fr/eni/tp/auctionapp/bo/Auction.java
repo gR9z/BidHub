@@ -1,6 +1,7 @@
 package fr.eni.tp.auctionapp.bo;
 
 public class Auction {
+    private int auctionId;
     private int userId;
     private int itemId;
     private int auctionDate;
@@ -9,11 +10,29 @@ public class Auction {
     public Auction() {
     }
 
-    public Auction(int userId, int itemId, int auctionDate, int auctionPrice) {
+    public Auction(int userId, int itemId, int auctionPrice) {
         this.userId = userId;
         this.itemId = itemId;
-        this.auctionDate = auctionDate;
         this.auctionPrice = auctionPrice;
+    }
+
+    public Auction(int userId, int itemId, int auctionDate, int auctionPrice) {
+        this(userId, itemId, auctionPrice);
+        this.auctionDate = auctionDate;
+
+    }
+
+    public Auction(int auctionId, int userId, int itemId, int auctionDate, int auctionPrice) {
+        this(userId, itemId, auctionDate, auctionPrice);
+        this.auctionId = auctionId;
+    }
+
+    public int getAuctionId() {
+        return auctionId;
+    }
+
+    public void setAuctionId(int auctionId) {
+        this.auctionId = auctionId;
     }
 
     public int getUserId() {
@@ -50,12 +69,13 @@ public class Auction {
 
     @Override
     public String toString() {
-        return "Auction{" +
-                "userId=" + userId +
-                ", itemId=" + itemId +
-                ", auctionDate=" + auctionDate +
-                ", auctionPrice=" + auctionPrice +
-                '}';
+        final StringBuilder sb = new StringBuilder("Auction{");
+        sb.append("auctionId=").append(auctionId);
+        sb.append(", userId=").append(userId);
+        sb.append(", itemId=").append(itemId);
+        sb.append(", auctionDate=").append(auctionDate);
+        sb.append(", auctionPrice=").append(auctionPrice);
+        sb.append('}');
+        return sb.toString();
     }
-
 }
