@@ -77,11 +77,11 @@ public class ItemDaoImpl implements ItemDao {
 
     @Override
     public void update(Item item) {
-
+ù
     }
 
     @Override
-    public void delete(Item item) {
+    public void delete(int itemId) {
 
     }
 
