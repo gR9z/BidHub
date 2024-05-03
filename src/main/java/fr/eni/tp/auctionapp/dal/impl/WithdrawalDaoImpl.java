@@ -1,7 +1,7 @@
 package fr.eni.tp.auctionapp.dal.impl;
 
 import fr.eni.tp.auctionapp.bo.Withdrawal;
-import fr.eni.tp.auctionapp.dal.WithdrawalDAO;
+import fr.eni.tp.auctionapp.dal.WithdrawalDao;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -12,7 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @Repository
-public class WithdrawalDAOImpl implements WithdrawalDAO {
+public class WithdrawalDaoImpl implements WithdrawalDao {
 
     private static final String INSERT_INTO = "INSERT INTO WITHDRAWALS (itemId, street, zipCode, city) VALUES (:itemId, :street, :zipCode, :city)";
     private static final String SELECT_BY_ITEM_ID = "SELECT itemId, street, zipCode, city FROM WITHDRAWALS WHERE itemId = : :id";
@@ -22,7 +22,7 @@ public class WithdrawalDAOImpl implements WithdrawalDAO {
     private JdbcTemplate jdbcTemplate;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    public WithdrawalDAOImpl(
+    public WithdrawalDaoImpl(
             JdbcTemplate jdbcTemplate,
             NamedParameterJdbcTemplate namedParameterJdbcTemplate
     ) {

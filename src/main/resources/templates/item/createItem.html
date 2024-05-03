@@ -63,7 +63,10 @@
                             <div class="auth-form__field">
                                 <select name="category" id="category">
                                     <option value="">--Choose a category--</option>
-                                    <option th:each="category: ${categories}" th:value="${category.categoryId}"></option>
+                                    <option th:each="category: ${categories}"
+                                            th:value="${category.categoryId}"
+                                            th:text="${category.label}">
+                                    </option>
                                 </select>
 
 
@@ -149,7 +152,7 @@
                                     required
                                     class="auth-form__input"
                                     placeholder=""
-                                    th:value="${authenticatedUser.street}"
+                                    th:field="*{withdrawal.street}"
                             />
 
 
@@ -171,7 +174,7 @@
                                     required
                                     class="auth-form__input"
                                     placeholder=""
-                                    th:value="${authenticatedUser.zipCode}"
+                                    th:field="*{withdrawal.zipCode}"
                             />
 
 
@@ -190,7 +193,7 @@
                                     required
                                     class="auth-form__input"
                                     placeholder=""
-                                    th:value="${authenticatedUser.city}"
+                                    th:field="*{withdrawal.city}"
 
                             />
 
