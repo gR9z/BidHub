@@ -2,6 +2,7 @@ package fr.eni.tp.auctionapp.dal.impl;
 
 import fr.eni.tp.auctionapp.bo.User;
 import fr.eni.tp.auctionapp.dal.UserDao;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -19,10 +20,11 @@ import java.util.Optional;
 @Repository
 public class UserDaoImpl implements UserDao {
 
-    private String SELECT_BY_USERNAME = "SELECT * FROM users WHERE username = ?;";
-    private String INSERT = "INSERT INTO users (username, lastName, firstName, email, phone, street, zipCode, city, password, credit, isAdmin) " +
+    private static String SELECT_BY_USERNAME = "SELECT * FROM users WHERE username = :username;";
+    private static String INSERT = "INSERT INTO users (username, lastName, firstName, email, phone, street, zipCode, city, password, credit, isAdmin) " +
             "VALUES (:username, :lastName, :firstName, :email, :phone, :street, :zipCode, :city, :password, :credit, :isAdmin);";
-    private String SELECT_ALL = "SELECT * FROM users;";
+    private static String SELECT_ALL = "SELECT * FROM users;";
+    private static final String COUNT = "SELECT COUNT(*) AS count FROM users;";
 
     private JdbcTemplate jdbcTemplate;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -34,10 +36,19 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Optional<User> selectUserByUsername(String username) {
-        User user = jdbcTemplate.queryForObject(SELECT_BY_USERNAME, new UserRowMapper(), username);
-        return Optional.ofNullable(user);
+        MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+        namedParameters.addValue("username", username);
+        try {
+            User user = namedParameterJdbcTemplate.queryForObject(
+                    SELECT_BY_USERNAME,
+                    namedParameters,
+                    new UserRowMapper()
+            );
+            return Optional.ofNullable(user);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
     }
-
     @Override
     public void insertUser(User user) {
 
@@ -72,6 +83,12 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> findAll() {
         return jdbcTemplate.query(SELECT_ALL, new UserRowMapper());
+    }
+
+    @Override
+    public int count() {
+        return Optional.ofNullable(jdbcTemplate.queryForObject(COUNT, (rs, rowNum) -> rs.getInt("count")))
+                .orElse(0);
     }
 
     public static class UserRowMapper implements RowMapper<User> {

@@ -7,5 +7,5 @@ public interface AuctionDao {
 
     void insert(Item item, int bidAmount);
     Auction read(int id);
-
+    int count();
 }

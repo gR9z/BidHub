@@ -11,7 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class TestDatabaseService {
@@ -85,8 +88,13 @@ public class TestDatabaseService {
 
         item.setItemName(faker.commerce().productName());
         item.setDescription(faker.lorem().sentence());
-        item.setAuctionStartingDate(LocalDateTime.now());
-        item.setAuctionEndingDate(LocalDateTime.now().plusDays(7));
+
+        java.util.Date date = faker.date().past(30, TimeUnit.DAYS);
+        LocalDateTime startDateTime = date.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
+        item.setAuctionStartingDate(startDateTime);
+        item.setAuctionEndingDate(startDateTime.plusDays(7));
 
         int startingPrice = faker.number().numberBetween(100, 1000);
         item.setStartingPrice(startingPrice);

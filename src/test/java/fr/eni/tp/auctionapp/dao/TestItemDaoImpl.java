@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 public class TestItemDaoImpl {
@@ -68,6 +69,43 @@ public class TestItemDaoImpl {
     }
 
     @Test
+    void test_updateItem() {
+        User seller = testDatabaseService.createRandomUser();
+        testDatabaseService.insertUserInDatabase(seller);
+
+        Category category = testDatabaseService.createRandomCategory();
+        testDatabaseService.insertCategoryInDatabase(category);
+
+        Item item = testDatabaseService.createRandomItem(seller, category);
+        testDatabaseService.insertItemInDatabase(item);
+
+        item.setItemName("New Item Name");
+        itemDao.update(item);
+
+        Optional<Item> optionalItem = itemDao.read(item.getItemId());
+        assertThat(optionalItem.isPresent()).isTrue();
+        Item itemRead = optionalItem.get();
+        assertThat(itemRead.getItemId()).isEqualTo(item.getItemId());
+        assertThat(itemRead.getItemName()).isEqualTo(item.getItemName());
+    }
+
+    @Test
+    void test_deleteItem() {
+        User seller = testDatabaseService.createRandomUser();
+        testDatabaseService.insertUserInDatabase(seller);
+
+        Category category = testDatabaseService.createRandomCategory();
+        testDatabaseService.insertCategoryInDatabase(category);
+
+        Item item = testDatabaseService.createRandomItem(seller, category);
+        testDatabaseService.insertItemInDatabase(item);
+
+        itemDao.delete(item.getItemId());
+        Optional<Item> optionalItem = itemDao.read(item.getItemId());
+        assertThat(optionalItem.isPresent()).isFalse();
+    }
+
+    @Test
     void test_findAll() {
         User seller = testDatabaseService.createRandomUser();
         testDatabaseService.insertUserInDatabase(seller);
@@ -84,5 +122,95 @@ public class TestItemDaoImpl {
         assertThat(listItems.size()).isEqualTo(10);
     }
 
+    @Test
+    void test_findAllItemsPaginated() {
+        User seller = testDatabaseService.createRandomUser();
+        testDatabaseService.insertUserInDatabase(seller);
 
+        Category category = testDatabaseService.createRandomCategory();
+        testDatabaseService.insertCategoryInDatabase(category);
+
+        for (int i = 0; i < 50; i++) {
+            testDatabaseService.insertItemInDatabase(testDatabaseService.createRandomItem(seller, category));
+        }
+
+        List<Item> paginatedItems = itemDao.findAllItemsPaginated(2, 10);
+        System.out.println(paginatedItems);
+        assertThat(paginatedItems.size()).isEqualTo(10);
+    }
+
+    @Test
+    void findAllItemsByUserIdPaginated() {
+        User seller = testDatabaseService.createRandomUser();
+        testDatabaseService.insertUserInDatabase(seller);
+
+        User seller2 = testDatabaseService.createRandomUser();
+        testDatabaseService.insertUserInDatabase(seller2);
+
+        Category category = testDatabaseService.createRandomCategory();
+        testDatabaseService.insertCategoryInDatabase(category);
+
+        for (int i = 0; i < 15; i++) {
+            testDatabaseService.insertItemInDatabase(testDatabaseService.createRandomItem(seller, category));
+        }
+
+        for (int i = 0; i < 10; i++) {
+            testDatabaseService.insertItemInDatabase(testDatabaseService.createRandomItem(seller2, category));
+        }
+
+        List<Item> itemsFromSellerPagination = itemDao.findAllItemsByUserIdPaginated(seller.getUserId(), 1, 100);
+        List<Item> itemsFromSeller2Pagination = itemDao.findAllItemsByUserIdPaginated(seller2.getUserId(), 1, 5);
+
+        assertThat(itemsFromSellerPagination.size()).isEqualTo(15);
+        assertThat(itemsFromSeller2Pagination.size()).isEqualTo(5);
+
+        LocalDateTime previousDate = LocalDateTime.MIN;
+        for (Item item : itemsFromSellerPagination) {
+            assertTrue(item.getAuctionStartingDate().isEqual(previousDate) || item.getAuctionStartingDate().isAfter(previousDate));
+            previousDate = item.getAuctionStartingDate();
+        }
+    }
+
+    @Test
+    void test_countItemsByUserId() {
+        User seller = testDatabaseService.createRandomUser();
+        testDatabaseService.insertUserInDatabase(seller);
+
+        User seller2 = testDatabaseService.createRandomUser();
+        testDatabaseService.insertUserInDatabase(seller2);
+
+        Category category = testDatabaseService.createRandomCategory();
+        testDatabaseService.insertCategoryInDatabase(category);
+
+        for (int i = 0; i < 15; i++) {
+            testDatabaseService.insertItemInDatabase(testDatabaseService.createRandomItem(seller, category));
+        }
+
+        for (int i = 0; i < 10; i++) {
+            testDatabaseService.insertItemInDatabase(testDatabaseService.createRandomItem(seller2, category));
+        }
+
+        int countItemsSeller1 = itemDao.countItemsByUserId(seller.getUserId());
+        int countItemsSeller2 = itemDao.countItemsByUserId(seller2.getUserId());
+
+        assertThat(countItemsSeller1).isEqualTo(15);
+        assertThat(countItemsSeller2).isEqualTo(10);
+    }
+
+    @Test
+    void test_count() {
+        User seller = testDatabaseService.createRandomUser();
+        testDatabaseService.insertUserInDatabase(seller);
+
+        Category category = testDatabaseService.createRandomCategory();
+        testDatabaseService.insertCategoryInDatabase(category);
+
+        for (int i = 0; i < 38; i++) {
+            testDatabaseService.createRandomItem(seller, category);
+            testDatabaseService.insertItemInDatabase(testDatabaseService.createRandomItem(seller, category));
+        }
+
+        int count = itemDao.count();
+        assertThat(count).isEqualTo(38);
+    }
 }

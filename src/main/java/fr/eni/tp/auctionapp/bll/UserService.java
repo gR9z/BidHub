@@ -8,6 +8,6 @@ import java.util.List;
 public interface UserService extends UserDetailsService {
     void createUser(User user);
     void createUser(User user, String confirmPassword);
-
     List<User> getUsers();
+    int countUsers();
 }

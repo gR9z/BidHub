@@ -10,4 +10,6 @@ public interface UserDao {
     void insertUser(User user);
 
     List<User> findAll();
+
+    int count();
 }

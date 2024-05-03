@@ -9,10 +9,13 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Repository
 public class AuctionDaoImpl implements AuctionDao {
 
-    private String INSERT = "INSERT INTO AUCTIONS (userId, itemId, bidAmount) VALUES (:userId, :itemId, :bidAmount);";
+    private static String INSERT = "INSERT INTO AUCTIONS (userId, itemId, bidAmount) VALUES (:userId, :itemId, :bidAmount);";
+    private static final String COUNT = "SELECT COUNT(*) AS count FROM auctions;";
 
     private JdbcTemplate jdbcTemplate;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -34,4 +37,10 @@ public class AuctionDaoImpl implements AuctionDao {
     public Auction read(int id) {
         return null;
     }
+
+    public int count() {
+        return Optional.ofNullable(jdbcTemplate.queryForObject(COUNT, (rs, rowNum) -> rs.getInt("count")))
+                .orElse(0);
+    }
+
 }

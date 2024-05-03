@@ -63,6 +63,15 @@ public class TestUserDaoImpl {
     }
 
     @Test
+    void test_countUsers() {
+        for (int i = 0; i < 25; i++) {
+            testDatabaseService.insertUserInDatabase(testDatabaseService.createRandomUser());
+        }
+
+        assertThat(userDao.count()).isEqualTo(25 + 1);
+    }
+
+    @Test
     void test_findAll() {
 
         for (int i = 0; i < 10; i++) {
