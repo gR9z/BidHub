@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html
+        lang="en" data-theme="light"
+        xmlns:th="http://www.thymeleaf.org"
+        th:replace="~{layouts/layout :: layout-main(
+        pageContent=~{:: .main},
+        title='Add a new item for sale',
+        cssPath=null,
+        jsPath=null
+    )}"
+>
+
+<main class="main">
+    <section class="section-content auth__section">
+        <div class="container">
+            <div class="auth__container">
+                <div class="auth__login">
+                    <h1 class="auth__title">New sale</h1>
+
+                    <form method="POST" th:object="${item}" th:action="@{/create-item}" id="auth__form-login" class="auth-form">
+
+<!--                        <p class="error" th:each="error: ${#fields.errors('global')}" th:text="${error}"></p>-->
+
+                        <div class="auth-form__group">
+                            <div class="auth-form__field">
+                                <input
+                                        type="text"
+                                        id="itemName"
+                                        name="itemName"
+                                        required
+                                        class="auth-form__input"
+                                        placeholder=""
+                                        th:field="*{itemName}"
+
+                                />
+
+
+                                <label
+                                        for="itemName"
+                                        class="auth-form__label"
+                                >Item</label
+                                >
+                            </div>
+
+                            <div class="auth-form__field">
+                                <textarea
+                                        id="description"
+                                        name="description"
+                                        required
+                                        class="auth-form__input"
+                                        placeholder=""
+                                        th:field="*{description}"
+                                ></textarea>
+
+
+                                <label
+                                        for="description"
+                                        class="auth-form__label"
+                                >Description
+                                </label>
+                            </div>
+
+                            <div class="auth-form__field">
+                                <select name="category" id="category">
+                                    <option value="">--Choose a category--</option>
+                                    <option th:each="category: ${categories}" th:value="${category.categoryId}"></option>
+                                </select>
+
+
+                                <label
+                                        for="category"
+                                        class="auth-form__label"
+                                >Category
+                                </label>
+                            </div>
+
+                            <div class="auth-form__actions">
+                                <input type="file" name="image" accept="image/*" id = "image">
+                                <label
+                                        for="image"
+                                        class="auth-form__label"
+                                >Add a Picture
+                                </label>
+                            </div>
+
+                            <div class="auth-form__field">
+                                <input
+                                        type="number"
+                                        id="startingPrice"
+                                        name="startingPrice"
+                                        required
+                                        class="auth-form__input"
+                                        placeholder=""
+                                        value="0"
+                                        th:field="*{startingPrice}"
+                                />
+
+
+                                <label
+                                        for="startingPrice"
+                                        class="auth-form__label"
+                                >Price</label
+                                >
+                            </div>
+
+                            <div class="auth-form__field">
+                                <input
+                                        type="datetime-local"
+                                        id="auctionStartingdate"
+                                        name="auctionStartingdate"
+                                        required
+                                        class="auth-form__input"
+                                        placeholder=""
+                                        th:field="*{auctionStartingDate}"
+                                />
+
+
+                                <label
+                                        for="auctionStartingdate"
+                                        class="auth-form__label"
+                                >Start of auction</label
+                                >
+                            </div>
+
+                            <div class="auth-form__field">
+                                <input
+                                        type="datetime-local"
+                                        id="auctionEndingdate"
+                                        name="auctionEndingdate"
+                                        required
+                                        class="auth-form__input"
+                                        placeholder=""
+                                        th:field="*{auctionEndingDate}"
+                                />
+
+                                <label
+                                        for="auctionEndingdate"
+                                        class="auth-form__label"
+                                >End of auction</label
+                                >
+                            </div>
+                        </div>
+
+                        <div class="auth-form__field">
+                            <input
+                                    type="text"
+                                    id="street"
+                                    name="street"
+                                    required
+                                    class="auth-form__input"
+                                    placeholder=""
+                                    th:value="${authenticatedUser.street}"
+                            />
+
+
+
+
+                            <label
+                                    for="street"
+                                    class="auth-form__label"
+                            >Street</label
+                            >
+                        </div>
+
+
+                        <div class="auth-form__field">
+                            <input
+                                    type="text"
+                                    id="zipCode"
+                                    name="zipCode"
+                                    required
+                                    class="auth-form__input"
+                                    placeholder=""
+                                    th:value="${authenticatedUser.zipCode}"
+                            />
+
+
+                            <label
+                                    for="zipCode"
+                                    class="auth-form__label"
+                            >Zip Code</label
+                            >
+                        </div>
+
+                        <div class="auth-form__field">
+                            <input
+                                    type="text"
+                                    id="city"
+                                    name="city"
+                                    required
+                                    class="auth-form__input"
+                                    placeholder=""
+                                    th:value="${authenticatedUser.city}"
+
+                            />
+
+                            <label
+                                    for="city"
+                                    class="auth-form__label"
+                            >City</label
+                            >
+                        </div>
+
+
+                        <div class="auth-form__actions">
+                            <button
+                                    class="button"
+                                    type="submit"
+                            >
+                                Save
+                            </button>
+
+                            <button
+                                    class="button"
+                                    type="submit"
+                            >
+                                Cancel
+                            </button>
+                        </div>
+
+                        <p
+                                class="auth-form__message auth-form__message--login"
+                        ></p>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+</main>
+
+</html>
