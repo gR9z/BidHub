@@ -14,33 +14,39 @@
 
     <h2>My Profile</h2>
 
-    <label for="username-input">Pseudo :</label>
-    <input type="text" name="username" id="username-input" disabled th:value="${user.username}">
+    <span>Welcome, <p th:text="${user.username}"></p></span>
 
-    <label for="name-input">Name :</label>
-    <input type="text" name="name" id="name-input" disabled th:value="${user.lastName}">
 
-    <label for="firstname-input">Firstname :</label>
-    <input type="text" name="firstname" id="firstname-input" disabled th:value="${user.firstName}">
 
-    <label for="email-input">Email :</label>
-    <input type="text" name="email" id="email-input" disabled th:value="${user.email}">
+        <label for="username-input">Pseudo :</label>
+        <input type="text" name="username" id="username-input" disabled th:value="${user.username}">
 
-    <label for="phone-input">Phone :</label>
-    <input type="number" name="phone" id="phone-input" disabled th:value="${user.phone}">
+        <label for="name-input">Name :</label>
+        <input type="text" name="name" id="name-input" disabled th:value="${user.lastName}">
 
-    <label for="street-input">Street</label>
-    <input type="text" name="street" id="street-input" disabled th:value="${user.street}">
+        <label for="firstname-input">Firstname :</label>
+        <input type="text" name="firstname" id="firstname-input" disabled th:value="${user.firstName}">
 
-    <label for="zipcode-input">Zip Code :</label>
-    <input type="number" name="zipcode" id="zipcode-input" disabled th:value="${user.zipCode}">
+        <label for="email-input">Email :</label>
+        <input type="text" name="email" id="email-input" disabled th:value="${user.email}">
 
-    <label for="city-input">City :</label>
-    <input type="text" name="city" id="city-input" disabled th:value="${user.city}">
+        <label for="phone-input">Phone :</label>
+        <input type="number" name="phone" id="phone-input" disabled th:value="${user.phone}">
 
-    <div class="submit-btns">
-        <button type="submit" id="edit-account"><a th:href="@{edit-profile}">Edit</a></button>
-    </div>
+        <label for="street-input">Street</label>
+        <input type="text" name="street" id="street-input" disabled th:value="${user.street}">
+
+        <label for="zipcode-input">Zip Code :</label>
+        <input type="number" name="zipcode" id="zipcode-input" disabled th:value="${user.zipCode}">
+
+        <label for="city-input">City :</label>
+        <input type="text" name="city" id="city-input" disabled th:value="${user.city}">
+
+        <div class="submit-btns">
+            <a href="profile/edit-profile.html">Edit</a>
+        </div>
+
+
 
 
 </main>

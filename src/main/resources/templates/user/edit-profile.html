@@ -14,7 +14,7 @@
 
     <h2>Edit my Profile</h2>
 
-    <form action="/edit-profile" method="post">
+    <form method="post" th:action="@{/profile/edit-profile}">
 
         <label for="username-input">Pseudo :</label>
         <input type="text" name="username" id="username-input" th:value="${user.username}">
@@ -41,11 +41,11 @@
         <input type="text" name="city" id="city-input" th:value="${user.city}">
 
 
-    <div class="submit-btns">
-        <button type="submit" id="save">Save</button>
-        <button type="submit" id="delete">Delete my account</button>
-        <button type="submit" id="back">Back</button>
-    </div>
+        <div class="submit-btns">
+            <button type="submit" id="save" name="action" value="save">Save</button>
+            <button type="submit" id="delete" name="action" value="delete">Delete my account</button>
+            <a th:href="@{/profile}"><button type="button" id="back">Back</button></a>
+        </div>
 
     </form>
 

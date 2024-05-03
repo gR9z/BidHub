@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html
+        lang="en" data-theme="light"
+        xmlns:th="http://www.thymeleaf.org"
+        th:replace="~{layouts/layout :: layout-main(
+        pageContent=~{:: .main},
+        title=~{:: .main-title}
+    )}"
+>
+
+
+<body>
+
+<main class="main">
+
+    <h2>Delete my account</h2>
+    <p>Are you sure to delete your account ?</p>
+
+    <form action="/login" method="post">
+        <button type="submit"><a th:href="@{/login}">Yes</a></button>
+        <button type="submit"><a th:href="@{}">No</a></button>
+    </form>
+
+</main>
+</body>
+</html>
