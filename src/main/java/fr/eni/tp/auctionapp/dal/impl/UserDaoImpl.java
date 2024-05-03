@@ -7,10 +7,13 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -19,6 +22,7 @@ public class UserDaoImpl implements UserDao {
     private String SELECT_BY_USERNAME = "SELECT * FROM users WHERE username = ?;";
     private String INSERT = "INSERT INTO users (username, lastName, firstName, email, phone, street, zipCode, city, password, credit, isAdmin) " +
             "VALUES (:username, :lastName, :firstName, :email, :phone, :street, :zipCode, :city, :password, :credit, :isAdmin);";
+    private String SELECT_ALL = "SELECT * FROM users;";
 
     private JdbcTemplate jdbcTemplate;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -30,7 +34,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Optional<User> selectUserByUsername(String username) {
-        User user = this.jdbcTemplate.queryForObject(SELECT_BY_USERNAME, new UserRowMapper(), username);
+        User user = jdbcTemplate.queryForObject(SELECT_BY_USERNAME, new UserRowMapper(), username);
         return Optional.ofNullable(user);
     }
 
@@ -50,13 +54,27 @@ public class UserDaoImpl implements UserDao {
         namedParameters.addValue("credit", user.getCredit());
         namedParameters.addValue("isAdmin", user.isAdmin());
 
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
         namedParameterJdbcTemplate.update(
                 INSERT,
-                namedParameters
+                namedParameters,
+                keyHolder
         );
+
+        Number key = (Number) keyHolder.getKey();
+
+        if(key != null) {
+            user.setId(key.intValue());
+        }
     }
 
-    public class UserRowMapper implements RowMapper<User> {
+    @Override
+    public List<User> findAll() {
+        return jdbcTemplate.query(SELECT_ALL, new UserRowMapper());
+    }
+
+    public static class UserRowMapper implements RowMapper<User> {
         @Override
         public User mapRow(ResultSet rs, int rowNum) throws SQLException {
 
