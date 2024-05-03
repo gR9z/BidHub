@@ -31,21 +31,6 @@ public class UserProfileController {
         return "/user/profile-user";
     }
 
-//    @GetMapping("/profile/edit-profile")
-//    public String editProfile(
-//            @ModelAttribute User user,
-//            @RequestParam("action") String action,
-//            Model model){
-//
-//        if ("edit".equals(action)) {
-//
-//            userService.editUserProfile(user);
-//            return "redirect:/profile";
-//
-//        }
-//        return "redirect:/profile";
-//    }
-
     @GetMapping("/profile/edit-profile")
     public String editProfile(
             Principal principal,
@@ -82,37 +67,22 @@ public class UserProfileController {
 //    }
 //
 
+    @PostMapping("/login")
+    public String deleteSubmit(
+            @ModelAttribute User user,
+            @RequestParam("action") String action,
+            Model model){
+
+        if ("delete".equals(action)) {
+
+            userService.deleteUser(user);
+            return "redirect:/security/login";
+
+        }
+        return "redirect:/login";
+    }
 
 
-
-//
-//    @PostMapping("/deleted-login")
-//    public String deleteSubmit(
-//            @ModelAttribute User user,
-//            @RequestParam("action") String action,
-//            Model model){
-//
-//        if ("delete".equals(action)) {
-//
-//            userService.deleteUser(user);
-//            return "redirect:/security/login";
-//
-//        }
-//        return "redirect:/login";
-//    }
-//
-//    @PostMapping("/cancel-profile")
-//    public String cancelSubmit(
-//            @ModelAttribute User user,
-//            @RequestParam("action") String action,
-//            Model model) {
-//
-//        if ("cancel".equals(action)) {
-//            return "redirect:/profile";
-//        }
-//        return "redirect:/profile";
-//    }
-//
     @GetMapping("/error-profile")
     public String userError(
             @RequestParam(name = "error", required = false) String error,

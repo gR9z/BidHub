@@ -8,15 +8,13 @@
     )}"
 >
 
-<body>
 
-<main class="main">
+
+    <main class="main">
 
     <h2>My Profile</h2>
 
     <span>Welcome, <p th:text="${user.username}"></p></span>
-
-
 
         <label for="username-input">Pseudo :</label>
         <input type="text" name="username" id="username-input" disabled th:value="${user.username}">
@@ -42,13 +40,8 @@
         <label for="city-input">City :</label>
         <input type="text" name="city" id="city-input" disabled th:value="${user.city}">
 
-        <div class="submit-btns">
-            <a href="profile/edit-profile.html">Edit</a>
-        </div>
+        <a href="profile/edit-profile">Edit</a>
 
+    </main>
 
-
-
-</main>
-</body>
 </html>

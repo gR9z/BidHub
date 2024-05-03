@@ -8,13 +8,13 @@
     )}"
 >
 
-<body>
+
 
 <main class="main">
 
     <h2>Edit my Profile</h2>
 
-    <form method="post" th:action="@{/profile/edit-profile}">
+    <form method="post" th:action="@{/profile}">
 
         <label for="username-input">Pseudo :</label>
         <input type="text" name="username" id="username-input" th:value="${user.username}">
@@ -43,7 +43,7 @@
 
         <div class="submit-btns">
             <button type="submit" id="save" name="action" value="save">Save</button>
-            <button type="submit" id="delete" name="action" value="delete">Delete my account</button>
+            <a th:href="@{/login}"><button type="button" id="delete">Delete my account</button></a>
             <a th:href="@{/profile}"><button type="button" id="back">Back</button></a>
         </div>
 
@@ -51,5 +51,5 @@
 
 
 </main>
-</body>
+
 </html>
