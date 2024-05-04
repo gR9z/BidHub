@@ -121,7 +121,7 @@ public class ItemDaoImpl implements ItemDao {
     }
 
     public List<Item> findAllItemsPaginated(int page, int size) {
-
+        if (page < 1) page = 1;
         int offset = (page - 1) * size;
 
         MapSqlParameterSource params = new MapSqlParameterSource();

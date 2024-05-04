@@ -3,7 +3,6 @@ package fr.eni.tp.auctionapp.dal.impl;
 import fr.eni.tp.auctionapp.bo.User;
 import fr.eni.tp.auctionapp.dal.UserDao;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -116,7 +115,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public List<User> findAllUsersPagination(int page, int size) {
-
+        if (page < 1) page = 1;
         int offset = (page - 1) * size;
 
         MapSqlParameterSource params = new MapSqlParameterSource();

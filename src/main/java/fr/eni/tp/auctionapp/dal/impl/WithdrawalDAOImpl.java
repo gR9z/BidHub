@@ -18,7 +18,6 @@ public class WithdrawalDAOImpl implements WithdrawalDAO {
     private static final String SELECT_BY_ITEM_ID = "SELECT itemId, street, zipCode, city FROM WITHDRAWALS WHERE itemId = : :id";
     private static final String UPDATE = "UPDATE WITHDRAWALS SET itemId = :itemId, street = :street, zipCode = :zipCode WHERE itemId = :itemId";
 
-
     private JdbcTemplate jdbcTemplate;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
