@@ -112,7 +112,7 @@ public class TestDatabaseService {
     }
 
     public Item insertItemInDatabase(Item item) {
-        itemService.insert(item);
+        itemService.createItem(item);
         return item;
     }
 

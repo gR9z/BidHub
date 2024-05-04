@@ -11,16 +11,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class ItemServiceImpl implements ItemService {
 
-    private ItemDao itemDao;
+    private final ItemDao itemDao;
     private WithdrawalDao withdrawalDao;
 
     public ItemServiceImpl(ItemDao itemDao, WithdrawalDao withdrawalDao) {
-
         this.itemDao = itemDao;
         this.withdrawalDao = withdrawalDao;
     }
@@ -37,95 +37,19 @@ public class ItemServiceImpl implements ItemService {
         isValid &= isAuctionEndingDateValid(item.getAuctionEndingDate(), item.getAuctionEndingDate(), businessException);
         isValid &= isCategoryValid(item.getCategory(), businessException);
 
-        if(isValid){
-            try{
-
-
-
-
-
+        if (isValid) {
+            try {
                 // Ajouter la partie où on sépare item de withdrawal pour faire deux objets
-
                 //withdrawalDao.insert(withdrawal)
-
                 itemDao.insert(item);
 
-            } catch(BusinessException dalBusinessException){
+            } catch (BusinessException dalBusinessException) {
                 throw dalBusinessException;
             }
         } else {
             throw businessException;
         }
 
-    }
-
-    //Item Name
-    private boolean isItemNameValid(String itemName, BusinessException businessException){
-        if(itemName == null){
-            businessException.addKey(BusinessCode.VALIDATION_ITEM_NAME_NULL);
-            return false;
-        }
-
-        if(itemName.length() > 30){
-            businessException.addKey(BusinessCode.VALIDATION_ITEM_NAME_SIZE);
-            return false;
-        }
-
-        return true;
-    }
-
-
-    //Description
-    private boolean isDescriptionValid(String description, BusinessException businessException){
-        if(description == null){
-            businessException.addKey(BusinessCode.VALIDATION_DESCRIPTION_NULL);
-            return false;
-        }
-
-        if(description.length() > 300){
-            businessException.addKey(BusinessCode.VALIDATION_DESCRIPTION_SIZE);
-            return false;
-        }
-
-        return true;
-    }
-
-
-    //Auction Starting Date
-    private boolean isAuctionStartingDateValid(LocalDateTime auctionStartingDate, BusinessException businessException){
-        if(auctionStartingDate == null){
-            businessException.addKey(BusinessCode.VALIDATION_AUCTION_STARTING_DATE_NULL);
-            return false;
-        }
-
-        return true;
-    }
-
-
-    //Auction Ending Date
-    private boolean isAuctionEndingDateValid(LocalDateTime auctionStartingDate, LocalDateTime auctionEndingDate, BusinessException businessException){
-        if(auctionEndingDate == null){
-            businessException.addKey(BusinessCode.VALIDATION_AUCTION_ENDING_DATE_NULL);
-            return false;
-        }
-
-        if(auctionEndingDate.isBefore(auctionStartingDate) ){
-            businessException.addKey(BusinessCode.VALIDATION_AUCTION_ENDING_DATE_AFTER_AUCTION_STARTING_DATE);
-            return false;
-        }
-
-        return true;
-    }
-
-
-    //Category
-    private boolean isCategoryValid(Category category, BusinessException businessException){
-        if(category == null){
-            businessException.addKey(BusinessCode.VALIDATION_CATEGORY_NULL);
-            return false;
-        }
-
-        return true;
     }
 
     @Override
@@ -135,36 +59,102 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public void update(Item item) {
-        itemDAO.update(item);
+        itemDao.update(item);
     }
 
     @Override
     public void delete(int itemId) {
-        itemDAO.delete(itemId);
+        itemDao.delete(itemId);
     }
 
     @Override
     public List<Item> findAll() {
-        return itemDAO.findAll();
+        return itemDao.findAll();
     }
 
     @Override
     public List<Item> findAllItemsPaginated(int page, int size) {
-        return itemDAO.findAllItemsPaginated(page, size);
+        return itemDao.findAllItemsPaginated(page, size);
     }
 
     @Override
     public List<Item> findAllItemsByUserIdPaginated(int userId, int page, int size) {
-        return itemDAO.findAllItemsByUserIdPaginated(userId, page, size);
-    };
+        return itemDao.findAllItemsByUserIdPaginated(userId, page, size);
+    }
 
     @Override
     public int countItemsByUserId(int userId) {
-        return itemDAO.countItemsByUserId(userId);
+        return itemDao.countItemsByUserId(userId);
     }
 
     @Override
     public int count() {
-        return itemDAO.count();
+        return itemDao.count();
+    }
+
+    //Item Name
+    private boolean isItemNameValid(String itemName, BusinessException businessException) {
+        if (itemName == null) {
+            businessException.addKey(BusinessCode.VALIDATION_ITEM_NAME_NULL);
+            return false;
+        }
+
+        if (itemName.length() > 30) {
+            businessException.addKey(BusinessCode.VALIDATION_ITEM_NAME_SIZE);
+            return false;
+        }
+
+        return true;
+    }
+
+
+    //Description
+    private boolean isDescriptionValid(String description, BusinessException businessException) {
+        if (description == null) {
+            businessException.addKey(BusinessCode.VALIDATION_DESCRIPTION_NULL);
+            return false;
+        }
+
+        if (description.length() > 300) {
+            businessException.addKey(BusinessCode.VALIDATION_DESCRIPTION_SIZE);
+            return false;
+        }
+
+        return true;
+    }
+
+
+    //Auction Starting Date
+    private boolean isAuctionStartingDateValid(LocalDateTime auctionStartingDate, BusinessException businessException) {
+        if (auctionStartingDate == null) {
+            businessException.addKey(BusinessCode.VALIDATION_AUCTION_STARTING_DATE_NULL);
+            return false;
+        }
+        return true;
+    }
+
+
+    //Auction Ending Date
+    private boolean isAuctionEndingDateValid(LocalDateTime auctionStartingDate, LocalDateTime auctionEndingDate, BusinessException businessException) {
+        if (auctionEndingDate == null) {
+            businessException.addKey(BusinessCode.VALIDATION_AUCTION_ENDING_DATE_NULL);
+            return false;
+        }
+
+        if (auctionEndingDate.isBefore(auctionStartingDate)) {
+            businessException.addKey(BusinessCode.VALIDATION_AUCTION_ENDING_DATE_AFTER_AUCTION_STARTING_DATE);
+            return false;
+        }
+        return true;
+    }
+
+    //Category
+    private boolean isCategoryValid(Category category, BusinessException businessException) {
+        if (category == null) {
+            businessException.addKey(BusinessCode.VALIDATION_CATEGORY_NULL);
+            return false;
+        }
+
+        return true;
     }
 }

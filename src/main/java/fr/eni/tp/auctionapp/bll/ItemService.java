@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ItemService {
-    void insert(Item item);
+    void createItem(Item item);
     Optional<Item> read(int id);
     void update(Item item);
     void delete(int itemId);
