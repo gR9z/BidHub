@@ -1,9 +1,11 @@
 package fr.eni.tp.auctionapp;
 
 import com.github.javafaker.Faker;
+import fr.eni.tp.auctionapp.bll.AuctionService;
 import fr.eni.tp.auctionapp.bll.CategoryService;
 import fr.eni.tp.auctionapp.bll.ItemService;
 import fr.eni.tp.auctionapp.bll.UserService;
+import fr.eni.tp.auctionapp.bo.Auction;
 import fr.eni.tp.auctionapp.bo.Category;
 import fr.eni.tp.auctionapp.bo.Item;
 import fr.eni.tp.auctionapp.bo.User;
@@ -12,6 +14,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class TestDatabaseService {
@@ -27,6 +31,9 @@ public class TestDatabaseService {
 
     @Autowired
     private ItemService itemService;
+
+    @Autowired
+    private AuctionService auctionService;
 
     private Faker faker = new Faker();
 
@@ -85,8 +92,13 @@ public class TestDatabaseService {
 
         item.setItemName(faker.commerce().productName());
         item.setDescription(faker.lorem().sentence());
-        item.setAuctionStartingDate(LocalDateTime.now());
-        item.setAuctionEndingDate(LocalDateTime.now().plusDays(7));
+
+        java.util.Date date = faker.date().past(30, TimeUnit.DAYS);
+        LocalDateTime startDateTime = date.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
+        item.setAuctionStartingDate(startDateTime);
+        item.setAuctionEndingDate(startDateTime.plusDays(7));
 
         int startingPrice = faker.number().numberBetween(100, 1000);
         item.setStartingPrice(startingPrice);
@@ -100,8 +112,22 @@ public class TestDatabaseService {
     }
 
     public Item insertItemInDatabase(Item item) {
-        itemService.createItem(item);
+        itemService.insert(item);
         return item;
     }
 
+    public Auction createAuction(User user, Item item) {
+        Auction auction = new Auction();
+        auction.setUserId(user.getId());
+        auction.setItemId(item.getItemId());
+        auction.setAuctionDate(item.getAuctionStartingDate().plusDays(faker.number().numberBetween(2, 6)));
+        auction.setBidAmount(faker.number().numberBetween(100, 2500));
+
+        return auction;
+    }
+
+    public Auction insertAuctionInDatabase(Auction auction) {
+        auctionService.insert(auction);
+        return auction;
+    }
 }

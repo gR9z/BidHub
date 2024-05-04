@@ -1,7 +1,9 @@
 package fr.eni.tp.auctionapp;
 
 import fr.eni.tp.auctionapp.bll.CategoryService;
+import fr.eni.tp.auctionapp.bll.ItemService;
 import fr.eni.tp.auctionapp.bll.UserService;
+import fr.eni.tp.auctionapp.bo.Auction;
 import fr.eni.tp.auctionapp.bo.Category;
 import fr.eni.tp.auctionapp.bo.Item;
 import fr.eni.tp.auctionapp.bo.User;
@@ -16,6 +18,7 @@ public class DatabaseSeeder {
     static TestDatabaseService testDatabaseService;
     static UserService userService;
     static CategoryService categoryService;
+    static ItemService itemService;
 
     public static void userSeeder(int count) {
 
@@ -60,18 +63,36 @@ public class DatabaseSeeder {
         System.out.printf("%d items populated in the database.%n", count);
     }
 
+    public static void auctionSeeder(int count) {
+        List<User> users = userService.getUsers();
+        List<Item> items = itemService.findAll();
+
+        Random random = new Random();
+        for (int i = 0; i < count - 1; i++) {
+            User user = users.get(random.nextInt(users.size()));
+            Item item = items.get(random.nextInt(items.size()));
+
+            Auction auction = testDatabaseService.createAuction(user, item);
+            testDatabaseService.insertAuctionInDatabase(auction);
+        }
+
+        System.out.printf("%d auctions populated in the database.%n", count);
+    }
+
     public static void main(String[] args) {
 
         ConfigurableApplicationContext context = SpringApplication.run(fr.eni.tp.auctionapp.AuctionAppApplication.class, args);
         testDatabaseService = context.getBean(TestDatabaseService.class);
         userService = context.getBean(UserService.class);
         categoryService = context.getBean(CategoryService.class);
+        itemService = context.getBean(ItemService.class);
 
         testDatabaseService.clearDatabase();
 
         userSeeder(50);
         categorySeeder(20);
         itemSeeder(100);
+        auctionSeeder(1000);
 
         context.close();
     }

@@ -10,6 +10,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -61,5 +63,25 @@ public class TestUserServiceImpl {
 
         assertThat(castLoadedUser.getUsername()).isEqualTo(adminUser.getUsername());
         assertThat(castLoadedUser.isAdmin()).isTrue();
+    }
+
+    @Test
+    void test_getUsers() {
+        for (int i = 0; i < 12; i++) {
+            testDatabaseService.insertUserInDatabase(testDatabaseService.createRandomUser());
+        }
+
+        List<User> users = userService.getUsers();
+        assertThat(users.size()).isEqualTo(12 + 1);
+    }
+
+    @Test
+    void test_countUsers() {
+        for (int i = 0; i < 14; i++) {
+            testDatabaseService.insertUserInDatabase(testDatabaseService.createRandomUser());
+        }
+
+        int count = userService.countUsers();
+        assertThat(count).isEqualTo(14 + 1);
     }
 }

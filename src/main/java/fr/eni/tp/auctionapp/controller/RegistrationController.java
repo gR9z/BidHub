@@ -35,7 +35,6 @@ public class RegistrationController {
     ) {
 
         if (bindingResult.hasErrors()) {
-            System.out.println("ca passe");
             return "account/create-account.html";
         }
 

@@ -55,11 +55,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getUsers() {
-        return userDao.findAll();
-    }
-
-    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> optUser = userDao.selectUserByUsername(username);
 
@@ -70,7 +65,15 @@ public class UserServiceImpl implements UserService {
         return optUser.get();
     }
 
+    @Override
+    public List<User> getUsers() {
+        return userDao.findAll();
+    }
 
+    @Override
+    public int countUsers() {
+        return userDao.count();
+    }
 
     public boolean arePasswordsMatching(String password, String confirmPassword, BusinessException businessException) {
 

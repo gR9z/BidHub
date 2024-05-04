@@ -1,10 +1,12 @@
 package fr.eni.tp.auctionapp.bo;
 
+import java.time.LocalDateTime;
+
 public class Auction {
     private int auctionId;
     private int userId;
     private int itemId;
-    private int auctionDate;
+    private LocalDateTime auctionDate;
     private int bidAmount;
 
     public Auction() {
@@ -16,13 +18,13 @@ public class Auction {
         this.bidAmount = bidAmount;
     }
 
-    public Auction(int userId, int itemId, int auctionDate, int bidAmount) {
+    public Auction(int userId, int itemId, LocalDateTime auctionDate, int bidAmount) {
         this(userId, itemId, bidAmount);
         this.auctionDate = auctionDate;
 
     }
 
-    public Auction(int auctionId, int userId, int itemId, int auctionDate, int bidAmount) {
+    public Auction(int auctionId, int userId, int itemId, LocalDateTime auctionDate, int bidAmount) {
         this(userId, itemId, auctionDate, bidAmount);
         this.auctionId = auctionId;
     }
@@ -51,19 +53,19 @@ public class Auction {
         this.itemId = itemId;
     }
 
-    public int getAuctionDate() {
+    public LocalDateTime getAuctionDate() {
         return auctionDate;
     }
 
-    public void setAuctionDate(int auctionDate) {
+    public void setAuctionDate(LocalDateTime auctionDate) {
         this.auctionDate = auctionDate;
     }
 
-    public int getAuctionPrice() {
+    public int getBidAmount() {
         return bidAmount;
     }
 
-    public void setAuctionPrice(int bidAmount) {
+    public void setBidAmount(int bidAmount) {
         this.bidAmount = bidAmount;
     }
 

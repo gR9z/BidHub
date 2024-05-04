@@ -1,11 +1,10 @@
-package fr.eni.tp.auctionapp.dao;
+package fr.eni.tp.auctionapp.bll;
 
 import fr.eni.tp.auctionapp.TestDatabaseService;
 import fr.eni.tp.auctionapp.bo.Auction;
 import fr.eni.tp.auctionapp.bo.Category;
 import fr.eni.tp.auctionapp.bo.Item;
 import fr.eni.tp.auctionapp.bo.User;
-import fr.eni.tp.auctionapp.dal.AuctionDao;
 import fr.eni.tp.auctionapp.dal.UserDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,16 +18,13 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-public class TestAuctionDaoImpl {
+public class TestAuctionDaoServiceImpl {
 
     @Autowired
-    private AuctionDao auctionDao;
+    private AuctionService auctionService;
 
     @Autowired
     private TestDatabaseService testDatabaseService;
-
-    @Autowired
-    private UserDao userDao;
 
     User user;
     Category category;
@@ -51,9 +47,10 @@ public class TestAuctionDaoImpl {
     void test_insertAuctionWithAuctionDate() {
         LocalDateTime auctionDate = LocalDateTime.of(2024, 5, 15, 17, 45);
         auction.setAuctionDate(auctionDate);
-        auctionDao.insert(auction);
 
-        Optional<Auction> optionalAuction = auctionDao.readByAuctionId(auction.getAuctionId());
+        auctionService.insert(auction);
+
+        Optional<Auction> optionalAuction = auctionService.readByAuctionId(auction.getAuctionId());
         assertThat(optionalAuction.isPresent()).isTrue();
         Auction getAuction = optionalAuction.get();
 
@@ -62,21 +59,21 @@ public class TestAuctionDaoImpl {
 
     @Test
     void test_readByAuctionId() {
-        auctionDao.insert(auction);
-        Optional<Auction> optionalAuction = auctionDao.readByAuctionId(auction.getAuctionId());
+        auctionService.insert(auction);
+        Optional<Auction> optionalAuction = auctionService.readByAuctionId(auction.getAuctionId());
         assertThat(optionalAuction.isPresent()).isTrue();
         Auction getAuction = optionalAuction.get();
         assertThat(getAuction.getAuctionId()).isEqualTo(auction.getAuctionId());
     }
 
     @Test
-    void test_readByItemIdPaginated() {
+    void test_readByItemIdPagination() {
         for (int i = 0; i < 25; i++) {
             Auction auction = testDatabaseService.createAuction(user, item);
             testDatabaseService.insertAuctionInDatabase(auction);
         }
 
-        List<Optional<Auction>> optionalAuctions = auctionDao.readByItemIdPaginated(item.getItemId(), 1, 10);
+        List<Optional<Auction>> optionalAuctions = auctionService.readByItemIdPaginated(item.getItemId(), 1, 10);
         List<Auction> auctions = optionalAuctions.stream()
                 .filter(Optional::isPresent)
                 .map(Optional::get)
@@ -84,8 +81,7 @@ public class TestAuctionDaoImpl {
         assertThat(auctions.size()).isEqualTo(10);
     }
 
-    @Test
-    void test_readByUserIdPaginated() {
+    @Test void test_readByUserIdPaginated() {
         User user2 = testDatabaseService.insertUserInDatabase(testDatabaseService.createRandomUser());
 
         for (int i = 0; i < 25; i++) {
@@ -98,8 +94,8 @@ public class TestAuctionDaoImpl {
             testDatabaseService.insertAuctionInDatabase(auction);
         }
 
-        List<Optional<Auction>> optionalAuctionsFromUser = auctionDao.readByItemIdPaginated(item.getItemId(), 1, 5);
-        List<Optional<Auction>> optionalAuctionsFromUser2 = auctionDao.readByItemIdPaginated(item.getItemId(), 1, 10);
+        List<Optional<Auction>> optionalAuctionsFromUser = auctionService.readByItemIdPaginated(item.getItemId(), 1, 5);
+        List<Optional<Auction>> optionalAuctionsFromUser2 = auctionService.readByItemIdPaginated(item.getItemId(), 1, 10);
 
         List<Auction> auctionsFromUser = optionalAuctionsFromUser.stream()
                 .filter(Optional::isPresent)
@@ -117,12 +113,12 @@ public class TestAuctionDaoImpl {
 
     @Test
     void test_deleteByAuctionId() {
-        auctionDao.insert(auction);
-        Optional<Auction> optionalAuction = auctionDao.readByAuctionId(auction.getAuctionId());
+        auctionService.insert(auction);
+        Optional<Auction> optionalAuction = auctionService.readByAuctionId(auction.getAuctionId());
         assertThat(optionalAuction.isPresent()).isTrue();
 
-        auctionDao.deleteByAuctionId(auction.getAuctionId());
-        Optional<Auction> optionalAuction2 = auctionDao.readByAuctionId(auction.getAuctionId());
+        auctionService.deleteByAuctionId(auction.getAuctionId());
+        Optional<Auction> optionalAuction2 = auctionService.readByAuctionId(auction.getAuctionId());
         assertThat(optionalAuction2.isPresent()).isFalse();
     }
 
@@ -139,7 +135,7 @@ public class TestAuctionDaoImpl {
             testDatabaseService.insertAuctionInDatabase(testDatabaseService.createAuction(user2, item2));
         }
 
-        int auctions = auctionDao.count();
+        int auctions = auctionService.count();
         assertThat(auctions).isEqualTo(7 + 9);
     }
 
@@ -156,8 +152,8 @@ public class TestAuctionDaoImpl {
             testDatabaseService.insertAuctionInDatabase(testDatabaseService.createAuction(user2, item2));
         }
 
-        int auctions = auctionDao.countByItemId(item.getItemId());
-        int auctions2 = auctionDao.countByItemId(item2.getItemId());
+        int auctions = auctionService.countByItemId(item.getItemId());
+        int auctions2 = auctionService.countByItemId(item2.getItemId());
         assertThat(auctions).isEqualTo(7);
         assertThat(auctions2).isEqualTo(9);
     }
@@ -174,8 +170,8 @@ public class TestAuctionDaoImpl {
             testDatabaseService.insertAuctionInDatabase(testDatabaseService.createAuction(user2, item));
         }
 
-        int auctions = auctionDao.countByItemIdAndUserId(item.getItemId(), user.getUserId());
-        int auctions2 = auctionDao.countByItemIdAndUserId(item.getItemId(), user2.getUserId());
+        int auctions = auctionService.countByItemIdAndUserId(item.getItemId(), user.getUserId());
+        int auctions2 = auctionService.countByItemIdAndUserId(item.getItemId(), user2.getUserId());
 
         assertThat(auctions).isEqualTo(12);
         assertThat(auctions2).isEqualTo(8);

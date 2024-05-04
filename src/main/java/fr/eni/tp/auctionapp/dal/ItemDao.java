@@ -15,4 +15,12 @@ public interface ItemDao {
     void delete(int itemId);
 
     List<Item> findAll();
+
+    List<Item> findAllItemsPaginated(int page, int size);
+
+    List<Item> findAllItemsByUserIdPaginated(int userId, int page, int size);
+
+    int countItemsByUserId(int userId);
+
+    int count();
 }

@@ -132,4 +132,39 @@ public class ItemServiceImpl implements ItemService {
     public Optional<Item> read(int id) {
         return itemDao.read(id);
     }
+
+    @Override
+    public void update(Item item) {
+        itemDAO.update(item);
+    }
+
+    @Override
+    public void delete(int itemId) {
+        itemDAO.delete(itemId);
+    }
+
+    @Override
+    public List<Item> findAll() {
+        return itemDAO.findAll();
+    }
+
+    @Override
+    public List<Item> findAllItemsPaginated(int page, int size) {
+        return itemDAO.findAllItemsPaginated(page, size);
+    }
+
+    @Override
+    public List<Item> findAllItemsByUserIdPaginated(int userId, int page, int size) {
+        return itemDAO.findAllItemsByUserIdPaginated(userId, page, size);
+    };
+
+    @Override
+    public int countItemsByUserId(int userId) {
+        return itemDAO.countItemsByUserId(userId);
+    }
+
+    @Override
+    public int count() {
+        return itemDAO.count();
+    }
 }

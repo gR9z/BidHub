@@ -63,6 +63,32 @@ public class TestUserDaoImpl {
     }
 
     @Test
+    void test_updateUser() {
+        user.setEmail("another@email.com");
+        userDao.updateUser(user);
+
+        Optional<User> optionalUser = userDao.selectUserByUsername(user.getUsername());
+        assertThat(optionalUser.isPresent()).isTrue();
+        assertThat(optionalUser.get().getEmail()).isEqualTo(user.getEmail());
+    }
+
+    @Test
+    void test_deleteUser() {
+        userDao.deleteUser(user.getId());
+        Optional<User> optionalUser = userDao.selectUserByUsername(user.getUsername());
+        assertThat(optionalUser.isPresent()).isFalse();
+    }
+
+    @Test
+    void test_countUsers() {
+        for (int i = 0; i < 25; i++) {
+            testDatabaseService.insertUserInDatabase(testDatabaseService.createRandomUser());
+        }
+
+        assertThat(userDao.count()).isEqualTo(25 + 1);
+    }
+
+    @Test
     void test_findAll() {
 
         for (int i = 0; i < 10; i++) {
@@ -73,5 +99,13 @@ public class TestUserDaoImpl {
         assertThat(users.size()).isEqualTo(11);
     }
 
+    @Test
+    void test_findAllUsersPagination() {
+        for (int i = 0; i < 20; i++) {
+            testDatabaseService.insertUserInDatabase(testDatabaseService.createRandomUser());
+        }
 
+        List<User> users = userDao.findAllUsersPagination(1, 10);
+        assertThat(users.size()).isEqualTo(10);
+    }
 }
