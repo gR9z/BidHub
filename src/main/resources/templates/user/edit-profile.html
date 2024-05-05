@@ -41,15 +41,18 @@
         <input type="text" name="city" id="city-input" th:value="${user.city}">
 
 
+
         <div class="submit-btns">
             <button type="submit" id="save" name="action" value="save">Save</button>
-            <a th:href="@{/login}"><button type="button" id="delete">Delete my account</button></a>
+            <button type="button" id="delete">Delete my account</button>
             <a th:href="@{/profile}"><button type="button" id="back">Back</button></a>
         </div>
 
     </form>
 
+    <button class="delete-account">Fermer</button>
 
+<script src="/js/common/modal.js"></script>
 </main>
 
 </html>

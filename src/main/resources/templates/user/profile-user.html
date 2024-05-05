@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOC html>
 <html
         lang="en" data-theme="light"
         xmlns:th="http://www.thymeleaf.org"
@@ -7,40 +7,36 @@
         title=~{:: .main-title}
     )}"
 >
-
-
-
     <main class="main">
+        <h2>My Profile</h2>
 
-    <h2>My Profile</h2>
+        <div>Welcome, <p th:text="${user.username}"></p></div>
 
-    <span>Welcome, <p th:text="${user.username}"></p></span>
+            <label>Pseudo :</label>
+            <div id="username" th:text="${user.username}"></div>
 
-        <label for="username-input">Pseudo :</label>
-        <input type="text" name="username" id="username-input" disabled th:value="${user.username}">
+            <label>Name :</label>
+            <div id="name" th:text="${user.lastName}"></div>
 
-        <label for="name-input">Name :</label>
-        <input type="text" name="name" id="name-input" disabled th:value="${user.lastName}">
+            <label>Firstname :</label>
+            <div id="firstname" th:text="${user.firstName}"></div>
 
-        <label for="firstname-input">Firstname :</label>
-        <input type="text" name="firstname" id="firstname-input" disabled th:value="${user.firstName}">
+            <label>Email :</label>
+            <div id="email" th:text="${user.email}"></div>
 
-        <label for="email-input">Email :</label>
-        <input type="text" name="email" id="email-input" disabled th:value="${user.email}">
+            <label>Phone :</label>
+            <div id="phone" th:text="${user.phone}"></div>
 
-        <label for="phone-input">Phone :</label>
-        <input type="number" name="phone" id="phone-input" disabled th:value="${user.phone}">
+            <label >Street</label>
+            <div id="street" th:text="${user.street}"></div>
 
-        <label for="street-input">Street</label>
-        <input type="text" name="street" id="street-input" disabled th:value="${user.street}">
+            <label>Zip Code :</label>
+            <div id="zipcode" th:text="${user.zipCode}"></div>
 
-        <label for="zipcode-input">Zip Code :</label>
-        <input type="number" name="zipcode" id="zipcode-input" disabled th:value="${user.zipCode}">
+            <label >City :</label>
+            <div id="city" th:text="${user.city}"></div>
 
-        <label for="city-input">City :</label>
-        <input type="text" name="city" id="city-input" disabled th:value="${user.city}">
-
-        <a href="profile/edit-profile">Edit</a>
+            <a href="profile/edit-profile"><button>Edit</button></a>
 
     </main>
 

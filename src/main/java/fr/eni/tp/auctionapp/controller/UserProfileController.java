@@ -67,13 +67,20 @@ public class UserProfileController {
 //    }
 //
 
+    @GetMapping("/confirm")
+    public String confirmDelete(Model model) {
+        model.addAttribute("showOverlay", true);
+        return "/login";
+    }
+
+
     @PostMapping("/login")
     public String deleteSubmit(
             @ModelAttribute User user,
             @RequestParam("action") String action,
             Model model){
 
-        if ("delete".equals(action)) {
+        if ("yes".equals(action)) {
 
             userService.deleteUser(user);
             return "redirect:/security/login";
