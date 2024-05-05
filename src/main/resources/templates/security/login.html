@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html
-        lang="en" data-theme="light"
         xmlns:th="http://www.thymeleaf.org"
         th:replace="~{layouts/layout :: layout-main(
         pageContent=~{:: .main},
@@ -11,52 +10,52 @@
 >
 
 <main class="main">
-    <section class="section-content auth__section">
+    <section class="section-content">
         <div class="container">
-            <div class="auth__container">
-                <div class="auth__login">
-                    <h1 class="auth__title">Login</h1>
+            <div class="form-container">
+                <div class="form-section">
+                    <h1 class="form-title">Login</h1>
 
-                    <form method="POST" th:action="@{/login}" id="auth__form-login" class="auth-form">
-                        <div class="auth-form__group">
-                            <div class="auth-form__field">
+                    <form method="POST" th:action="@{/login}" class="auth-form">
+                        <div class="form-group">
+                            <div class="form-field">
                                 <input
                                         type="text"
                                         id="username"
                                         name="username"
                                         required
-                                        class="auth-form__input"
+                                        class="form-input"
                                         placeholder=""
                                         value="user"
                                 />
 
                                 <label
                                         for="username"
-                                        class="auth-form__label"
+                                        class="form-label"
                                 >Username</label
                                 >
                             </div>
 
-                            <div class="auth-form__field">
+                            <div class="form-field">
                                 <input
                                         type="password"
                                         id="password"
                                         name="password"
                                         required
-                                        class="auth-form__input"
+                                        class="form-input"
                                         placeholder=""
                                         value="password"
                                 />
 
                                 <label
                                         for="password"
-                                        class="auth-form__label"
+                                        class="form-label"
                                 >Password
                                 </label>
                             </div>
                         </div>
 
-                        <div class="auth-form__actions">
+                        <div class="form-actions">
                             <button
                                     class="button"
                                     type="submit"
@@ -65,13 +64,11 @@
                             </button>
                         </div>
 
-                        <p
-                                class="auth-form__message auth-form__message--login"
-                        ></p>
+                        <p class="auth-form__message auth-form__message--login"></p>
                     </form>
                 </div>
 
-                <a class="auth__account-creation-link" th:href="@{/create-account}">Don't have an
+                <a class="form-link" th:href="@{/create-account}">Don't have an
                     <strong>account?</strong><br>Create one for <strong>free</strong>!</a>
             </div>
         </div>

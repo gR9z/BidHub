@@ -76,7 +76,7 @@ public class ItemDaoImpl implements ItemDao {
     }
 
     @Override
-    public Optional<Item> findAllPagination(int id) {
+    public Optional<Item> findById(int id) {
         MapSqlParameterSource namedParameters = new MapSqlParameterSource();
         namedParameters.addValue("itemId", id);
         try {

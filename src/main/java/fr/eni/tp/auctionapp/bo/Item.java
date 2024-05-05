@@ -1,28 +1,49 @@
 package fr.eni.tp.auctionapp.bo;
 
-import java.time.LocalDate;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
 public class Item {
     private int itemId;
+
+    //    @NotNull(message = "Item name cannot be null")
+//    @Size(max = 30, message = "Item name must not exceed 30 characters")
     private String itemName;
+
+    //    @NotNull(message = "Description cannot be null")
+//    @Size(max = 255, message = "Description must not exceed {max} characters")
     private String description;
+
+    //    @NotNull(message = "Auction start date cannot be null")
     private LocalDateTime auctionStartingDate;
+
+    //    @NotNull(message = "Auction end date cannot be null")
     private LocalDateTime auctionEndingDate;
+
+    //    @Min(value = 1, message = "The starting price must be greater than 0")
     private int startingPrice;
     private int sellingPrice;
+
+    @Pattern(regexp = ".*\\.(jpeg|jpg|png|gif)$", message = "Invalid image file format")
     private String imageUrl;
 
     private String saleStatus;
 
+    //    @NotNull(message = "Category cannot be null")
     private Category category;
+
     private List<Auction> auctions;
     private User buyer;
     private User seller;
     private Withdrawal withdrawal;
 
-    public Item() {}
+    public Item() {
+    }
 
     public Item(String itemName, String description, LocalDateTime auctionStartingDate, LocalDateTime auctionEndingDate, int startingPrice, int sellingPrice, String imageUrl) {
         this.itemName = itemName;
@@ -153,21 +174,21 @@ public class Item {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Item{");
-        sb.append("itemId=").append(itemId);
-        sb.append(", itemName='").append(itemName).append('\'');
-        sb.append(", description='").append(description).append('\'');
-        sb.append(", auctionStartingDate=").append(auctionStartingDate);
-        sb.append(", auctionEndingDate=").append(auctionEndingDate);
-        sb.append(", startingPrice=").append(startingPrice);
-        sb.append(", sellingPrice=").append(sellingPrice);
-        sb.append(", saleStatus='").append(saleStatus).append('\'');
-        sb.append(", category=").append(category);
-        sb.append(", auctions=").append(auctions);
-        sb.append(", buyer=").append(buyer);
-        sb.append(", seller=").append(seller);
-        sb.append(", withdrawal=").append(withdrawal);
-        sb.append('}');
-        return sb.toString();
+        return "Item{" +
+                "itemId=" + itemId +
+                ", itemName='" + itemName + '\'' +
+                ", description='" + description + '\'' +
+                ", auctionStartingDate=" + auctionStartingDate +
+                ", auctionEndingDate=" + auctionEndingDate +
+                ", startingPrice=" + startingPrice +
+                ", sellingPrice=" + sellingPrice +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", saleStatus='" + saleStatus + '\'' +
+                ", category=" + category +
+                ", auctions=" + auctions +
+                ", buyer=" + buyer +
+                ", seller=" + seller +
+                ", withdrawal=" + withdrawal +
+                '}';
     }
 }

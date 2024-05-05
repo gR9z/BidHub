@@ -1,6 +1,7 @@
 package fr.eni.tp.auctionapp.bll;
 
 import fr.eni.tp.auctionapp.bo.Item;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;

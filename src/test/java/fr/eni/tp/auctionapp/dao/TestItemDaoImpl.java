@@ -59,7 +59,7 @@ public class TestItemDaoImpl {
 
         itemDao.insert(item);
 
-        Optional<Item> optionalItem = itemDao.findAllPagination(item.getItemId());
+        Optional<Item> optionalItem = itemDao.findById(item.getItemId());
         assertThat(optionalItem.isPresent()).isTrue();
         Item itemRead = optionalItem.get();
 
@@ -82,7 +82,7 @@ public class TestItemDaoImpl {
         item.setItemName("New Item Name");
         itemDao.update(item);
 
-        Optional<Item> optionalItem = itemDao.findAllPagination(item.getItemId());
+        Optional<Item> optionalItem = itemDao.findById(item.getItemId());
         assertThat(optionalItem.isPresent()).isTrue();
         Item itemRead = optionalItem.get();
         assertThat(itemRead.getItemId()).isEqualTo(item.getItemId());
@@ -101,7 +101,7 @@ public class TestItemDaoImpl {
         testDatabaseService.insertItemInDatabase(item);
 
         itemDao.deleteById(item.getItemId());
-        Optional<Item> optionalItem = itemDao.findAllPagination(item.getItemId());
+        Optional<Item> optionalItem = itemDao.findById(item.getItemId());
         assertThat(optionalItem.isPresent()).isFalse();
     }
 

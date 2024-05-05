@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface ItemDao {
     void insert(Item item);
 
-    Optional<Item> findAllPagination(int id);
+    Optional<Item> findById(int id);
 
     void update(Item item);
 
