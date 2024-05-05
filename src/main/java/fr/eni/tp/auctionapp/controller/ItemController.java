@@ -83,7 +83,7 @@ public class ItemController {
 
                 model.addAttribute("categories", categories);
                 model.addAttribute("item", item);
-                model.addAttribute("authenticatedUser", authenticatedUser);
+
                 businessException.getKeys().forEach(key -> {
                     ObjectError error = new ObjectError("globalError", key);
                     bindingResult.addError(error);
