@@ -1,13 +1,11 @@
 @media screen and (min-width: 480px) {
-    .auth-form__group {
-        gap: var(--space-5);
-    }
-
-    .auth-form__field-row {
-        gap: var(--space-5);
+    /* ==================================== */
+    /* =============== FORM =============== */
+    /* ==================================== */
+    .form-group, .form-row {
+        gap: var(--space-7);
     }
 }
-
 
 @media screen and (min-width: 768px) {
     /* ============================== */
@@ -47,23 +45,19 @@
     }
 
     /* ==================================== */
-    /* =========== LANDING PAGE =========== */
+    /* =============== FORM =============== */
     /* ==================================== */
-    /* ===================================== */
-    /* ============= USER AUTH ============= */
-    /* ===================================== */
-    .auth__container {
-        flex-direction: row;
+    .form-group, .form-row {
+        gap: var(--space-6);
     }
 
-    .auth-form__field-row {
+    .form-container, .form-row {
         flex-direction: row;
     }
 }
 
 @media screen and (min-width: 1024px) {
-    /* ===================================== */
-    /* ============= USER AUTH ============= */
-    /* ===================================== */
-
+    .form-group, .form-row {
+        gap: calc(var(--space-5) + var(--space-2));
+    }
 }
