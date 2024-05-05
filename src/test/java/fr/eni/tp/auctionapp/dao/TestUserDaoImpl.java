@@ -42,7 +42,7 @@ public class TestUserDaoImpl {
     }
 
     @Test
-    void test_insertUser() {
+    void test_insert() {
         User newUser = new User();
         newUser.setUsername(faker.name().username());
         newUser.setLastName(faker.name().lastName());
@@ -55,7 +55,7 @@ public class TestUserDaoImpl {
         newUser.setPassword(faker.internet().password());
         newUser.setCredit(10000);
         newUser.setAdmin(true);
-        userDao.insertUser(newUser);
+        userDao.insert(newUser);
 
         Optional<User> optionalNewUser = userDao.selectUserByUsername(newUser.getUsername());
         assertThat(optionalNewUser.isPresent()).isTrue();
@@ -63,9 +63,9 @@ public class TestUserDaoImpl {
     }
 
     @Test
-    void test_updateUser() {
+    void test_update() {
         user.setEmail("another@email.com");
-        userDao.updateUser(user);
+        userDao.update(user);
 
         Optional<User> optionalUser = userDao.selectUserByUsername(user.getUsername());
         assertThat(optionalUser.isPresent()).isTrue();
@@ -73,14 +73,14 @@ public class TestUserDaoImpl {
     }
 
     @Test
-    void test_deleteUser() {
-        userDao.deleteUser(user.getId());
+    void test_deleteById() {
+        userDao.deleteById(user.getId());
         Optional<User> optionalUser = userDao.selectUserByUsername(user.getUsername());
         assertThat(optionalUser.isPresent()).isFalse();
     }
 
     @Test
-    void test_countUsers() {
+    void test_count() {
         for (int i = 0; i < 25; i++) {
             testDatabaseService.insertUserInDatabase(testDatabaseService.createRandomUser());
         }
@@ -100,12 +100,12 @@ public class TestUserDaoImpl {
     }
 
     @Test
-    void test_findAllUsersPagination() {
+    void test_findAllPagination() {
         for (int i = 0; i < 20; i++) {
             testDatabaseService.insertUserInDatabase(testDatabaseService.createRandomUser());
         }
 
-        List<User> users = userDao.findAllUsersPagination(1, 10);
+        List<User> users = userDao.findAllPagination(1, 10);
         assertThat(users.size()).isEqualTo(10);
     }
 }

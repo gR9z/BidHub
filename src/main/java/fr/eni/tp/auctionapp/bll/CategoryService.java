@@ -9,11 +9,11 @@ public interface CategoryService {
 
     void createCategory(Category category);
 
-    Optional<Category> read(int id);
+    Optional<Category> findCategoryById(int id);
 
     void updateCategory(Category category);
 
-    void deleteCategory(int id);
+    void removeCategoryById(int id);
 
-    List<Category> readAll();
+    List<Category> getAllCategories();
 }

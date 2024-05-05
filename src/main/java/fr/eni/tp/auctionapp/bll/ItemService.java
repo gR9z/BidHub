@@ -7,12 +7,12 @@ import java.util.Optional;
 
 public interface ItemService {
     void createItem(Item item);
-    Optional<Item> read(int id);
-    void update(Item item);
-    void delete(int itemId);
-    List<Item> findAll();
-    List<Item> findAllItemsPaginated(int page, int size);
-    List<Item> findAllItemsByUserIdPaginated(int userId, int page, int size);
-    int countItemsByUserId(int userId);
-    int count();
+    Optional<Item> findItemById(int id);
+    void updateItem(Item item);
+    void removeItemById(int itemId);
+    List<Item> getAllItems();
+    List<Item> getAllPaginated(int page, int size);
+    List<Item> getByUserIdPaginated(int userId, int page, int size);
+    int getCountOfItemsByUserId(int userId);
+    int getTotalItemCount();
 }

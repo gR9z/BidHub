@@ -8,19 +8,19 @@ import java.util.Optional;
 public interface ItemDao {
     void insert(Item item);
 
-    Optional<Item> read(int id);
+    Optional<Item> findAllPagination(int id);
 
     void update(Item item);
 
-    void delete(int itemId);
+    void deleteById(int itemId);
 
     List<Item> findAll();
 
-    List<Item> findAllItemsPaginated(int page, int size);
+    List<Item> findAllPaginated(int page, int size);
 
-    List<Item> findAllItemsByUserIdPaginated(int userId, int page, int size);
+    List<Item> findAllByUserIdPaginated(int userId, int page, int size);
 
-    int countItemsByUserId(int userId);
+    int countByUserId(int userId);
 
     int count();
 }

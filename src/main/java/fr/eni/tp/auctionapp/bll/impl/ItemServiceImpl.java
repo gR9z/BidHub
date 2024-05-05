@@ -53,42 +53,42 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Optional<Item> read(int id) {
-        return itemDao.read(id);
+    public Optional<Item> findItemById(int id) {
+        return itemDao.findAllPagination(id);
     }
 
     @Override
-    public void update(Item item) {
+    public void updateItem(Item item) {
         itemDao.update(item);
     }
 
     @Override
-    public void delete(int itemId) {
-        itemDao.delete(itemId);
+    public void removeItemById(int itemId) {
+        itemDao.deleteById(itemId);
     }
 
     @Override
-    public List<Item> findAll() {
+    public List<Item> getAllItems() {
         return itemDao.findAll();
     }
 
     @Override
-    public List<Item> findAllItemsPaginated(int page, int size) {
-        return itemDao.findAllItemsPaginated(page, size);
+    public List<Item> getAllPaginated(int page, int size) {
+        return itemDao.findAllPaginated(page, size);
     }
 
     @Override
-    public List<Item> findAllItemsByUserIdPaginated(int userId, int page, int size) {
-        return itemDao.findAllItemsByUserIdPaginated(userId, page, size);
+    public List<Item> getByUserIdPaginated(int userId, int page, int size) {
+        return itemDao.findAllByUserIdPaginated(userId, page, size);
     }
 
     @Override
-    public int countItemsByUserId(int userId) {
-        return itemDao.countItemsByUserId(userId);
+    public int getCountOfItemsByUserId(int userId) {
+        return itemDao.countByUserId(userId);
     }
 
     @Override
-    public int count() {
+    public int getTotalItemCount() {
         return itemDao.count();
     }
 

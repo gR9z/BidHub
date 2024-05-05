@@ -49,7 +49,7 @@ public class ItemController {
             withdrawal.setCity(authenticatedUser.getCity());
             item.setWithdrawal(withdrawal);
 
-            List<Category> categories = categoryService.readAll();
+            List<Category> categories = categoryService.getAllCategories();
 
             model.addAttribute("item", item);
             model.addAttribute("categories", categories);
@@ -72,7 +72,7 @@ public class ItemController {
     ) {
         if (authenticatedUser != null) {
             if (bindingResult.hasErrors()) {
-                List<Category> categories = categoryService.readAll();
+                List<Category> categories = categoryService.getAllCategories();
 
                 model.addAttribute("categories", categories);
                 model.addAttribute("authenticatedUser", authenticatedUser);
@@ -84,7 +84,7 @@ public class ItemController {
                     System.out.println("sout 2");
                     return "redirect:/";
                 } catch (BusinessException businessException) {
-                    List<Category> categories = categoryService.readAll();
+                    List<Category> categories = categoryService.getAllCategories();
 
                     model.addAttribute("categories", categories);
                     model.addAttribute("authenticatedUser", authenticatedUser);

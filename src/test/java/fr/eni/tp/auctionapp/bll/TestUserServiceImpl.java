@@ -66,22 +66,22 @@ public class TestUserServiceImpl {
     }
 
     @Test
-    void test_getUsers() {
+    void test_getAllUsers() {
         for (int i = 0; i < 12; i++) {
             testDatabaseService.insertUserInDatabase(testDatabaseService.createRandomUser());
         }
 
-        List<User> users = userService.getUsers();
+        List<User> users = userService.getAllUsers();
         assertThat(users.size()).isEqualTo(12 + 1);
     }
 
     @Test
-    void test_countUsers() {
+    void test_getTotalUserCount() {
         for (int i = 0; i < 14; i++) {
             testDatabaseService.insertUserInDatabase(testDatabaseService.createRandomUser());
         }
 
-        int count = userService.countUsers();
+        int count = userService.getTotalUserCount();
         assertThat(count).isEqualTo(14 + 1);
     }
 }

@@ -17,9 +17,10 @@ public class WithdrawalDaoImpl implements WithdrawalDao {
     private static final String INSERT_INTO = "INSERT INTO WITHDRAWALS (itemId, street, zipCode, city) VALUES (:itemId, :street, :zipCode, :city)";
     private static final String SELECT_BY_ITEM_ID = "SELECT itemId, street, zipCode, city FROM WITHDRAWALS WHERE itemId = : :id";
     private static final String UPDATE = "UPDATE WITHDRAWALS SET itemId = :itemId, street = :street, zipCode = :zipCode WHERE itemId = :itemId";
+    private static final String DELETE_BY_ITEM_ID = "DELETE FROM WITHDRAWALS WHERE itemId = :itemId;";
 
-    private JdbcTemplate jdbcTemplate;
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     public WithdrawalDaoImpl(
             JdbcTemplate jdbcTemplate,
@@ -28,7 +29,6 @@ public class WithdrawalDaoImpl implements WithdrawalDao {
         this.jdbcTemplate = jdbcTemplate;
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
-
 
     @Override
     public void insert(Withdrawal withdrawal) {
@@ -45,7 +45,7 @@ public class WithdrawalDaoImpl implements WithdrawalDao {
     }
 
     @Override
-    public Withdrawal getWithdrawalById(int itemId) {
+    public Withdrawal getById(int itemId) {
         MapSqlParameterSource namedParameters = new MapSqlParameterSource();
         namedParameters.addValue("itemId", itemId);
 
@@ -69,8 +69,14 @@ public class WithdrawalDaoImpl implements WithdrawalDao {
         namedParameterJdbcTemplate.update(UPDATE, namedParameters);
     }
 
+    @Override
+    public void delete(int itemId) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("itemId", itemId);
+        namedParameterJdbcTemplate.update(DELETE_BY_ITEM_ID, params);
+    }
 
-    private class WithdrawalRowMapper implements RowMapper<Withdrawal> {
+    private static class WithdrawalRowMapper implements RowMapper<Withdrawal> {
         @Override
         public Withdrawal mapRow(ResultSet rs, int rowNum) throws SQLException {
             Withdrawal withdrawal = new Withdrawal();

@@ -35,7 +35,7 @@ public class TestCategoryServiceImpl {
         Category category = testDatabaseService.createRandomCategory();
         categoryService.createCategory(category);
 
-        Optional<Category> optionalCategory = categoryService.read(category.getCategoryId());
+        Optional<Category> optionalCategory = categoryService.findCategoryById(category.getCategoryId());
         assertThat(optionalCategory.isPresent()).isTrue();
 
         Category getCategory = optionalCategory.orElseThrow(() -> new IllegalStateException("Category not found"));
@@ -43,11 +43,11 @@ public class TestCategoryServiceImpl {
     }
 
     @Test
-    public void test_readCategory() {
+    public void test_findCategoryById() {
         Category category = testDatabaseService.createRandomCategory();
         categoryService.createCategory(category);
 
-        Optional<Category> optionalCategory = categoryService.read(category.getCategoryId());
+        Optional<Category> optionalCategory = categoryService.findCategoryById(category.getCategoryId());
         Category getCategory = optionalCategory.orElseThrow(() -> new IllegalStateException("Category not found"));
 
         assertThat(category.getLabel()).isEqualTo(getCategory.getLabel());
@@ -61,29 +61,29 @@ public class TestCategoryServiceImpl {
         category.setLabel("New Label Category");
         categoryService.updateCategory(category);
 
-        Optional<Category> optionalCategory = categoryService.read(category.getCategoryId());
+        Optional<Category> optionalCategory = categoryService.findCategoryById(category.getCategoryId());
         Category getCategory = optionalCategory.orElseThrow(() -> new IllegalStateException("Category not found"));
         assertThat(category.getLabel()).isEqualTo(getCategory.getLabel()).isEqualTo("New Label Category");
     }
 
     @Test
-    public void test_deleteCategory() {
+    public void test_removeCategoryById() {
         Category category = testDatabaseService.createRandomCategory();
         categoryService.createCategory(category);
-        categoryService.deleteCategory(category.getCategoryId());
-        Optional<Category> optionalCategory = categoryService.read(category.getCategoryId());
+        categoryService.removeCategoryById(category.getCategoryId());
+        Optional<Category> optionalCategory = categoryService.findCategoryById(category.getCategoryId());
 
         assertThat(optionalCategory.isPresent()).isFalse();
     }
 
     @Test
-    public void test_readAllCategories() {
+    public void test_getAllCategories() {
         for (int i = 0; i < 10; i++) {
             Category category = testDatabaseService.createRandomCategory();
             testDatabaseService.insertCategoryInDatabase(category);
         }
 
-        List<Category> categories = categoryService.readAll();
+        List<Category> categories = categoryService.getAllCategories();
         assertThat(categories.size()).isEqualTo(10);
     }
 }

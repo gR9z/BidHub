@@ -4,6 +4,7 @@ import fr.eni.tp.auctionapp.bo.Withdrawal;
 
 public interface WithdrawalDao {
     void insert(Withdrawal withdrawal);
-    Withdrawal getWithdrawalById(int itemId);
+    Withdrawal getById(int itemId);
     void update(Withdrawal withdrawal);
+    void delete(int itemId);
 }

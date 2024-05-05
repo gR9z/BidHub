@@ -30,18 +30,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public void createUser(User user) {
         user.setPassword(this.passwordEncoder.encode(user.getPassword()));
-        userDao.insertUser(user);
+        userDao.insert(user);
     }
 
     @Override
-    public void createUser(User user, String confirmPassword) {
+    public void createUserWithConfirmPassword(User user, String confirmPassword) {
 
         BusinessException businessException = new BusinessException();
 
         if (arePasswordsMatching(user.getPassword(), confirmPassword, businessException)) {
           try {
               user.setPassword(this.passwordEncoder.encode(user.getPassword()));
-              userDao.insertUser(user);
+              userDao.insert(user);
               request.login(user.getUsername(), confirmPassword);
           } catch(BusinessException dalBusinessException) {
               throw dalBusinessException;
@@ -51,6 +51,16 @@ public class UserServiceImpl implements UserService {
         } else {
             throw businessException;
         }
+
+    }
+
+    @Override
+    public void updateUser(User user) {
+
+    }
+
+    @Override
+    public void removeUserById(int id) {
 
     }
 
@@ -66,12 +76,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getUsers() {
+    public List<User> getAllUsers() {
         return userDao.findAll();
     }
 
     @Override
-    public int countUsers() {
+    public int getTotalUserCount() {
         return userDao.count();
     }
 

@@ -52,7 +52,7 @@ public class UserDaoImpl implements UserDao {
         }
     }
     @Override
-    public void insertUser(User user) {
+    public void insert(User user) {
 
         MapSqlParameterSource namedParameters = new MapSqlParameterSource();
         namedParameters.addValue("username", user.getUsername());
@@ -83,7 +83,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void updateUser(User user) {
+    public void update(User user) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("userId", user.getUserId());
         params.addValue("username", user.getUsername());
@@ -102,7 +102,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void deleteUser(int userId) {
+    public void deleteById(int userId) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("userId", userId);
         namedParameterJdbcTemplate.update(DELETE_BY_ID, params);
@@ -114,7 +114,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public List<User> findAllUsersPagination(int page, int size) {
+    public List<User> findAllPagination(int page, int size) {
         if (page < 1) page = 1;
         int offset = (page - 1) * size;
 

@@ -48,8 +48,8 @@ public class DatabaseSeeder {
     }
 
     public static void itemSeeder(int count) {
-        List<User> users = userService.getUsers();
-        List<Category> categories = categoryService.readAll();
+        List<User> users = userService.getAllUsers();
+        List<Category> categories = categoryService.getAllCategories();
 
         Random random = new Random();
         for (int i = 0; i < count - 1; i++) {
@@ -64,8 +64,8 @@ public class DatabaseSeeder {
     }
 
     public static void auctionSeeder(int count) {
-        List<User> users = userService.getUsers();
-        List<Item> items = itemService.findAll();
+        List<User> users = userService.getAllUsers();
+        List<Item> items = itemService.getAllItems();
 
         Random random = new Random();
         for (int i = 0; i < count - 1; i++) {

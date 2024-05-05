@@ -127,7 +127,7 @@ public class TestDatabaseService {
     }
 
     public Auction insertAuctionInDatabase(Auction auction) {
-        auctionService.insert(auction);
+        auctionService.createAuction(auction);
         return auction;
     }
 }
