@@ -1,4 +1,4 @@
-<!DOC html>
+<!DOCTYPE html>
 <html
         lang="en" data-theme="light"
         xmlns:th="http://www.thymeleaf.org"
@@ -7,37 +7,38 @@
         title=~{:: .main-title}
     )}"
 >
-    <main class="main">
-        <h2>My Profile</h2>
+<main class="main">
+    <h2>My Profile</h2>
 
-        <div>Welcome, <p th:text="${user.username}"></p></div>
+    <div>Welcome, <p th:text="${user.username}"></p></div>
 
-            <label>Pseudo :</label>
-            <div id="username" th:text="${user.username}"></div>
+        <label>Pseudo :</label>
+        <div id="username" th:text="${user.username}"></div>
 
-            <label>Name :</label>
-            <div id="name" th:text="${user.lastName}"></div>
+        <label>Name :</label>
+        <div id="name" th:text="${user.lastName}"></div>
 
-            <label>Firstname :</label>
-            <div id="firstname" th:text="${user.firstName}"></div>
+        <label>Firstname :</label>
+        <div id="firstname" th:text="${user.firstName}"></div>
 
-            <label>Email :</label>
-            <div id="email" th:text="${user.email}"></div>
+        <label>Email :</label>
+        <div id="email" th:text="${user.email}"></div>
 
-            <label>Phone :</label>
-            <div id="phone" th:text="${user.phone}"></div>
+        <label>Phone :</label>
+        <div id="phone" th:text="${user.phone}"></div>
 
-            <label >Street</label>
-            <div id="street" th:text="${user.street}"></div>
+        <label >Street</label>
+        <div id="street" th:text="${user.street}"></div>
 
-            <label>Zip Code :</label>
-            <div id="zipcode" th:text="${user.zipCode}"></div>
+        <label>Zip Code :</label>
+        <div id="zipcode" th:text="${user.zipCode}"></div>
 
-            <label >City :</label>
-            <div id="city" th:text="${user.city}"></div>
+        <label >City :</label>
+        <div id="city" th:text="${user.city}"></div>
 
-            <a href="profile/edit-profile"><button>Edit</button></a>
+        <a href="profile/edit-profile"><button>Edit</button></a>
 
-    </main>
+
+</main>
 
 </html>

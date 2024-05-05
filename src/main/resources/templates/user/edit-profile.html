@@ -7,14 +7,10 @@
         title=~{:: .main-title}
     )}"
 >
-
-
-
 <main class="main">
-
     <h2>Edit my Profile</h2>
 
-    <form method="post" th:action="@{/profile}">
+    <form method="post" th:action="@{/profile}" id="form-edit-profile">
 
         <label for="username-input">Pseudo :</label>
         <input type="text" name="username" id="username-input" th:value="${user.username}">
@@ -44,15 +40,20 @@
 
         <div class="submit-btns">
             <button type="submit" id="save" name="action" value="save">Save</button>
-            <button type="button" id="delete">Delete my account</button>
+            <button type="button" id="delete-btn">Delete my account</button>
             <a th:href="@{/profile}"><button type="button" id="back">Back</button></a>
         </div>
 
     </form>
 
-    <button class="delete-account">Fermer</button>
 
-<script src="/js/common/modal.js"></script>
+    <div id="delete-confirmation"
+         th:replace="~{fragments/fragment-delete-confirmation :: frag-delete}">
+    </div>
+
+
+
+
 </main>
-
+<script src="/js/common/modal.js"></script>
 </html>
