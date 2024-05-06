@@ -30,10 +30,10 @@ public class TestAuctionDaoImpl {
     @Autowired
     private UserDao userDao;
 
-    User user;
-    Category category;
-    Item item;
-    Auction auction = new Auction();
+    private User user;
+    private Category category;
+    private Item item;
+    private final Auction auction = new Auction();
 
     @BeforeEach
     public void setup() {

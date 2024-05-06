@@ -1,179 +1,128 @@
 package fr.eni.tp.auctionapp.bll;
 
-import fr.eni.tp.auctionapp.TestDatabaseService;
+import fr.eni.tp.auctionapp.bll.impl.AuctionServiceImpl;
 import fr.eni.tp.auctionapp.bo.Auction;
-import fr.eni.tp.auctionapp.bo.Category;
-import fr.eni.tp.auctionapp.bo.Item;
-import fr.eni.tp.auctionapp.bo.User;
-import fr.eni.tp.auctionapp.dal.UserDao;
+import fr.eni.tp.auctionapp.dal.AuctionDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDateTime;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.Mockito.*;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class TestAuctionDaoServiceImpl {
 
-    @Autowired
-    private AuctionService auctionService;
+    @Mock
+    private AuctionDao auctionDaoMock;
 
-    @Autowired
-    private TestDatabaseService testDatabaseService;
-
-    User user;
-    Category category;
-    Item item;
-    Auction auction = new Auction();
+    @InjectMocks
+    private AuctionServiceImpl auctionService;
 
     @BeforeEach
-    public void setup() {
-        testDatabaseService.clearDatabase();
-
-        user = testDatabaseService.insertUserInDatabase(testDatabaseService.createRandomUser());
-        category = testDatabaseService.insertCategoryInDatabase(testDatabaseService.createRandomCategory());
-        item = testDatabaseService.insertItemInDatabase(testDatabaseService.createRandomItem(user, category));
-
-        auction.setItemId(item.getItemId());
-        auction.setUserId(user.getUserId());
+    void setUp() {
     }
 
     @Test
     void test_createAuctionWithAuctionDate() {
-        LocalDateTime auctionDate = LocalDateTime.of(2024, 5, 15, 17, 45);
-        auction.setAuctionDate(auctionDate);
+        Auction auction = new Auction();
+
+        doNothing().when(auctionDaoMock).insert(auction);
 
         auctionService.createAuction(auction);
 
-        Optional<Auction> optionalAuction = auctionService.findAuctionById(auction.getAuctionId());
-        assertThat(optionalAuction.isPresent()).isTrue();
-        Auction getAuction = optionalAuction.get();
-
-        assertThat(getAuction.getAuctionDate()).isEqualTo(auctionDate);
+        verify(auctionDaoMock, times(1)).insert(auction);
     }
 
     @Test
     void test_findAuctionById() {
-        auctionService.createAuction(auction);
-        Optional<Auction> optionalAuction = auctionService.findAuctionById(auction.getAuctionId());
-        assertThat(optionalAuction.isPresent()).isTrue();
-        Auction getAuction = optionalAuction.get();
-        assertThat(getAuction.getAuctionId()).isEqualTo(auction.getAuctionId());
+        Auction auction = new Auction();
+        int auctionId = 123;
+
+        when(auctionDaoMock.findByAuctionId(auctionId)).thenReturn(Optional.of(auction));
+
+        Optional<Auction> result = auctionService.findAuctionById(auctionId);
+        assertThat(result).isPresent();
+        assertThat(result.get()).isEqualTo(auction);
+
+        verify(auctionDaoMock).findByAuctionId(auctionId);
     }
 
     @Test
     void test_findAuctionsByItemIdPaginated() {
-        for (int i = 0; i < 25; i++) {
-            Auction auction = testDatabaseService.createAuction(user, item);
-            testDatabaseService.insertAuctionInDatabase(auction);
-        }
+        List<Auction> auctions = new ArrayList<>();
+        auctions.add(new Auction());
+        auctions.add(new Auction());
 
-        List<Optional<Auction>> optionalAuctions = auctionService.findAuctionsByItemIdPaginated(item.getItemId(), 1, 10);
-        List<Auction> auctions = optionalAuctions.stream()
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .toList();
-        assertThat(auctions.size()).isEqualTo(10);
+        List<Optional<Auction>> optionalAuctions = auctions.stream()
+                .map(Optional::of)
+                .collect(Collectors.toList());
+
+        when(auctionDaoMock.findAuctionsByItemIdPaginated(anyInt(), anyInt(), anyInt())).thenReturn(optionalAuctions);
+        List<Optional<Auction>> result = auctionService.findAuctionsByItemIdPaginated(123, 1, 10);
+        assertThat(result).isNotNull();
+        verify(auctionDaoMock).findAuctionsByItemIdPaginated(123, 1, 10);
     }
 
-    @Test void test_findAuctionsByUserIdPaginated() {
-        User user2 = testDatabaseService.insertUserInDatabase(testDatabaseService.createRandomUser());
+    @Test
+    void test_findAuctionsByUserIdPaginated() {
+        List<Auction> auctions = new ArrayList<>();
+        auctions.add(new Auction());
+        auctions.add(new Auction());
 
-        for (int i = 0; i < 25; i++) {
-            Auction auction = testDatabaseService.createAuction(user, item);
-            testDatabaseService.insertAuctionInDatabase(auction);
-        }
+        List<Optional<Auction>> optionalAuctions = auctions.stream()
+                .map(Optional::of)
+                .collect(Collectors.toList());
 
-        for (int i = 0; i < 15; i++) {
-            Auction auction = testDatabaseService.createAuction(user2, item);
-            testDatabaseService.insertAuctionInDatabase(auction);
-        }
-
-        List<Optional<Auction>> optionalAuctionsFromUser = auctionService.findAuctionsByUserIdPaginated(user.getUserId(), 1, 5);
-        List<Optional<Auction>> optionalAuctionsFromUser2 = auctionService.findAuctionsByUserIdPaginated(user2.getUserId(), 1, 10);
-
-        List<Auction> auctionsFromUser = optionalAuctionsFromUser.stream()
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .toList();
-
-        List<Auction> auctionsFromUser2 = optionalAuctionsFromUser2.stream()
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .toList();
-
-        assertThat(auctionsFromUser.size()).isEqualTo(5);
-        assertThat(auctionsFromUser2.size()).isEqualTo(10);
+        when(auctionDaoMock.findAuctionsByUserIdPaginated(anyInt(), anyInt(), anyInt())).thenReturn(optionalAuctions);
+        List<Optional<Auction>> result = auctionService.findAuctionsByUserIdPaginated(123, 1, 10);
+        assertThat(result).isNotNull();
+        verify(auctionDaoMock).findAuctionsByUserIdPaginated(123, 1, 10);
     }
 
     @Test
     void test_removeAuctionById() {
-        auctionService.createAuction(auction);
-        Optional<Auction> optionalAuction = auctionService.findAuctionById(auction.getAuctionId());
-        assertThat(optionalAuction.isPresent()).isTrue();
-
-        auctionService.removeAuctionById(auction.getAuctionId());
-        Optional<Auction> optionalAuction2 = auctionService.findAuctionById(auction.getAuctionId());
-        assertThat(optionalAuction2.isPresent()).isFalse();
+        int auctionId = 123;
+        auctionService.removeAuctionById(auctionId);
+        verify(auctionDaoMock).deleteById(auctionId);
     }
 
     @Test
     void test_getTotalAuctionCount() {
-        User user2 = testDatabaseService.insertUserInDatabase(testDatabaseService.createRandomUser());
-        Item item2 = testDatabaseService.insertItemInDatabase(testDatabaseService.createRandomItem(user2, category));
-
-        for (int i = 0; i < 7; i++) {
-            testDatabaseService.insertAuctionInDatabase(testDatabaseService.createAuction(user, item));
-        }
-
-        for (int i = 0; i < 9; i++) {
-            testDatabaseService.insertAuctionInDatabase(testDatabaseService.createAuction(user2, item2));
-        }
-
-        int auctions = auctionService.getTotalAuctionCount();
-        assertThat(auctions).isEqualTo(7 + 9);
+        int count = 10;
+        when(auctionDaoMock.count()).thenReturn(count);
+        int result = auctionService.getTotalAuctionCount();
+        assertThat(result).isEqualTo(count);
+        verify(auctionDaoMock).count();
     }
 
     @Test
     void test_getCountOfAuctionsByItemId() {
-        User user2 = testDatabaseService.insertUserInDatabase(testDatabaseService.createRandomUser());
-        Item item2 = testDatabaseService.insertItemInDatabase(testDatabaseService.createRandomItem(user2, category));
-
-        for (int i = 0; i < 7; i++) {
-            testDatabaseService.insertAuctionInDatabase(testDatabaseService.createAuction(user, item));
-        }
-
-        for (int i = 0; i < 9; i++) {
-            testDatabaseService.insertAuctionInDatabase(testDatabaseService.createAuction(user2, item2));
-        }
-
-        int auctions = auctionService.getCountOfAuctionsByItemId(item.getItemId());
-        int auctions2 = auctionService.getCountOfAuctionsByItemId(item2.getItemId());
-        assertThat(auctions).isEqualTo(7);
-        assertThat(auctions2).isEqualTo(9);
+        int itemId = 123;
+        int count = 5;
+        when(auctionDaoMock.countByItemId(itemId)).thenReturn(count);
+        int result = auctionService.getCountOfAuctionsByItemId(itemId);
+        assertThat(result).isEqualTo(count);
+        verify(auctionDaoMock).countByItemId(itemId);
     }
 
     @Test
     void test_getCountOfAuctionsByItemIdAndUserId() {
-        User user2 = testDatabaseService.insertUserInDatabase(testDatabaseService.createRandomUser());
+        int itemId = 123;
+        int userId = 456;
+        int count = 8;
 
-        for (int i = 0; i < 12; i++) {
-            testDatabaseService.insertAuctionInDatabase(testDatabaseService.createAuction(user, item));
-        }
-
-        for (int i = 0; i < 8; i++) {
-            testDatabaseService.insertAuctionInDatabase(testDatabaseService.createAuction(user2, item));
-        }
-
-        int auctions = auctionService.getCountOfAuctionsByItemIdAndUserId(item.getItemId(), user.getUserId());
-        int auctions2 = auctionService.getCountOfAuctionsByItemIdAndUserId(item.getItemId(), user2.getUserId());
-
-        assertThat(auctions).isEqualTo(12);
-        assertThat(auctions2).isEqualTo(8);
+        when(auctionDaoMock.countByItemIdAndUserId(itemId, userId)).thenReturn(count);
+        int result = auctionService.getCountOfAuctionsByItemIdAndUserId(itemId, userId);
+        assertThat(result).isEqualTo(count);
+        verify(auctionDaoMock).countByItemIdAndUserId(itemId, userId);
     }
 }

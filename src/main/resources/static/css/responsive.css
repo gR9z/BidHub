@@ -5,7 +5,13 @@
     .form-group, .form-row {
         gap: var(--space-7);
     }
+
+    .shop__list {
+        gap: var(--space-7);
+    }
 }
+
+@media screen and (min-width: 568px) {}
 
 @media screen and (min-width: 768px) {
     /* ============================== */
@@ -54,10 +60,43 @@
     .form-container, .form-row {
         flex-direction: row;
     }
+
+    #image-container {
+        flex-direction: row;
+        align-items: center;
+        gap: var(--space-4);
+    }
+
+    /* ==================================== */
+    /* ============ FILTER FORM =========== */
+    /* ==================================== */
+    .filter-form {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .filter-form__search {
+        width: initial;
+    }
+
+    /* ==================================== */
+    /* ============= SHOP LIST ============ */
+    /* ==================================== */
+    .shop__list {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-6);
+    }
 }
 
 @media screen and (min-width: 1024px) {
     .form-group, .form-row {
         gap: calc(var(--space-5) + var(--space-2));
+    }
+
+    /* ==================================== */
+    /* ============= SHOP LIST ============ */
+    /* ==================================== */
+    .shop__list {
+        grid-template-columns: repeat(3, 1fr);
     }
 }

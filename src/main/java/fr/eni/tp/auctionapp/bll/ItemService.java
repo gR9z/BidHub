@@ -16,4 +16,5 @@ public interface ItemService {
     List<Item> getByUserIdPaginated(int userId, int page, int size);
     int getCountOfItemsByUserId(int userId);
     int getTotalItemCount();
+    int getTotalPageCount(int size);
 }

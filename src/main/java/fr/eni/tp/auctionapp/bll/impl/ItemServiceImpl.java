@@ -102,6 +102,12 @@ public class ItemServiceImpl implements ItemService {
         return itemDao.count();
     }
 
+    @Override
+    public int getTotalPageCount(int size) {
+        int totalItemCount = getTotalItemCount();
+        return (int) Math.ceil((double) totalItemCount / size);
+    }
+
     private boolean isItemNameValid(String itemName, BusinessException businessException) {
         if (itemName == null) {
             businessException.addKey("BusinessCode.VALIDATION_ITEM_NAME_NULL");

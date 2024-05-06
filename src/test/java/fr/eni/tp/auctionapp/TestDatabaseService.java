@@ -5,10 +5,7 @@ import fr.eni.tp.auctionapp.bll.AuctionService;
 import fr.eni.tp.auctionapp.bll.CategoryService;
 import fr.eni.tp.auctionapp.bll.ItemService;
 import fr.eni.tp.auctionapp.bll.UserService;
-import fr.eni.tp.auctionapp.bo.Auction;
-import fr.eni.tp.auctionapp.bo.Category;
-import fr.eni.tp.auctionapp.bo.Item;
-import fr.eni.tp.auctionapp.bo.User;
+import fr.eni.tp.auctionapp.bo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -129,5 +126,17 @@ public class TestDatabaseService {
     public Auction insertAuctionInDatabase(Auction auction) {
         auctionService.createAuction(auction);
         return auction;
+    }
+
+    public Withdrawal createRandomWithdrawal(Item item) {
+        Withdrawal withdrawal = new Withdrawal();
+        withdrawal.setItem(item);
+        withdrawal.setItemId(item.getItemId());
+        withdrawal.setCity(faker.address().city());
+        withdrawal.setStreet(faker.address().streetAddress());
+        withdrawal.setZipCode(faker.address().zipCode());
+        item.setWithdrawal(withdrawal);
+
+        return withdrawal;
     }
 }

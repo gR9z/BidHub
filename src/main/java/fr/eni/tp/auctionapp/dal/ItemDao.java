@@ -20,6 +20,8 @@ public interface ItemDao {
 
     List<Item> findAllByUserIdPaginated(int userId, int page, int size);
 
+    List<Item> findByCategoryPaginated(int categoryId, int page, int size);
+
     int countByUserId(int userId);
 
     int count();

@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -11,22 +12,23 @@ import java.util.List;
 public class Item {
     private int itemId;
 
-    //    @NotNull(message = "Item name cannot be null")
-//    @Size(max = 30, message = "Item name must not exceed 30 characters")
+    @NotNull(message = "Item name cannot be null")
+    @Size(max = 30, message = "Item name must not exceed {max} characters")
     private String itemName;
 
-    //    @NotNull(message = "Description cannot be null")
-//    @Size(max = 255, message = "Description must not exceed {max} characters")
+    @NotNull(message = "Description cannot be null")
+    @Size(max = 255, message = "Description must not exceed {max} characters")
     private String description;
 
-    //    @NotNull(message = "Auction start date cannot be null")
+    @NotNull(message = "Auction start date cannot be null")
     private LocalDateTime auctionStartingDate;
 
-    //    @NotNull(message = "Auction end date cannot be null")
+    @NotNull(message = "Auction end date cannot be null")
     private LocalDateTime auctionEndingDate;
 
-    //    @Min(value = 1, message = "The starting price must be greater than 0")
+    @Min(value = 1, message = "The starting price must be greater than 0")
     private int startingPrice;
+
     private int sellingPrice;
 
     @Pattern(regexp = ".*\\.(jpeg|jpg|png|gif)$", message = "Invalid image file format")
@@ -34,7 +36,7 @@ public class Item {
 
     private String saleStatus;
 
-    //    @NotNull(message = "Category cannot be null")
+    @NotNull(message = "Category cannot be null")
     private Category category;
 
     private List<Auction> auctions;

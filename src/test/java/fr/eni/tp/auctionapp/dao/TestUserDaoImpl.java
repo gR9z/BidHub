@@ -25,7 +25,7 @@ public class TestUserDaoImpl {
     @Autowired
     private TestDatabaseService testDatabaseService;
 
-    User user;
+    private User user;
     private final Faker faker = new Faker();
 
     @BeforeEach

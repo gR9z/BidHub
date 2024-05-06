@@ -1,89 +1,90 @@
 package fr.eni.tp.auctionapp.bll;
 
-import com.github.javafaker.Faker;
-import fr.eni.tp.auctionapp.TestDatabaseService;
+import fr.eni.tp.auctionapp.bll.impl.CategoryServiceImpl;
 import fr.eni.tp.auctionapp.bo.Category;
-import org.assertj.core.api.Assertions;
+import fr.eni.tp.auctionapp.dal.CategoryDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class TestCategoryServiceImpl {
 
-    @Autowired
-    private CategoryService categoryService;
+    @Mock
+    private CategoryDao categoryDaoMock;
 
-    @Autowired
-    private TestDatabaseService testDatabaseService;
-
-    private final Faker faker = new Faker();
+    @InjectMocks
+    private CategoryServiceImpl categoryService;
 
     @BeforeEach
-    public void setUp() {
-        testDatabaseService.clearDatabase();
+    void setUp() {
     }
 
     @Test
-    public void test_createCategory() {
-        Category category = testDatabaseService.createRandomCategory();
+    void test_createCategory() {
+        Category category = new Category();
+
+        doNothing().when(categoryDaoMock).insert(category);
+
         categoryService.createCategory(category);
 
-        Optional<Category> optionalCategory = categoryService.findCategoryById(category.getCategoryId());
-        assertThat(optionalCategory.isPresent()).isTrue();
-
-        Category getCategory = optionalCategory.orElseThrow(() -> new IllegalStateException("Category not found"));
-        assertThat(category.getLabel()).isEqualTo(getCategory.getLabel());
+        verify(categoryDaoMock, times(1)).insert(category);
     }
 
     @Test
-    public void test_findCategoryById() {
-        Category category = testDatabaseService.createRandomCategory();
-        categoryService.createCategory(category);
+    void test_findCategoryById() {
+        Category category = new Category();
+        int categoryId = 123;
 
-        Optional<Category> optionalCategory = categoryService.findCategoryById(category.getCategoryId());
-        Category getCategory = optionalCategory.orElseThrow(() -> new IllegalStateException("Category not found"));
+        when(categoryDaoMock.getById(categoryId)).thenReturn(Optional.of(category));
 
-        assertThat(category.getLabel()).isEqualTo(getCategory.getLabel());
+        Optional<Category> result = categoryService.findCategoryById(categoryId);
+        assertThat(result).isPresent();
+        assertThat(result.get()).isEqualTo(category);
+
+        verify(categoryDaoMock).getById(categoryId);
     }
 
     @Test
-    public void test_updateCategory() {
-        Category category = testDatabaseService.createRandomCategory();
-        categoryService.createCategory(category);
+    void test_updateCategory() {
+        Category category = new Category();
 
-        category.setLabel("New Label Category");
         categoryService.updateCategory(category);
 
-        Optional<Category> optionalCategory = categoryService.findCategoryById(category.getCategoryId());
-        Category getCategory = optionalCategory.orElseThrow(() -> new IllegalStateException("Category not found"));
-        assertThat(category.getLabel()).isEqualTo(getCategory.getLabel()).isEqualTo("New Label Category");
+        verify(categoryDaoMock, times(1)).update(category);
     }
 
     @Test
-    public void test_removeCategoryById() {
-        Category category = testDatabaseService.createRandomCategory();
-        categoryService.createCategory(category);
-        categoryService.removeCategoryById(category.getCategoryId());
-        Optional<Category> optionalCategory = categoryService.findCategoryById(category.getCategoryId());
+    void test_removeCategoryById() {
+        int categoryId = 123;
 
-        assertThat(optionalCategory.isPresent()).isFalse();
+        categoryService.removeCategoryById(categoryId);
+
+        verify(categoryDaoMock, times(1)).deleteById(categoryId);
     }
 
     @Test
-    public void test_getAllCategories() {
-        for (int i = 0; i < 10; i++) {
-            Category category = testDatabaseService.createRandomCategory();
-            testDatabaseService.insertCategoryInDatabase(category);
-        }
+    void test_getAllCategories() {
+        List<Category> categories = new ArrayList<>();
+        categories.add(new Category());
+        categories.add(new Category());
 
-        List<Category> categories = categoryService.getAllCategories();
-        assertThat(categories.size()).isEqualTo(10);
+        when(categoryDaoMock.findAll()).thenReturn(categories);
+
+        List<Category> result = categoryService.getAllCategories();
+        assertThat(result).isNotNull();
+        assertThat(result.size()).isEqualTo(categories.size());
+
+        verify(categoryDaoMock).findAll();
     }
 }

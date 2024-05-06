@@ -1,87 +1,106 @@
 package fr.eni.tp.auctionapp.bll;
 
-import com.github.javafaker.Faker;
-import fr.eni.tp.auctionapp.TestDatabaseService;
+import fr.eni.tp.auctionapp.bll.impl.UserServiceImpl;
 import fr.eni.tp.auctionapp.bo.User;
+import fr.eni.tp.auctionapp.dal.UserDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.mockito.Mockito.*;
 
-@SpringBootTest
-@Transactional
+@ExtendWith(MockitoExtension.class)
 public class TestUserServiceImpl {
 
-    @Autowired
-    private UserService userService;
+    @Mock
+    private UserDao userDaoMock;
 
-    @Autowired
-    private TestDatabaseService testDatabaseService;
+    @InjectMocks
+    private UserServiceImpl userService;
 
-    User adminUser;
-    private final Faker faker = new Faker();
+    @Mock
+    private PasswordEncoder passwordEncoderMock;
+
+    private User adminUser;
 
     @BeforeEach
     public void setUp() {
-        testDatabaseService.clearDatabase();
-        adminUser = testDatabaseService.insertUserInDatabase(testDatabaseService.createRandomAdmin());
+        adminUser = new User();
+        adminUser.setUsername("admin");
+        adminUser.setAdmin(true);
     }
 
     @Test
     void test_createUser() {
-        User adminUser = new User();
-        adminUser.setUsername(faker.name().username());
-        adminUser.setLastName(faker.name().lastName());
-        adminUser.setFirstName(faker.name().firstName());
-        adminUser.setEmail(faker.internet().emailAddress());
-        adminUser.setPhone(faker.phoneNumber().phoneNumber());
-        adminUser.setStreet(faker.address().streetAddress());
-        adminUser.setZipCode(faker.address().zipCode());
-        adminUser.setCity(faker.address().city());
-        adminUser.setPassword(faker.internet().password());
-        adminUser.setCredit(10000);
-        adminUser.setAdmin(true);
+        User user = new User();
+        user.setUsername("testuser");
+        user.setPassword("password");
 
-        userService.createUser(adminUser);
-        UserDetails loadedAdminUser = userService.loadUserByUsername(adminUser.getUsername());
-        User castLoadedAdminUser = (User) loadedAdminUser;
+        when(passwordEncoderMock.encode(any(CharSequence.class))).thenReturn("hashedPassword");
 
-        assertThat(castLoadedAdminUser.getUsername()).isEqualTo(adminUser.getUsername());
-        assertThat(castLoadedAdminUser.isAdmin()).isTrue();
+        doNothing().when(userDaoMock).insert(user);
+
+        userService.createUser(user);
+
+        verify(userDaoMock, times(1)).insert(user);
+
+        verify(passwordEncoderMock, times(1)).encode(eq("password"));
     }
 
     @Test
     void test_loadUserByUsername() {
-        UserDetails loadedUser = userService.loadUserByUsername(adminUser.getUsername());
-        User castLoadedUser = (User) loadedUser;
+        when(userDaoMock.selectUserByUsername(adminUser.getUsername())).thenReturn(Optional.of(adminUser));
 
-        assertThat(castLoadedUser.getUsername()).isEqualTo(adminUser.getUsername());
-        assertThat(castLoadedUser.isAdmin()).isTrue();
+        UserDetails loadedUser = userService.loadUserByUsername(adminUser.getUsername());
+        assertThat(loadedUser).isNotNull();
+        assertThat(loadedUser.getUsername()).isEqualTo(adminUser.getUsername());
+        assertThat(loadedUser.getPassword()).isEqualTo(adminUser.getPassword());
+    }
+
+    @Test
+    void test_loadUserByUsername_UserNotFound() {
+        String nonExistingUsername = "nonexistinguser";
+        when(userDaoMock.selectUserByUsername(nonExistingUsername)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> userService.loadUserByUsername(nonExistingUsername))
+                .isInstanceOf(UsernameNotFoundException.class);
     }
 
     @Test
     void test_getAllUsers() {
-        for (int i = 0; i < 12; i++) {
-            testDatabaseService.insertUserInDatabase(testDatabaseService.createRandomUser());
-        }
+        List<User> users = new ArrayList<>();
+        users.add(new User());
+        users.add(new User());
 
-        List<User> users = userService.getAllUsers();
-        assertThat(users.size()).isEqualTo(12 + 1);
+        when(userDaoMock.findAll()).thenReturn(users);
+
+        List<User> result = userService.getAllUsers();
+        assertThat(result).isNotNull();
+        assertThat(result.size()).isEqualTo(users.size());
+
+        verify(userDaoMock).findAll();
     }
 
     @Test
     void test_getTotalUserCount() {
-        for (int i = 0; i < 14; i++) {
-            testDatabaseService.insertUserInDatabase(testDatabaseService.createRandomUser());
-        }
+        int count = 10;
+        when(userDaoMock.count()).thenReturn(count);
 
-        int count = userService.getTotalUserCount();
-        assertThat(count).isEqualTo(14 + 1);
+        int result = userService.getTotalUserCount();
+        assertThat(result).isEqualTo(count);
+
+        verify(userDaoMock).count();
     }
 }

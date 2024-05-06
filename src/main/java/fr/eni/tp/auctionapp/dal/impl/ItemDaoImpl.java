@@ -33,6 +33,7 @@ public class ItemDaoImpl implements ItemDao {
     private static final String SELECT_ALL = "SELECT itemId, itemName, description, auctionStartingDate, auctionEndingDate, startingPrice, sellingPrice, imageUrl, userId, categoryId FROM ITEMS;";
     private static final String SELECT_ALL_PAGINATED = "SELECT itemId, itemName, description, auctionStartingDate, auctionEndingDate, startingPrice, sellingPrice, imageUrl, userId, categoryId FROM ITEMS ORDER BY auctionStartingDate OFFSET :offset ROWS FETCH NEXT :limit ROWS ONLY;";
     private static final String SELECT_ALL_ITEMS_FROM_USERID_PAGINATED = "SELECT itemId, itemName, description, auctionStartingDate, auctionEndingDate, startingPrice, sellingPrice, imageUrl, userId, categoryId FROM ITEMS WHERE userId = :userId ORDER BY auctionStartingDate OFFSET :offset ROWS FETCH NEXT :limit ROWS ONLY;";
+    private static final String SELECT_BY_CATEGORY_PAGINATED = "SELECT itemId, itemName, description, auctionStartingDate, auctionEndingDate, startingPrice, sellingPrice, imageUrl, userId, categoryId FROM ITEMS WHERE categoryId = :categoryId ORDER BY auctionStartingDate OFFSET :offset ROWS FETCH NEXT :limit ROWS ONLY;";
     private static final String COUNT_ITEM_BY_USER_ID = "SELECT COUNT(*) AS count FROM Items WHERE userId = :userId;";
     private static final String COUNT = "SELECT COUNT(*) AS count FROM Items;";
 
@@ -79,6 +80,7 @@ public class ItemDaoImpl implements ItemDao {
     public Optional<Item> findById(int id) {
         MapSqlParameterSource namedParameters = new MapSqlParameterSource();
         namedParameters.addValue("itemId", id);
+
         try {
             Item item = namedParameterJdbcTemplate.queryForObject(
                     SELECT_BY_ID,
@@ -130,6 +132,22 @@ public class ItemDaoImpl implements ItemDao {
 
         return namedParameterJdbcTemplate.query(
                 SELECT_ALL_PAGINATED,
+                params,
+                new ItemRowMapper()
+        );
+    }
+
+    public List<Item> findByCategoryPaginated(int categoryId, int page, int size) {
+        if (page < 1) page = 1;
+        int offset = (page - 1) * size;
+
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("categoryId", categoryId);
+        params.addValue("limit", size);
+        params.addValue("offset", offset);
+
+        return namedParameterJdbcTemplate.query(
+                SELECT_BY_CATEGORY_PAGINATED,
                 params,
                 new ItemRowMapper()
         );

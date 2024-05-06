@@ -28,6 +28,7 @@ dependencies {
     runtimeOnly 'com.microsoft.sqlserver:mssql-jdbc'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: '5.11.0'
 }
 
 tasks.named('test') {

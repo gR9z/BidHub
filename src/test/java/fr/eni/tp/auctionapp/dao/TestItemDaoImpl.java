@@ -29,19 +29,22 @@ public class TestItemDaoImpl {
 
     private final Faker faker = new Faker();
 
+    User seller;
+    Category category;
+
     @BeforeEach
     public void setup() {
         testDatabaseService.clearDatabase();
+
+        seller = testDatabaseService.createRandomUser();
+        testDatabaseService.insertUserInDatabase(seller);
+
+        category = testDatabaseService.createRandomCategory();
+        testDatabaseService.insertCategoryInDatabase(category);
     }
 
     @Test
     void test_insert() {
-        User seller = testDatabaseService.createRandomUser();
-        testDatabaseService.insertUserInDatabase(seller);
-
-        Category category = testDatabaseService.createRandomCategory();
-        testDatabaseService.insertCategoryInDatabase(category);
-
         Item item = new Item();
 
         item.setItemName(faker.commerce().productName());
@@ -70,12 +73,6 @@ public class TestItemDaoImpl {
 
     @Test
     void test_update() {
-        User seller = testDatabaseService.createRandomUser();
-        testDatabaseService.insertUserInDatabase(seller);
-
-        Category category = testDatabaseService.createRandomCategory();
-        testDatabaseService.insertCategoryInDatabase(category);
-
         Item item = testDatabaseService.createRandomItem(seller, category);
         testDatabaseService.insertItemInDatabase(item);
 
@@ -91,12 +88,6 @@ public class TestItemDaoImpl {
 
     @Test
     void test_deleteById() {
-        User seller = testDatabaseService.createRandomUser();
-        testDatabaseService.insertUserInDatabase(seller);
-
-        Category category = testDatabaseService.createRandomCategory();
-        testDatabaseService.insertCategoryInDatabase(category);
-
         Item item = testDatabaseService.createRandomItem(seller, category);
         testDatabaseService.insertItemInDatabase(item);
 
@@ -107,12 +98,6 @@ public class TestItemDaoImpl {
 
     @Test
     void test_findAll() {
-        User seller = testDatabaseService.createRandomUser();
-        testDatabaseService.insertUserInDatabase(seller);
-
-        Category category = testDatabaseService.createRandomCategory();
-        testDatabaseService.insertCategoryInDatabase(category);
-
         for (int i = 0; i < 10; i++) {
             testDatabaseService.insertItemInDatabase(testDatabaseService.createRandomItem(seller, category));
         }
@@ -124,12 +109,6 @@ public class TestItemDaoImpl {
 
     @Test
     void test_findAllPaginated() {
-        User seller = testDatabaseService.createRandomUser();
-        testDatabaseService.insertUserInDatabase(seller);
-
-        Category category = testDatabaseService.createRandomCategory();
-        testDatabaseService.insertCategoryInDatabase(category);
-
         for (int i = 0; i < 50; i++) {
             testDatabaseService.insertItemInDatabase(testDatabaseService.createRandomItem(seller, category));
         }
@@ -141,14 +120,8 @@ public class TestItemDaoImpl {
 
     @Test
     void findAllByUserIdPaginated() {
-        User seller = testDatabaseService.createRandomUser();
-        testDatabaseService.insertUserInDatabase(seller);
-
         User seller2 = testDatabaseService.createRandomUser();
         testDatabaseService.insertUserInDatabase(seller2);
-
-        Category category = testDatabaseService.createRandomCategory();
-        testDatabaseService.insertCategoryInDatabase(category);
 
         for (int i = 0; i < 15; i++) {
             testDatabaseService.insertItemInDatabase(testDatabaseService.createRandomItem(seller, category));
@@ -172,15 +145,41 @@ public class TestItemDaoImpl {
     }
 
     @Test
-    void test_countByUserId() {
-        User seller = testDatabaseService.createRandomUser();
-        testDatabaseService.insertUserInDatabase(seller);
+    void test_findByCategoryPaginated() {
+        Category category2 = testDatabaseService.insertCategoryInDatabase(testDatabaseService.createRandomCategory());
 
+        for (int i = 0; i < 10; i++) {
+            testDatabaseService.insertItemInDatabase(testDatabaseService.createRandomItem(seller, category));
+        }
+
+        for (int i = 0; i < 15; i++) {
+            testDatabaseService.insertItemInDatabase(testDatabaseService.createRandomItem(seller, category2));
+        }
+
+        List<Item> itemsByCategoryPagination = itemDao.findByCategoryPaginated(category2.getCategoryId(), 1, 7);
+        List<Item> itemsByCategoryPagination2 = itemDao.findByCategoryPaginated(category.getCategoryId(), 1, 8);
+
+        List<Item> getAllItemsByCategory = itemDao.findByCategoryPaginated(category.getCategoryId(), 1, 100);
+        List<Item> getAllItemsByCategory2 = itemDao.findByCategoryPaginated(category2.getCategoryId(), 1, 100);
+
+        assertThat(itemsByCategoryPagination.size()).isEqualTo(7);
+        assertThat(itemsByCategoryPagination2.size()).isEqualTo(8);
+        assertThat(getAllItemsByCategory.size()).isEqualTo(10);
+        assertThat(getAllItemsByCategory2.size()).isEqualTo(15);
+
+        for (Item item : getAllItemsByCategory) {
+            assertThat(item.getCategory().getCategoryId()).isEqualTo(category.getCategoryId());
+        }
+
+        for (Item item : getAllItemsByCategory2) {
+            assertThat(item.getCategory().getCategoryId()).isEqualTo(category2.getCategoryId());
+        }
+    }
+
+    @Test
+    void test_countByUserId() {
         User seller2 = testDatabaseService.createRandomUser();
         testDatabaseService.insertUserInDatabase(seller2);
-
-        Category category = testDatabaseService.createRandomCategory();
-        testDatabaseService.insertCategoryInDatabase(category);
 
         for (int i = 0; i < 15; i++) {
             testDatabaseService.insertItemInDatabase(testDatabaseService.createRandomItem(seller, category));
@@ -199,12 +198,6 @@ public class TestItemDaoImpl {
 
     @Test
     void test_count() {
-        User seller = testDatabaseService.createRandomUser();
-        testDatabaseService.insertUserInDatabase(seller);
-
-        Category category = testDatabaseService.createRandomCategory();
-        testDatabaseService.insertCategoryInDatabase(category);
-
         for (int i = 0; i < 38; i++) {
             testDatabaseService.createRandomItem(seller, category);
             testDatabaseService.insertItemInDatabase(testDatabaseService.createRandomItem(seller, category));
