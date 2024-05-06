@@ -6,7 +6,6 @@ import fr.eni.tp.auctionapp.bo.Category;
 import fr.eni.tp.auctionapp.bo.Item;
 import fr.eni.tp.auctionapp.bo.User;
 import fr.eni.tp.auctionapp.bo.Withdrawal;
-import fr.eni.tp.auctionapp.dal.WithdrawalDao;
 import fr.eni.tp.auctionapp.exceptions.BusinessException;
 import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

@@ -3,6 +3,8 @@ package fr.eni.tp.auctionapp.bll.impl;
 import fr.eni.tp.auctionapp.bll.ItemService;
 import fr.eni.tp.auctionapp.bo.Category;
 import fr.eni.tp.auctionapp.bo.Item;
+import fr.eni.tp.auctionapp.bo.User;
+import fr.eni.tp.auctionapp.bo.Withdrawal;
 import fr.eni.tp.auctionapp.dal.ItemDao;
 import fr.eni.tp.auctionapp.dal.WithdrawalDao;
 import fr.eni.tp.auctionapp.exceptions.BusinessException;
@@ -11,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -37,15 +40,26 @@ public class ItemServiceImpl implements ItemService {
             businessException.addKey("Seller cannot be null");
         }
 
-        try {
-            // Ajouter la partie où on sépare item de withdrawal pour faire deux objets
-            //withdrawalDao.insert(withdrawal)
-            itemDao.insert(item);
+        if (Objects.requireNonNull(item).getWithdrawal() == null) {
+            Withdrawal defaultWithdrawal = new Withdrawal();
+            User seller = item.getSeller();
 
+            defaultWithdrawal.setStreet(seller.getStreet());
+            defaultWithdrawal.setZipCode(seller.getZipCode());
+            defaultWithdrawal.setCity(seller.getCity());
+
+            defaultWithdrawal.setItem(item);
+            item.setWithdrawal(defaultWithdrawal);
+        }
+
+        try {
+            itemDao.insert(item);
+            Objects.requireNonNull(item).getWithdrawal().setItem(item);
+            Objects.requireNonNull(item).getWithdrawal().setItemId(item.getItemId());
+            withdrawalDao.insert(item.getWithdrawal());
         } catch (BusinessException dalBusinessException) {
             throw dalBusinessException;
         }
-
     }
 
     @Override
