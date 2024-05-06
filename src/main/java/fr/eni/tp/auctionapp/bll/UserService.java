@@ -7,7 +7,9 @@ import java.util.List;
 
 public interface UserService extends UserDetailsService {
     void createUser(User user);
-    void createUser(User user, String confirmPassword);
-    List<User> getUsers();
-    int countUsers();
+    void createUserWithConfirmPassword(User user, String confirmPassword);
+    void updateUser(User user);
+    void removeUserById(int id);
+    List<User> getAllUsers();
+    int getTotalUserCount();
 }

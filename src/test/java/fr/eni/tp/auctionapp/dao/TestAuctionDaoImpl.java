@@ -48,12 +48,12 @@ public class TestAuctionDaoImpl {
     }
 
     @Test
-    void test_insertAuctionWithAuctionDate() {
+    void test_insert() {
         LocalDateTime auctionDate = LocalDateTime.of(2024, 5, 15, 17, 45);
         auction.setAuctionDate(auctionDate);
         auctionDao.insert(auction);
 
-        Optional<Auction> optionalAuction = auctionDao.readByAuctionId(auction.getAuctionId());
+        Optional<Auction> optionalAuction = auctionDao.findByAuctionId(auction.getAuctionId());
         assertThat(optionalAuction.isPresent()).isTrue();
         Auction getAuction = optionalAuction.get();
 
@@ -61,22 +61,22 @@ public class TestAuctionDaoImpl {
     }
 
     @Test
-    void test_readByAuctionId() {
+    void test_findByAuctionId() {
         auctionDao.insert(auction);
-        Optional<Auction> optionalAuction = auctionDao.readByAuctionId(auction.getAuctionId());
+        Optional<Auction> optionalAuction = auctionDao.findByAuctionId(auction.getAuctionId());
         assertThat(optionalAuction.isPresent()).isTrue();
         Auction getAuction = optionalAuction.get();
         assertThat(getAuction.getAuctionId()).isEqualTo(auction.getAuctionId());
     }
 
     @Test
-    void test_readByItemIdPaginated() {
+    void test_findAuctionsByItemIdPaginated() {
         for (int i = 0; i < 25; i++) {
             Auction auction = testDatabaseService.createAuction(user, item);
             testDatabaseService.insertAuctionInDatabase(auction);
         }
 
-        List<Optional<Auction>> optionalAuctions = auctionDao.readByItemIdPaginated(item.getItemId(), 1, 10);
+        List<Optional<Auction>> optionalAuctions = auctionDao.findAuctionsByItemIdPaginated(item.getItemId(), 1, 10);
         List<Auction> auctions = optionalAuctions.stream()
                 .filter(Optional::isPresent)
                 .map(Optional::get)
@@ -85,7 +85,7 @@ public class TestAuctionDaoImpl {
     }
 
     @Test
-    void test_readByUserIdPaginated() {
+    void test_findAuctionsByUserIdPaginated() {
         User user2 = testDatabaseService.insertUserInDatabase(testDatabaseService.createRandomUser());
 
         for (int i = 0; i < 25; i++) {
@@ -98,8 +98,8 @@ public class TestAuctionDaoImpl {
             testDatabaseService.insertAuctionInDatabase(auction);
         }
 
-        List<Optional<Auction>> optionalAuctionsFromUser = auctionDao.readByItemIdPaginated(item.getItemId(), 1, 5);
-        List<Optional<Auction>> optionalAuctionsFromUser2 = auctionDao.readByItemIdPaginated(item.getItemId(), 1, 10);
+        List<Optional<Auction>> optionalAuctionsFromUser = auctionDao.findAuctionsByUserIdPaginated(user.getUserId(), 1, 5);
+        List<Optional<Auction>> optionalAuctionsFromUser2 = auctionDao.findAuctionsByUserIdPaginated(user2.getUserId(), 1, 10);
 
         List<Auction> auctionsFromUser = optionalAuctionsFromUser.stream()
                 .filter(Optional::isPresent)
@@ -116,13 +116,13 @@ public class TestAuctionDaoImpl {
     }
 
     @Test
-    void test_deleteByAuctionId() {
+    void test_deleteById() {
         auctionDao.insert(auction);
-        Optional<Auction> optionalAuction = auctionDao.readByAuctionId(auction.getAuctionId());
+        Optional<Auction> optionalAuction = auctionDao.findByAuctionId(auction.getAuctionId());
         assertThat(optionalAuction.isPresent()).isTrue();
 
-        auctionDao.deleteByAuctionId(auction.getAuctionId());
-        Optional<Auction> optionalAuction2 = auctionDao.readByAuctionId(auction.getAuctionId());
+        auctionDao.deleteById(auction.getAuctionId());
+        Optional<Auction> optionalAuction2 = auctionDao.findByAuctionId(auction.getAuctionId());
         assertThat(optionalAuction2.isPresent()).isFalse();
     }
 

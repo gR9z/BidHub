@@ -8,15 +8,7 @@
             <nav id="nav" class="nav" role="navigation">
                 <ul class="nav__list">
                     <li class="visually-hidden">
-                        <a href="/" aria-current="page">Home</a>
-                    </li>
-
-                    <li th:if="${!#authorization.expression('isAuthenticated()')}">
-                        <a
-                                href="create-account"
-                                class="nav__link"
-                        >Sign Up</a
-                        >
+                        <a href="/">Home</a>
                     </li>
 
                     <li th:if="${!#authorization.expression('isAuthenticated()')}">
@@ -28,7 +20,8 @@
                     </li>
 
                     <li th:if="${#authorization.expression('isAuthenticated()')}"
-                        th:text="'Hey ' + ${#authentication.name}"></li>
+                        th:text="'Hey ' + ${#authentication.name} + ' • €'+${#authentication.principal.credit}">
+                    </li>
 
                     <li th:if="${#authorization.expression('isAuthenticated()')}">
                         <a
@@ -41,10 +34,17 @@
 
             <div class="nav__btns">
                 <i class="ri-sun-line" id="theme-toggle"></i>
-                <a
-                        href="#"
-                        class="button"
-                >Auction!</a
+
+                <a th:if="${#authorization.expression('isAuthenticated()')}"
+                   href="create-item"
+                   class="button"
+                >Sell Item!</a
+                >
+
+                <a th:if="${!#authorization.expression('isAuthenticated()')}"
+                   href="create-account"
+                   class="button"
+                >Sign Up!</a
                 >
                 <i
                         class="ri-menu-3-line nav__toggle"

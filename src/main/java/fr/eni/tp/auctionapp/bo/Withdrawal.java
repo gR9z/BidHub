@@ -67,5 +67,4 @@ public class Withdrawal {
                 ", city='" + city + '\'' +
                 '}';
     }
-
 }

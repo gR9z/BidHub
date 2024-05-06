@@ -41,7 +41,7 @@ public class RegistrationController {
         try {
             user.setCredit(0);
             user.setAdmin(false);
-            userService.createUser(user, passwordConfirm);
+            userService.createUserWithConfirmPassword(user, passwordConfirm);
 
         } catch (BusinessException businessException) {
 

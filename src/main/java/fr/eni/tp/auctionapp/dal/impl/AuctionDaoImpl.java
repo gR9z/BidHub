@@ -61,7 +61,7 @@ public class AuctionDaoImpl implements AuctionDao {
     }
 
     @Override
-    public Optional<Auction> readByAuctionId(int auctionId) {
+    public Optional<Auction> findByAuctionId(int auctionId) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("auctionId", auctionId);
 
@@ -78,7 +78,7 @@ public class AuctionDaoImpl implements AuctionDao {
     }
 
     @Override
-    public List<Optional<Auction>> readByItemIdPaginated(int itemId, int page, int size) {
+    public List<Optional<Auction>> findAuctionsByItemIdPaginated(int itemId, int page, int size) {
         if (page < 1) page = 1;
         int offset = (page - 1) * size;
 
@@ -100,7 +100,7 @@ public class AuctionDaoImpl implements AuctionDao {
     }
 
     @Override
-    public List<Optional<Auction>> readByUserIdPaginated(int userId, int page, int size) {
+    public List<Optional<Auction>> findAuctionsByUserIdPaginated(int userId, int page, int size) {
         if (page < 1) page = 1;
         int offset = (page - 1) * size;
 
@@ -122,7 +122,7 @@ public class AuctionDaoImpl implements AuctionDao {
     }
 
     @Override
-    public void deleteByAuctionId(int auctionId) {
+    public void deleteById(int auctionId) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("auctionId", auctionId);
 

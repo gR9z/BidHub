@@ -1,4 +1,4 @@
-const authFormIcon = document.querySelector('#auth-form__icon');
+const authFormIcon = document.querySelector('.form-icon');
 const input = document.querySelector('#password')
 
 authFormIcon.addEventListener('click', () => {

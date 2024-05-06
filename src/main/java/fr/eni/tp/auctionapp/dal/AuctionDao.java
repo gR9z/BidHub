@@ -7,11 +7,11 @@ import java.util.Optional;
 
 public interface AuctionDao {
     void insert(Auction auction);
-    Optional<Auction> readByAuctionId(int auctionId);
-    List<Optional<Auction>> readByItemIdPaginated(int itemId, int page, int size);
-    List<Optional<Auction>> readByUserIdPaginated(int userId, int page, int size);
+    Optional<Auction> findByAuctionId(int auctionId);
+    List<Optional<Auction>> findAuctionsByItemIdPaginated(int itemId, int page, int size);
+    List<Optional<Auction>> findAuctionsByUserIdPaginated(int userId, int page, int size);
     int countByItemId(int itemId);
     int countByItemIdAndUserId(int itemId, int userId);
-    void deleteByAuctionId(int auctionId);
+    void deleteById(int auctionId);
     int count();
 }

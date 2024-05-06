@@ -76,7 +76,7 @@ public class ItemDaoImpl implements ItemDao {
     }
 
     @Override
-    public Optional<Item> read(int id) {
+    public Optional<Item> findById(int id) {
         MapSqlParameterSource namedParameters = new MapSqlParameterSource();
         namedParameters.addValue("itemId", id);
         try {
@@ -109,7 +109,7 @@ public class ItemDaoImpl implements ItemDao {
     }
 
     @Override
-    public void delete(int itemId) {
+    public void deleteById(int itemId) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("itemId", itemId);
         namedParameterJdbcTemplate.update(DELETE_BY_ID, params);
@@ -120,7 +120,7 @@ public class ItemDaoImpl implements ItemDao {
         return jdbcTemplate.query(SELECT_ALL, new ItemRowMapper());
     }
 
-    public List<Item> findAllItemsPaginated(int page, int size) {
+    public List<Item> findAllPaginated(int page, int size) {
         if (page < 1) page = 1;
         int offset = (page - 1) * size;
 
@@ -135,7 +135,7 @@ public class ItemDaoImpl implements ItemDao {
         );
     }
 
-    public List<Item> findAllItemsByUserIdPaginated(int userId, int page, int size) {
+    public List<Item> findAllByUserIdPaginated(int userId, int page, int size) {
 
         int offset = (page - 1) * size;
 
@@ -151,7 +151,7 @@ public class ItemDaoImpl implements ItemDao {
         );
     }
 
-    public int countItemsByUserId(int userId) {
+    public int countByUserId(int userId) {
             MapSqlParameterSource params = new MapSqlParameterSource();
             params.addValue("userId", userId);
             return Optional.ofNullable(namedParameterJdbcTemplate.queryForObject(COUNT_ITEM_BY_USER_ID, params, Integer.class)).orElse(0);

@@ -37,12 +37,12 @@ public class TestCategoryDaoImpl {
     }
 
     @Test
-    void test_createCategory() {
+    void test_insert() {
         Category newCategory = new Category();
         newCategory.setLabel(faker.commerce().department());
 
         categoryDao.insert(newCategory);
-        Optional<Category> optionalCategory = categoryDao.read(newCategory.getCategoryId());
+        Optional<Category> optionalCategory = categoryDao.getById(newCategory.getCategoryId());
         assertThat(optionalCategory.isPresent()).isTrue();
 
         Category category = optionalCategory.get();
@@ -50,8 +50,8 @@ public class TestCategoryDaoImpl {
     }
 
     @Test
-    void test_readCategory() {
-        Optional<Category> optionalCategory = categoryDao.read(category.getCategoryId());
+    void test_getById() {
+        Optional<Category> optionalCategory = categoryDao.getById(category.getCategoryId());
         assertThat(optionalCategory.isPresent()).isTrue();
 
         Category getCategory = optionalCategory.get();
@@ -59,11 +59,11 @@ public class TestCategoryDaoImpl {
     }
 
     @Test
-    void test_updateCategory() {
+    void test_update() {
         category.setLabel("New Category Name");
         categoryDao.update(category);
 
-        Optional<Category> optionalCategory = categoryDao.read(category.getCategoryId());
+        Optional<Category> optionalCategory = categoryDao.getById(category.getCategoryId());
         assertThat(optionalCategory.isPresent()).isTrue();
 
         Category category = optionalCategory.get();
@@ -71,10 +71,10 @@ public class TestCategoryDaoImpl {
     }
 
     @Test
-    void test_deleteCategory() {
-        categoryDao.delete(category.getCategoryId());
+    void test_deleteById() {
+        categoryDao.deleteById(category.getCategoryId());
 
-        Optional<Category> optionalCategory = categoryDao.read(category.getCategoryId());
+        Optional<Category> optionalCategory = categoryDao.getById(category.getCategoryId());
         assertThat(optionalCategory).isEmpty();
     }
 

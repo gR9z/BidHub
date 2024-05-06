@@ -51,7 +51,7 @@ public class CategoryDaoImpl implements CategoryDao {
     }
 
     @Override
-    public Optional<Category> read(int id) {
+    public Optional<Category> getById(int id) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("categoryId", id);
 
@@ -82,7 +82,7 @@ public class CategoryDaoImpl implements CategoryDao {
     }
 
     @Override
-    public void delete(int id) {
+    public void deleteById(int id) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("categoryId", id);
         namedParameterJdbcTemplate.update(DELETE, params);
@@ -90,6 +90,6 @@ public class CategoryDaoImpl implements CategoryDao {
 
     @Override
     public List<Category> findAll() {
-        return jdbcTemplate.query(SELECT_ALL, new BeanPropertyRowMapper<Category>(Category.class));
+        return jdbcTemplate.query(SELECT_ALL, new BeanPropertyRowMapper<>(Category.class));
     }
 }

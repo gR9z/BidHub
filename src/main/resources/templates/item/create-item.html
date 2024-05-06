@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/layout :: layout-main(pageContent=~{:: .main}, title='Add a new item for sale', cssPath=null, jsPath=null)}">
+
+<main class="main">
+    <section class="section-content">
+        <div class="container">
+            <div class="form-container">
+                <div class="form-section">
+                    <h1 class="form-title">New sale</h1>
+
+                    <form method="POST" th:object="${item}" th:action="@{/create-item}" class="auth-form">
+
+                        <p class="error" th:each="error: ${#fields.errors('global')}" th:text="${error}"></p>
+
+                        <div class="form-group">
+                            <div class="form-field">
+                                <input type="text" id="itemName" name="itemName" required class="form-input"
+                                       placeholder="" th:field="*{itemName}"/>
+                                <label for="itemName" class="form-label">Item</label>
+                            </div>
+
+                            <div class="form-field">
+                                <textarea id="description" name="description" required
+                                          class="form-input textarea-custom" placeholder=""
+                                          th:field="*{description}" rows="8"></textarea>
+                                <label for="description" class="form-label">Description</label>
+                            </div>
+
+                            <div class="form-field">
+                                <input type="file" name="imageUrl" th:field="*{imageUrl}" accept="image/*" id="image">
+                                <label for="image" class="upload-label">
+                                    <i class="ri-image-circle-line"></i>
+                                    Add a Picture
+                                </label>
+                                <div id="imageContainer"></div>
+                                <div th:replace="~{fragments/fragment-error :: frag-error('imageUrl')}"></div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-field">
+                                    <select name="category" id="category" class="form-input">
+                                        <option value="">--Choose a category--</option>
+                                        <option th:each="category : ${categories}" th:value="${category.categoryId}"
+                                                th:selected="${category.categoryId == item.category?.categoryId}"
+                                                th:text="${category.label}"></option>
+                                    </select>
+                                    <label for="category" class="form-label">Category</label>
+                                </div>
+
+                                <div class="form-field">
+                                    <input type="number" min="0" id="startingPrice" name="startingPrice" required
+                                           class="form-input"
+                                           placeholder="" value="0" th:field="*{startingPrice}"/>
+                                    <label for="startingPrice" class="form-label">Price</label>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-field">
+                                    <input type="datetime-local" th:min="${T(java.time.LocalDate).now()}" id="auctionStartingdate"
+                                           name="auctionStartingdate"
+                                           required class="form-input" placeholder=""
+                                           th:field="*{auctionStartingDate}"/>
+
+                                    <label for="auctionStartingdate" class="form-label">Start of auction</label>
+                                </div>
+
+                                <div class="form-field">
+                                    <input type="datetime-local" th:min="${T(java.time.LocalDate).now()}" id="auctionEndingdate"
+                                           name="auctionEndingdate"
+                                           required
+                                           class="form-input" placeholder="" th:field="*{auctionEndingDate}"/>
+                                    <label for="auctionEndingdate" class="form-label">End of auction</label>
+                                </div>
+                            </div>
+
+                            <div class="form-field">
+                                <input type="text" id="street" name="street" required class="form-input" placeholder=""
+                                       th:field="*{withdrawal.street}"/>
+                                <label for="street" class="form-label">Street</label>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-field">
+                                    <input type="text" id="zipCode" name="zipCode" required class="form-input"
+                                           placeholder="" th:field="*{withdrawal.zipCode}"/>
+                                    <label for="zipCode" class="form-label">Zip Code</label>
+                                </div>
+
+                                <div class="form-field">
+                                    <input type="text" id="city" name="city" required class="form-input" placeholder=""
+                                           th:field="*{withdrawal.city}"/>
+                                    <label for="city" class="form-label">City</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button class="button" type="submit">Save</button>
+                            <a href="/" class="button button--secondary">Cancel</a>
+                        </div>
+
+                        <p class="auth-form__message auth-form__message--login"></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const inputFile = document.getElementById('image');
+                const imageContainer = document.getElementById('imageContainer');
+
+                inputFile.addEventListener('change', function (event) {
+                    while (imageContainer.firstChild) {
+                        imageContainer.removeChild(imageContainer.firstChild);
+                    }
+
+                    if (event.target.files.length > 0) {
+                        const file = event.target.files[0];
+                        const frame = document.createElement('img');
+                        frame.classList.add('image-preview');
+                        frame.src = URL.createObjectURL(file);
+                        frame.alt = "Image preview";
+
+                        frame.onload = function () {
+                            URL.revokeObjectURL(frame.src);
+                        };
+
+                        imageContainer.appendChild(frame);
+                    }
+                });
+            });
+        </script>
+
+    </section>
+</main>
+
+</html>

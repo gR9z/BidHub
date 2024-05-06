@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.Optional;
 
 public interface AuctionService {
-    void insert(Auction auction);
-    Optional<Auction> readByAuctionId(int auctionId);
-    List<Optional<Auction>> readByItemIdPaginated(int itemId, int page, int size);
-    List<Optional<Auction>> readByUserIdPaginated(int userId, int page, int size);
-    void deleteByAuctionId(int auctionId);
-    int count();
-    int countByItemId(int itemId);
-    int countByItemIdAndUserId(int itemId, int userId);
+    void createAuction(Auction auction);
+    Optional<Auction> findAuctionById(int auctionId);
+    List<Optional<Auction>> findAuctionsByItemIdPaginated(int itemId, int page, int size);
+    List<Optional<Auction>> findAuctionsByUserIdPaginated(int userId, int page, int size);
+    void removeAuctionById(int auctionId);
+    int getTotalAuctionCount();
+    int getCountOfAuctionsByItemId(int itemId);
+    int getCountOfAuctionsByItemIdAndUserId(int itemId, int userId);
 }
 

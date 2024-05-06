@@ -3,15 +3,17 @@ package fr.eni.tp.auctionapp.bll.impl;
 import fr.eni.tp.auctionapp.bll.ItemService;
 import fr.eni.tp.auctionapp.bo.Category;
 import fr.eni.tp.auctionapp.bo.Item;
+import fr.eni.tp.auctionapp.bo.User;
+import fr.eni.tp.auctionapp.bo.Withdrawal;
 import fr.eni.tp.auctionapp.dal.ItemDao;
 import fr.eni.tp.auctionapp.dal.WithdrawalDao;
-import fr.eni.tp.auctionapp.exceptions.BusinessCode;
 import fr.eni.tp.auctionapp.exceptions.BusinessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -30,128 +32,128 @@ public class ItemServiceImpl implements ItemService {
     public void createItem(Item item) {
         BusinessException businessException = new BusinessException();
 
-        boolean isValid = true;
-        isValid &= isItemNameValid(item.getItemName(), businessException);
-        isValid &= isDescriptionValid(item.getDescription(), businessException);
-        isValid &= isAuctionStartingDateValid(item.getAuctionStartingDate(), businessException);
-        isValid &= isAuctionEndingDateValid(item.getAuctionEndingDate(), item.getAuctionEndingDate(), businessException);
-        isValid &= isCategoryValid(item.getCategory(), businessException);
-
-        if (isValid) {
-            try {
-                // Ajouter la partie où on sépare item de withdrawal pour faire deux objets
-                //withdrawalDao.insert(withdrawal)
-                itemDao.insert(item);
-
-            } catch (BusinessException dalBusinessException) {
-                throw dalBusinessException;
-            }
-        } else {
-            throw businessException;
+        if (item == null) {
+            businessException.addKey("Item cannot be null");
         }
 
+        if (item != null && item.getSeller() == null) {
+            businessException.addKey("Seller cannot be null");
+        }
+
+        if (Objects.requireNonNull(item).getWithdrawal() == null) {
+            Withdrawal defaultWithdrawal = new Withdrawal();
+            User seller = item.getSeller();
+
+            defaultWithdrawal.setStreet(seller.getStreet());
+            defaultWithdrawal.setZipCode(seller.getZipCode());
+            defaultWithdrawal.setCity(seller.getCity());
+
+            defaultWithdrawal.setItem(item);
+            item.setWithdrawal(defaultWithdrawal);
+        }
+
+        try {
+            itemDao.insert(item);
+            Objects.requireNonNull(item).getWithdrawal().setItem(item);
+            Objects.requireNonNull(item).getWithdrawal().setItemId(item.getItemId());
+            withdrawalDao.insert(item.getWithdrawal());
+        } catch (BusinessException dalBusinessException) {
+            throw dalBusinessException;
+        }
     }
 
     @Override
-    public Optional<Item> read(int id) {
-        return itemDao.read(id);
+    public Optional<Item> findItemById(int id) {
+        return itemDao.findById(id);
     }
 
     @Override
-    public void update(Item item) {
+    public void updateItem(Item item) {
         itemDao.update(item);
     }
 
     @Override
-    public void delete(int itemId) {
-        itemDao.delete(itemId);
+    public void removeItemById(int itemId) {
+        itemDao.deleteById(itemId);
     }
 
     @Override
-    public List<Item> findAll() {
+    public List<Item> getAllItems() {
         return itemDao.findAll();
     }
 
     @Override
-    public List<Item> findAllItemsPaginated(int page, int size) {
-        return itemDao.findAllItemsPaginated(page, size);
+    public List<Item> getAllPaginated(int page, int size) {
+        return itemDao.findAllPaginated(page, size);
     }
 
     @Override
-    public List<Item> findAllItemsByUserIdPaginated(int userId, int page, int size) {
-        return itemDao.findAllItemsByUserIdPaginated(userId, page, size);
+    public List<Item> getByUserIdPaginated(int userId, int page, int size) {
+        return itemDao.findAllByUserIdPaginated(userId, page, size);
     }
 
     @Override
-    public int countItemsByUserId(int userId) {
-        return itemDao.countItemsByUserId(userId);
+    public int getCountOfItemsByUserId(int userId) {
+        return itemDao.countByUserId(userId);
     }
 
     @Override
-    public int count() {
+    public int getTotalItemCount() {
         return itemDao.count();
     }
 
-    //Item Name
     private boolean isItemNameValid(String itemName, BusinessException businessException) {
         if (itemName == null) {
-            businessException.addKey(BusinessCode.VALIDATION_ITEM_NAME_NULL);
+            businessException.addKey("BusinessCode.VALIDATION_ITEM_NAME_NULL");
             return false;
         }
 
         if (itemName.length() > 30) {
-            businessException.addKey(BusinessCode.VALIDATION_ITEM_NAME_SIZE);
+            businessException.addKey("BusinessCode.VALIDATION_ITEM_NAME_SIZE");
             return false;
         }
 
         return true;
     }
 
-
-    //Description
     private boolean isDescriptionValid(String description, BusinessException businessException) {
         if (description == null) {
-            businessException.addKey(BusinessCode.VALIDATION_DESCRIPTION_NULL);
+            businessException.addKey("BusinessCode.VALIDATION_DESCRIPTION_NULL");
             return false;
         }
 
         if (description.length() > 300) {
-            businessException.addKey(BusinessCode.VALIDATION_DESCRIPTION_SIZE);
+            businessException.addKey("BusinessCode.VALIDATION_DESCRIPTION_SIZE");
             return false;
         }
 
         return true;
     }
 
-
-    //Auction Starting Date
     private boolean isAuctionStartingDateValid(LocalDateTime auctionStartingDate, BusinessException businessException) {
         if (auctionStartingDate == null) {
-            businessException.addKey(BusinessCode.VALIDATION_AUCTION_STARTING_DATE_NULL);
+            businessException.addKey("BusinessCode.VALIDATION_AUCTION_STARTING_DATE_NULL");
             return false;
         }
         return true;
     }
 
-
-    //Auction Ending Date
     private boolean isAuctionEndingDateValid(LocalDateTime auctionStartingDate, LocalDateTime auctionEndingDate, BusinessException businessException) {
         if (auctionEndingDate == null) {
-            businessException.addKey(BusinessCode.VALIDATION_AUCTION_ENDING_DATE_NULL);
+            businessException.addKey("BusinessCode.VALIDATION_AUCTION_ENDING_DATE_NULL");
             return false;
         }
 
         if (auctionEndingDate.isBefore(auctionStartingDate)) {
-            businessException.addKey(BusinessCode.VALIDATION_AUCTION_ENDING_DATE_AFTER_AUCTION_STARTING_DATE);
+            businessException.addKey("BusinessCode.VALIDATION_AUCTION_ENDING_DATE_AFTER_AUCTION_STARTING_DATE");
             return false;
         }
         return true;
     }
 
-    //Category
     private boolean isCategoryValid(Category category, BusinessException businessException) {
         if (category == null) {
-            businessException.addKey(BusinessCode.VALIDATION_CATEGORY_NULL);
+            businessException.addKey("BusinessCode.VALIDATION_CATEGORY_NULL");
             return false;
         }
 

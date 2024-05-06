@@ -35,7 +35,7 @@ public class TestItemDaoImpl {
     }
 
     @Test
-    void test_createItem() {
+    void test_insert() {
         User seller = testDatabaseService.createRandomUser();
         testDatabaseService.insertUserInDatabase(seller);
 
@@ -59,7 +59,7 @@ public class TestItemDaoImpl {
 
         itemDao.insert(item);
 
-        Optional<Item> optionalItem = itemDao.read(item.getItemId());
+        Optional<Item> optionalItem = itemDao.findById(item.getItemId());
         assertThat(optionalItem.isPresent()).isTrue();
         Item itemRead = optionalItem.get();
 
@@ -69,7 +69,7 @@ public class TestItemDaoImpl {
     }
 
     @Test
-    void test_updateItem() {
+    void test_update() {
         User seller = testDatabaseService.createRandomUser();
         testDatabaseService.insertUserInDatabase(seller);
 
@@ -82,7 +82,7 @@ public class TestItemDaoImpl {
         item.setItemName("New Item Name");
         itemDao.update(item);
 
-        Optional<Item> optionalItem = itemDao.read(item.getItemId());
+        Optional<Item> optionalItem = itemDao.findById(item.getItemId());
         assertThat(optionalItem.isPresent()).isTrue();
         Item itemRead = optionalItem.get();
         assertThat(itemRead.getItemId()).isEqualTo(item.getItemId());
@@ -90,7 +90,7 @@ public class TestItemDaoImpl {
     }
 
     @Test
-    void test_deleteItem() {
+    void test_deleteById() {
         User seller = testDatabaseService.createRandomUser();
         testDatabaseService.insertUserInDatabase(seller);
 
@@ -100,8 +100,8 @@ public class TestItemDaoImpl {
         Item item = testDatabaseService.createRandomItem(seller, category);
         testDatabaseService.insertItemInDatabase(item);
 
-        itemDao.delete(item.getItemId());
-        Optional<Item> optionalItem = itemDao.read(item.getItemId());
+        itemDao.deleteById(item.getItemId());
+        Optional<Item> optionalItem = itemDao.findById(item.getItemId());
         assertThat(optionalItem.isPresent()).isFalse();
     }
 
@@ -123,7 +123,7 @@ public class TestItemDaoImpl {
     }
 
     @Test
-    void test_findAllItemsPaginated() {
+    void test_findAllPaginated() {
         User seller = testDatabaseService.createRandomUser();
         testDatabaseService.insertUserInDatabase(seller);
 
@@ -134,13 +134,13 @@ public class TestItemDaoImpl {
             testDatabaseService.insertItemInDatabase(testDatabaseService.createRandomItem(seller, category));
         }
 
-        List<Item> paginatedItems = itemDao.findAllItemsPaginated(2, 10);
+        List<Item> paginatedItems = itemDao.findAllPaginated(2, 10);
         System.out.println(paginatedItems);
         assertThat(paginatedItems.size()).isEqualTo(10);
     }
 
     @Test
-    void findAllItemsByUserIdPaginated() {
+    void findAllByUserIdPaginated() {
         User seller = testDatabaseService.createRandomUser();
         testDatabaseService.insertUserInDatabase(seller);
 
@@ -158,8 +158,8 @@ public class TestItemDaoImpl {
             testDatabaseService.insertItemInDatabase(testDatabaseService.createRandomItem(seller2, category));
         }
 
-        List<Item> itemsFromSellerPagination = itemDao.findAllItemsByUserIdPaginated(seller.getUserId(), 1, 100);
-        List<Item> itemsFromSeller2Pagination = itemDao.findAllItemsByUserIdPaginated(seller2.getUserId(), 1, 5);
+        List<Item> itemsFromSellerPagination = itemDao.findAllByUserIdPaginated(seller.getUserId(), 1, 100);
+        List<Item> itemsFromSeller2Pagination = itemDao.findAllByUserIdPaginated(seller2.getUserId(), 1, 5);
 
         assertThat(itemsFromSellerPagination.size()).isEqualTo(15);
         assertThat(itemsFromSeller2Pagination.size()).isEqualTo(5);
@@ -172,7 +172,7 @@ public class TestItemDaoImpl {
     }
 
     @Test
-    void test_countItemsByUserId() {
+    void test_countByUserId() {
         User seller = testDatabaseService.createRandomUser();
         testDatabaseService.insertUserInDatabase(seller);
 
@@ -190,8 +190,8 @@ public class TestItemDaoImpl {
             testDatabaseService.insertItemInDatabase(testDatabaseService.createRandomItem(seller2, category));
         }
 
-        int countItemsSeller1 = itemDao.countItemsByUserId(seller.getUserId());
-        int countItemsSeller2 = itemDao.countItemsByUserId(seller2.getUserId());
+        int countItemsSeller1 = itemDao.countByUserId(seller.getUserId());
+        int countItemsSeller2 = itemDao.countByUserId(seller2.getUserId());
 
         assertThat(countItemsSeller1).isEqualTo(15);
         assertThat(countItemsSeller2).isEqualTo(10);

@@ -462,9 +462,16 @@ a {
 
 .error {
     background-color: var(--error-color);
-    display: inline-block;
+    display: inline-flex;
     font-weight: var(--bold);
-    margin-bottom: var(--space-4);
-    padding: var(--space-1) var(--space-2);
+    padding: var(--space-1) var(--space-4);
     border-radius: var(--border-radius-1);
+}
+
+.error--form {
+    margin-top: var(--space-4);
+}
+
+.error--register-global {
+    margin-bottom: var(--space-6);
 }
