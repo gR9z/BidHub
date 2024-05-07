@@ -65,7 +65,6 @@ public class UserProfileController {
 //        }
 //        return "redirect:/profile";
 //    }
-//
 
     @GetMapping("/confirm")
     public String confirmDelete(Model model) {
@@ -74,7 +73,7 @@ public class UserProfileController {
     }
 
 
-    @PostMapping("/login")
+    @PostMapping("/profile/delete")
     public String deleteSubmit(
             @ModelAttribute User user,
             @RequestParam("action") String action,
