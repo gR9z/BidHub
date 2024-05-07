@@ -18,9 +18,13 @@ public interface ItemDao {
 
     List<Item> findAllPaginated(int page, int size);
 
+    List<Item> searchItems(String query, List<Integer> categories, int offset, int limit);
+
     List<Item> findAllByUserIdPaginated(int userId, int page, int size);
 
     List<Item> findByCategoryPaginated(int categoryId, int page, int size);
+
+    int countFilteredItems(String query, List<Integer> categories);
 
     int countByUserId(int userId);
 

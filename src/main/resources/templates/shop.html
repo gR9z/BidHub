@@ -21,22 +21,25 @@
                 <p class="shop__subtitle" th:text="${totalItems} + ' items available for auction'"></p>
 
                 <div class="filter">
-                    <form class="filter-form" action="/search" method="GET">
+                    <form class="filter-form" th:action="@{/shop}" method="GET">
                         <div class="filter-form__search">
                             <i class="ri-search-line filter-form__icon"></i>
-                            <input class="filter-form__input" type="text" name="q" placeholder="Search...">
+                            <input class="filter-form__input" type="text" name="q" th:value="${q}" placeholder="Search...">
                         </div>
 
                         <div class="filter-form__select">
-                            <select class="filter-form__select-input" name="category">
+                            <select class="filter-form__select-input" name="categories">
                                 <option value="" selected disabled>Select Category</option>
-                                <option th:each="category : ${categories}" th:value="${category.categoryId}" th:text="${category.label}"></option>
+                                <option th:each="category : ${categories}"
+                                        th:value="${category.categoryId}"
+                                        th:text="${category.label}"
+                                        th:selected="${categoriesSelected != null and categoriesSelected.contains(category.categoryId)}">
+                                </option>
                             </select>
                             <button type="submit" class="filter-form__button">Search</button>
                         </div>
                     </form>
                 </div>
-
 
                 <div class="shop__list">
                     <div class="shop__item" th:each="item : ${items}">
@@ -51,39 +54,44 @@
 
                 <div class="pagination">
                     <ul class="pagination__list">
+                        <!-- Aller à la première page -->
                         <th:block th:if="${currentPage > 2}">
                             <li class="pagination__item">
-                                <a th:href="@{/shop?page=1}" class="pagination__link">
+                                <a th:href="@{/shop(page=1, q=${param.q}, categories=${param.categories})}" class="pagination__link">
                                     <i class="ri-skip-left-line"></i>
                                 </a>
                             </li>
                         </th:block>
 
+                        <!-- Page précédente -->
                         <th:block th:if="${currentPage > 1}">
                             <li class="pagination__item">
-                                <a th:href="@{${'/shop?page=' + (currentPage - 1)}}" class="pagination__link">
+                                <a th:href="@{/shop(page=${currentPage - 1}, q=${param.q}, categories=${param.categories})}" class="pagination__link">
                                     <i th:if="${currentPage == 2}" class="ri-skip-left-line"></i>
                                     <i th:unless="${currentPage == 2}" class="ri-arrow-left-s-fill"></i>
                                 </a>
                             </li>
                         </th:block>
 
+                        <!-- Page courante (active) -->
                         <li class="pagination__item pagination__item--active">
                             <span class="pagination__link" th:text="${currentPage}"></span>
                         </li>
 
+                        <!-- Page suivante -->
                         <th:block th:if="${currentPage < totalPages}">
                             <li class="pagination__item">
-                                <a th:href="@{${'/shop?page=' + (currentPage + 1)}}" class="pagination__link">
+                                <a th:href="@{/shop(page=${currentPage + 1}, q=${param.q}, categories=${param.categories})}" class="pagination__link">
                                     <i th:if="${currentPage == totalPages - 1}" class="ri-skip-right-line"></i>
                                     <i th:unless="${currentPage == totalPages - 1}" class="ri-arrow-right-s-fill"></i>
                                 </a>
                             </li>
                         </th:block>
 
+                        <!-- Aller à la dernière page -->
                         <th:block th:if="${currentPage < totalPages - 1}">
                             <li class="pagination__item">
-                                <a th:href="@{${'/shop?page=' + totalPages}}" class="pagination__link">
+                                <a th:href="@{/shop(page=${totalPages}, q=${param.q}, categories=${param.categories})}" class="pagination__link">
                                     <i class="ri-skip-right-line"></i>
                                 </a>
                             </li>

@@ -83,6 +83,12 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    public List<Item> searchItems(String query, List<Integer> categories, int offset, int limit) {
+        return itemDao.searchItems(query, categories, offset, limit);
+    }
+
+
+    @Override
     public List<Item> getAllPaginated(int page, int size) {
         return itemDao.findAllPaginated(page, size);
     }
@@ -100,6 +106,11 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public int getTotalItemCount() {
         return itemDao.count();
+    }
+
+    @Override
+    public int countFilteredItems(String query, List<Integer> categories) {
+        return itemDao.countFilteredItems(query, categories);
     }
 
     @Override

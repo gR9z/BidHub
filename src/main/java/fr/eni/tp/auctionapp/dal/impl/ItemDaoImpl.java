@@ -21,19 +21,25 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Repository
 public class ItemDaoImpl implements ItemDao {
 
+    private static final String ORDER_BY_DATE = " ORDER BY auctionStartingDate ";
+    private static final String OFFSET_LIMIT = "OFFSET :offset ROWS FETCH NEXT :limit ROWS ONLY";
+
     private static final String INSERT = "INSERT INTO ITEMS (itemName, description, auctionStartingDate, auctionEndingDate, startingPrice, sellingPrice, imageUrl, userId, categoryId) VALUES (:itemName, :description, :auctionStartingDate, :auctionEndingDate, :startingPrice, :sellingPrice, :imageUrl, :userId, :categoryId);";
     private static final String SELECT_BY_ID = "SELECT itemId, itemName, description, auctionStartingDate, auctionEndingDate, startingPrice, sellingPrice, imageUrl, userId, categoryId FROM ITEMS WHERE itemId = :itemId;";
     private static final String UPDATE_BY_ID = "UPDATE ITEMS SET itemName = :itemName, description = :description, auctionStartingDate = :auctionStartingDate, auctionEndingDate = :auctionEndingDate, startingPrice = :startingPrice, sellingPrice = :sellingPrice, imageUrl = :imageUrl, userId = :userId, categoryId = :categoryId WHERE itemId = :itemId;";
     private static final String DELETE_BY_ID = "DELETE FROM ITEMS WHERE itemId = :itemId;";
-    private static final String SELECT_ALL = "SELECT itemId, itemName, description, auctionStartingDate, auctionEndingDate, startingPrice, sellingPrice, imageUrl, userId, categoryId FROM ITEMS;";
-    private static final String SELECT_ALL_PAGINATED = "SELECT itemId, itemName, description, auctionStartingDate, auctionEndingDate, startingPrice, sellingPrice, imageUrl, userId, categoryId FROM ITEMS ORDER BY auctionStartingDate OFFSET :offset ROWS FETCH NEXT :limit ROWS ONLY;";
-    private static final String SELECT_ALL_ITEMS_FROM_USERID_PAGINATED = "SELECT itemId, itemName, description, auctionStartingDate, auctionEndingDate, startingPrice, sellingPrice, imageUrl, userId, categoryId FROM ITEMS WHERE userId = :userId ORDER BY auctionStartingDate OFFSET :offset ROWS FETCH NEXT :limit ROWS ONLY;";
-    private static final String SELECT_BY_CATEGORY_PAGINATED = "SELECT itemId, itemName, description, auctionStartingDate, auctionEndingDate, startingPrice, sellingPrice, imageUrl, userId, categoryId FROM ITEMS WHERE categoryId = :categoryId ORDER BY auctionStartingDate OFFSET :offset ROWS FETCH NEXT :limit ROWS ONLY;";
+
+    private static final String SELECT_ALL = "SELECT itemId, itemName, description, auctionStartingDate, auctionEndingDate, startingPrice, sellingPrice, imageUrl, userId, categoryId FROM ITEMS ";
+    private static final String SELECT_ALL_PAGINATED = "SELECT itemId, itemName, description, auctionStartingDate, auctionEndingDate, startingPrice, sellingPrice, imageUrl, userId, categoryId FROM ITEMS " + ORDER_BY_DATE + OFFSET_LIMIT;
+    private static final String SELECT_ALL_ITEMS_FROM_USERID_PAGINATED = "SELECT itemId, itemName, description, auctionStartingDate, auctionEndingDate, startingPrice, sellingPrice, imageUrl, userId, categoryId FROM ITEMS WHERE userId = :userId " + ORDER_BY_DATE + OFFSET_LIMIT;
+    private static final String SELECT_BY_CATEGORY_PAGINATED = "SELECT itemId, itemName, description, auctionStartingDate, auctionEndingDate, startingPrice, sellingPrice, imageUrl, userId, categoryId FROM ITEMS WHERE categoryId = :categoryId " + ORDER_BY_DATE + OFFSET_LIMIT;
+
     private static final String COUNT_ITEM_BY_USER_ID = "SELECT COUNT(*) AS count FROM Items WHERE userId = :userId;";
     private static final String COUNT = "SELECT COUNT(*) AS count FROM Items;";
 
@@ -137,6 +143,42 @@ public class ItemDaoImpl implements ItemDao {
         );
     }
 
+    public List<Item> searchItems(String query, List<Integer> categories, int offset, int limit) {
+        StringBuilder sql = new StringBuilder(SELECT_ALL);
+
+        boolean hasCondition = false;
+
+        if (query != null && !query.isEmpty()) {
+            sql.append(" WHERE (itemName LIKE :query OR description LIKE :query) ");
+            hasCondition = true;
+        }
+
+        if (categories != null && !categories.isEmpty()) {
+            if (hasCondition) {
+                sql.append("AND ");
+            } else {
+                sql.append(" WHERE ");
+            }
+            sql.append("categoryId IN (:categories) ");
+            hasCondition = true;
+        }
+
+        if (!hasCondition) {
+            sql.append(" WHERE 1=1 ");
+        }
+
+        sql.append(ORDER_BY_DATE);
+        sql.append(" OFFSET :offset ROWS FETCH NEXT :limit ROWS ONLY");
+
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("query", "%" + query + "%");
+        params.addValue("categories", categories);
+        params.addValue("offset", offset);
+        params.addValue("limit", limit);
+
+        return namedParameterJdbcTemplate.query(sql.toString(), params, new ItemRowMapper());
+    }
+
     public List<Item> findByCategoryPaginated(int categoryId, int page, int size) {
         if (page < 1) page = 1;
         int offset = (page - 1) * size;
@@ -170,15 +212,39 @@ public class ItemDaoImpl implements ItemDao {
     }
 
     public int countByUserId(int userId) {
-            MapSqlParameterSource params = new MapSqlParameterSource();
-            params.addValue("userId", userId);
-            return Optional.ofNullable(namedParameterJdbcTemplate.queryForObject(COUNT_ITEM_BY_USER_ID, params, Integer.class)).orElse(0);
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("userId", userId);
+        return Optional.ofNullable(namedParameterJdbcTemplate.queryForObject(COUNT_ITEM_BY_USER_ID, params, Integer.class)).orElse(0);
     }
 
     public int count() {
         return Optional.ofNullable(jdbcTemplate.queryForObject(COUNT, (rs, rowNum) -> rs.getInt("count")))
                 .orElse(0);
     }
+
+    public int countFilteredItems(String query, List<Integer> categories) {
+        StringBuilder sql = new StringBuilder("SELECT COUNT(*) AS count FROM ITEMS");
+
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        if (query != null && !query.isEmpty()) {
+            sql.append(" WHERE (itemName LIKE :query OR description LIKE :query)");
+            params.addValue("query", "%" + query + "%");
+        }
+
+        if (categories != null && !categories.isEmpty()) {
+            if (query != null && !query.isEmpty()) {
+                sql.append(" AND ");
+            } else {
+                sql.append(" WHERE ");
+            }
+            sql.append("categoryId IN (:categories)");
+            params.addValue("categories", categories);
+        }
+
+        return Optional.ofNullable(namedParameterJdbcTemplate.queryForObject(sql.toString(), params, (rs, rowNum) -> rs.getInt("count")))
+                .orElse(0);
+    }
+
 
     private static class ItemRowMapper implements RowMapper<Item> {
         @Override
