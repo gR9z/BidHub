@@ -2,6 +2,8 @@ package fr.eni.tp.auctionapp.controller;
 
 import fr.eni.tp.auctionapp.bll.UserService;
 import fr.eni.tp.auctionapp.bo.User;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,43 +53,29 @@ public class UserProfileController {
         return "redirect:/profile";
     }
 
-//    @PostMapping("/profile/saved-profile")
-//    public String saveSubmit(
-//            @ModelAttribute User user,
-//            @RequestParam("action") String action,
-//            Model model){
-//
-//        if ("save".equals(action)) {
-//
-//            userService.editUserProfile(user);
-//            return "redirect:/user/profile-user";
-//
-//        }
-//        return "redirect:/profile";
-//    }
+    @PostMapping("/profile/delete")
+    public String deleteConfirm(
+            @ModelAttribute User user,
+            @RequestParam("action") String action,
+            HttpServletRequest request,
+            Model model){
+        if ("yes".equals(action)) {
+            userService.deleteUser(user);
+            HttpSession session = request.getSession(false);
+            if (session != null) {
+                session.invalidate();
+            }
+            //return "redirect:/security/login";
+            return "redirect:/login";
+        }
+        return "redirect:/profile";
+    }
 
     @GetMapping("/confirm")
     public String confirmDelete(Model model) {
         model.addAttribute("showOverlay", true);
         return "/login";
     }
-
-
-    @PostMapping("/profile/delete")
-    public String deleteSubmit(
-            @ModelAttribute User user,
-            @RequestParam("action") String action,
-            Model model){
-
-        if ("yes".equals(action)) {
-
-            userService.deleteUser(user);
-            return "redirect:/security/login";
-
-        }
-        return "redirect:/login";
-    }
-
 
     @GetMapping("/error-profile")
     public String userError(

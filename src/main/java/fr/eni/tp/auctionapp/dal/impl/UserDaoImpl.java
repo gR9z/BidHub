@@ -2,6 +2,7 @@ package fr.eni.tp.auctionapp.dal.impl;
 
 import fr.eni.tp.auctionapp.bo.User;
 import fr.eni.tp.auctionapp.dal.UserDao;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -91,6 +92,7 @@ public class UserDaoImpl implements UserDao {
     public void deleteUser(String username) {
         jdbcTemplate.update(DELETE_BY_USERNAME, username);
     }
+
 
 
 
