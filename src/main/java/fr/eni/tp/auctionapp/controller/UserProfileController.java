@@ -4,12 +4,11 @@ import fr.eni.tp.auctionapp.bll.UserService;
 import fr.eni.tp.auctionapp.bo.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
@@ -53,29 +52,51 @@ public class UserProfileController {
         return "redirect:/profile";
     }
 
-    @PostMapping("/profile/delete")
-    public String deleteConfirm(
-            @ModelAttribute User user,
-            @RequestParam("action") String action,
-            HttpServletRequest request,
-            Model model){
-        if ("yes".equals(action)) {
-            userService.deleteUser(user);
+//    @PostMapping("/profile/delete")
+//    public String deleteConfirm(
+//            @ModelAttribute User user,
+//            Principal principal,
+//            HttpServletRequest request) {
+//        User currentUser = userService.getUsername(principal.getName());
+//        if (currentUser.getUsername().equals(user.getUsername())) {
+//            userService.deleteUser(user);
+//            HttpSession session = request.getSession(false);
+//            if (session != null) {
+//                session.invalidate();
+//            }
+//            //return "redirect:/security/login";
+//            return "redirect:/login";
+//        }
+//        return "redirect:/profile";
+//    }
+//
+//    @GetMapping("/profile/confirm-delete")
+//    public String showDeleteConfirmation(Model model, Principal principal) {
+//        User user = userService.getUsername(principal.getName());
+//        model.addAttribute("user", user);
+//        return "/user/confirm-delete"; // Page Thymeleaf pour confirmation
+//    }
+
+    @DeleteMapping("/profile/delete/{username}")
+    public ResponseEntity<String> deleteUser(@PathVariable String username, Principal principal, HttpServletRequest request) {
+        User currentUser = userService.getUsername(principal.getName());
+        if (currentUser.getUsername().equals(username)) {
+            userService.deleteUser(currentUser);
             HttpSession session = request.getSession(false);
             if (session != null) {
                 session.invalidate();
             }
-            //return "redirect:/security/login";
-            return "redirect:/login";
+            return ResponseEntity.ok("Account successfully deleted");
         }
-        return "redirect:/profile";
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You can only delete your own account");
     }
 
-    @GetMapping("/confirm")
-    public String confirmDelete(Model model) {
-        model.addAttribute("showOverlay", true);
-        return "/login";
-    }
+
+//    @GetMapping("/confirm")
+//    public String confirmDelete(Model model) {
+//        model.addAttribute("showOverlay", true);
+//        return "/login";
+//    }
 
     @GetMapping("/error-profile")
     public String userError(
