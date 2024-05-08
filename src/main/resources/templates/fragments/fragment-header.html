@@ -1,31 +1,49 @@
-<header class="header" xmlns:th="http://www.thymeleaf.org" th:fragment="frag-navigation">
+<header class="header" xmlns:th="http://www.thymeleaf.org" th:fragment="frag-header">
     <div class="container">
         <div class="header__container">
-            <a href="/" class="logo">
+            <a th:href="@{/}" class="logo">
                 <img th:src="@{/images/logo.svg}" alt="Logo BidHub">
             </a>
 
             <nav id="nav" class="nav" role="navigation">
                 <ul class="nav__list">
                     <li class="visually-hidden">
-                        <a href="/">Home</a>
+                        <a th:href="@{/}">Home</a>
                     </li>
 
+                    <!-- NAV FOR LOGOUT USER -->
                     <li th:if="${!#authorization.expression('isAuthenticated()')}">
                         <a
-                                href="login"
+                                th:href="@{/login}"
                                 class="nav__link"
                         >Login</a
                         >
                     </li>
 
+                    <li th:if="${!#authorization.expression('isAuthenticated()')}">
+                        <a
+                                th:href="@{/create-account}"
+                                class="nav__link"
+                        >Register</a
+                        >
+                    </li>
+
+                    <!-- NAV FOR LOGGED USER-->
                     <li th:if="${#authorization.expression('isAuthenticated()')}"
                         th:text="'Hey ' + ${#authentication.name} + ' • €'+${#authentication.principal.credit}">
                     </li>
 
                     <li th:if="${#authorization.expression('isAuthenticated()')}">
                         <a
-                                href="logout"
+                                th:href="@{/create-item}"
+                                class="nav__link"
+                        >Sell Item!</a
+                        >
+                    </li>
+
+                    <li th:if="${#authorization.expression('isAuthenticated()')}">
+                        <a
+                                th:href="@{/logout}"
                                 class="nav__link"
                         >Logout</a>
                     </li>
@@ -35,17 +53,12 @@
             <div class="nav__btns">
                 <i class="ri-sun-line" id="theme-toggle"></i>
 
-                <a th:if="${#authorization.expression('isAuthenticated()')}"
-                   href="create-item"
-                   class="button"
-                >Sell Item!</a
-                >
+                <a
+                    th:href="@{/shop}"
+                    class="button"
+                    >Shop!
+                </a>
 
-                <a th:if="${!#authorization.expression('isAuthenticated()')}"
-                   href="create-account"
-                   class="button"
-                >Sign Up!</a
-                >
                 <i
                         class="ri-menu-3-line nav__toggle"
                         id="nav-toggle"

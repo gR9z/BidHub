@@ -8,7 +8,7 @@
 }
 
 .filter {
-    margin-bottom: var(--space-6);
+    margin-bottom: var(--space-9);
 }
 
 .filter-form {
@@ -77,6 +77,11 @@
     display: grid;
     border-radius: var(--border-radius-3);
     gap: var(--space-3);
+    transition: all .3s ease-in-out;
+}
+
+.shop__item:hover {
+    transform: translateY(-1rem);
 }
 
 .shop__item img {
@@ -92,7 +97,7 @@
 }
 
 .info__price {
-    font-size: var(--h5);
+    font-size: var(--h4);
 }
 
 .info__ending-date {

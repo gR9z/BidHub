@@ -53,6 +53,12 @@
                                 >Password
                                 </label>
                             </div>
+
+                        </div>
+
+                        <div class="form-field form-field--checkbox">
+                            <input type="checkbox" id="remember-me" name="remember-me" class="form-input--checkbox"/>
+                            <label for="remember-me" class="form-label--checkbox">Remember me</label>
                         </div>
 
                         <div class="form-actions">
@@ -68,8 +74,11 @@
                     </form>
                 </div>
 
-                <a class="form-link" th:href="@{/create-account}">Don't have an
-                    <strong>account?</strong><br>Create one for <strong>free</strong>!</a>
+                <div class="form-group">
+                    <a class="form-link" th:href="@{/create-account}">Don't have an
+                        <strong>account?</strong><br>Create one for <strong>free</strong>!
+                    </a>
+                </div>
             </div>
         </div>
     </section>

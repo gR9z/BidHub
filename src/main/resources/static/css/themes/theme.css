@@ -4,16 +4,16 @@
 @font-face {
     font-family: 'Geomanist';
     src: local('Geomanist Bold'), local('Geomanist-Bold'),
-    url('./../fonts/geomanist/geomanist-bold.woff2') format('woff2'),
-    url('./../fonts/geomanist/geomanist-bold.woff') format('woff');
+    url('../../fonts/geomanist/geomanist-bold.woff2') format('woff2'),
+    url('../../fonts/geomanist/geomanist-bold.woff') format('woff');
     font-weight: 600;
 }
 
 @font-face {
     font-family: 'Geomanist';
     src: local('Geomanist Regular'), local('Geomanist-Regular'),
-    url('./../fonts/geomanist/geomanist-regular.woff2') format('woff2'),
-    url('./../fonts/geomanist/geomanist-regular.woff') format('woff');
+    url('../../fonts/geomanist/geomanist-regular.woff2') format('woff2'),
+    url('../../fonts/geomanist/geomanist-regular.woff') format('woff');
     font-weight: 400;
 }
 
@@ -323,6 +323,10 @@ body {
 ::-webkit-selection {
     background-color: var(--primary);
     color: var(--text);
+}
+
+[data-theme="dark"] ::-webkit-calendar-picker-indicator {
+    filter: invert(1);
 }
 
 h1,

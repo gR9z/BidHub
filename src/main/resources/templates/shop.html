@@ -4,7 +4,7 @@
       th:replace="~{layouts/layout :: layout-main(
             pageContent=~{:: .main},
             title='BidHub - Browse BidHub\'s Hidden Treasures',
-            cssPath='./css/pages/shop.css',
+            cssPath='/css/pages/shop.css',
             jsPath=null
         )}"
 >
@@ -24,7 +24,8 @@
                     <form class="filter-form" th:action="@{/shop}" method="GET">
                         <div class="filter-form__search">
                             <i class="ri-search-line filter-form__icon"></i>
-                            <input class="filter-form__input" type="text" name="q" th:value="${q}" placeholder="Search...">
+                            <input class="filter-form__input" type="text" name="q" th:value="${q}"
+                                   placeholder="Search...">
                         </div>
 
                         <div class="filter-form__select">
@@ -43,55 +44,64 @@
 
                 <div class="shop__list">
                     <div class="shop__item" th:each="item : ${items}">
-                        <img src="./images/placeholder_800x800.svg" alt="Placeholder image">
-                        <div class="item__info">
-                            <h1 class="info__name" th:text="${item.itemName}"></h1>
-                            <p class="info__price" th:text="'€' + ${item.sellingPrice}"></p>
-                            <p class="info__ending-date" th:text="${item.auctionEndingDate}"></p>
-                        </div>
+                        <a th:href="@{|/products/${itemUrls[item.itemId]}|}" th:title="${item.itemName}">
+                            <img src="./images/placeholder_800x800.svg" alt="Placeholder image">
+                            <div class="item__info">
+                                <h1 class="info__name" th:text="${item.itemName}"></h1>
+                                <p class="info__price" th:text="'€' + ${item.sellingPrice}"></p>
+                                <p class="info__ending-date">
+                                    Ending auction in:
+                                    <span th:text="${T(fr.eni.tp.auctionapp.utils.DateUtils).formatDateTime(item.auctionEndingDate)}"></span>
+                                </p>
+                            </div>
+                        </a>
                     </div>
                 </div>
 
                 <div class="pagination">
                     <ul class="pagination__list">
-                        <!-- Aller à la première page -->
+                        <!-- First page -->
                         <th:block th:if="${currentPage > 2}">
                             <li class="pagination__item">
-                                <a th:href="@{/shop(page=1, q=${param.q}, categories=${param.categories})}" class="pagination__link">
+                                <a th:href="@{/shop(page=1, q=${param.q}, categories=${param.categories})}"
+                                   class="pagination__link">
                                     <i class="ri-skip-left-line"></i>
                                 </a>
                             </li>
                         </th:block>
 
-                        <!-- Page précédente -->
+                        <!-- Previous page -->
                         <th:block th:if="${currentPage > 1}">
                             <li class="pagination__item">
-                                <a th:href="@{/shop(page=${currentPage - 1}, q=${param.q}, categories=${param.categories})}" class="pagination__link">
+                                <a th:href="@{/shop(page=${currentPage - 1}, q=${param.q}, categories=${param.categories})}"
+                                   class="pagination__link">
                                     <i th:if="${currentPage == 2}" class="ri-skip-left-line"></i>
                                     <i th:unless="${currentPage == 2}" class="ri-arrow-left-s-fill"></i>
                                 </a>
                             </li>
                         </th:block>
 
-                        <!-- Page courante (active) -->
+                        <!-- Current page (active) -->
                         <li class="pagination__item pagination__item--active">
                             <span class="pagination__link" th:text="${currentPage}"></span>
                         </li>
 
-                        <!-- Page suivante -->
+                        <!-- Next page -->
                         <th:block th:if="${currentPage < totalPages}">
                             <li class="pagination__item">
-                                <a th:href="@{/shop(page=${currentPage + 1}, q=${param.q}, categories=${param.categories})}" class="pagination__link">
+                                <a th:href="@{/shop(page=${currentPage + 1}, q=${param.q}, categories=${param.categories})}"
+                                   class="pagination__link">
                                     <i th:if="${currentPage == totalPages - 1}" class="ri-skip-right-line"></i>
                                     <i th:unless="${currentPage == totalPages - 1}" class="ri-arrow-right-s-fill"></i>
                                 </a>
                             </li>
                         </th:block>
 
-                        <!-- Aller à la dernière page -->
+                        <!-- Last page -->
                         <th:block th:if="${currentPage < totalPages - 1}">
                             <li class="pagination__item">
-                                <a th:href="@{/shop(page=${totalPages}, q=${param.q}, categories=${param.categories})}" class="pagination__link">
+                                <a th:href="@{/shop(page=${totalPages}, q=${param.q}, categories=${param.categories})}"
+                                   class="pagination__link">
                                     <i class="ri-skip-right-line"></i>
                                 </a>
                             </li>

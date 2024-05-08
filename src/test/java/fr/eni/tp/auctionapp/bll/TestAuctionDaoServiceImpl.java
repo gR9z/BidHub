@@ -3,6 +3,7 @@ package fr.eni.tp.auctionapp.bll;
 import fr.eni.tp.auctionapp.bll.impl.AuctionServiceImpl;
 import fr.eni.tp.auctionapp.bo.Auction;
 import fr.eni.tp.auctionapp.dal.AuctionDao;
+import fr.eni.tp.auctionapp.dto.BidHistoryDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,7 +17,6 @@ import static org.mockito.Mockito.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @ExtendWith(MockitoExtension.class)
 public class TestAuctionDaoServiceImpl {
@@ -62,12 +62,8 @@ public class TestAuctionDaoServiceImpl {
         auctions.add(new Auction());
         auctions.add(new Auction());
 
-        List<Optional<Auction>> optionalAuctions = auctions.stream()
-                .map(Optional::of)
-                .collect(Collectors.toList());
-
-        when(auctionDaoMock.findAuctionsByItemIdPaginated(anyInt(), anyInt(), anyInt())).thenReturn(optionalAuctions);
-        List<Optional<Auction>> result = auctionService.findAuctionsByItemIdPaginated(123, 1, 10);
+        when(auctionDaoMock.findAuctionsByItemIdPaginated(anyInt(), anyInt(), anyInt())).thenReturn(auctions);
+        List<Auction> result = auctionService.findAuctionsByItemIdPaginated(123, 1, 10);
         assertThat(result).isNotNull();
         verify(auctionDaoMock).findAuctionsByItemIdPaginated(123, 1, 10);
     }
@@ -78,14 +74,29 @@ public class TestAuctionDaoServiceImpl {
         auctions.add(new Auction());
         auctions.add(new Auction());
 
-        List<Optional<Auction>> optionalAuctions = auctions.stream()
-                .map(Optional::of)
-                .collect(Collectors.toList());
+        List<Auction> auctionList = auctions.stream()
+                .toList();
 
-        when(auctionDaoMock.findAuctionsByUserIdPaginated(anyInt(), anyInt(), anyInt())).thenReturn(optionalAuctions);
-        List<Optional<Auction>> result = auctionService.findAuctionsByUserIdPaginated(123, 1, 10);
+        when(auctionDaoMock.findAuctionsByUserIdPaginated(anyInt(), anyInt(), anyInt())).thenReturn(auctionList);
+        List<Auction> result = auctionService.findAuctionsByUserIdPaginated(123, 1, 10);
         assertThat(result).isNotNull();
         verify(auctionDaoMock).findAuctionsByUserIdPaginated(123, 1, 10);
+    }
+
+    @Test
+    void test_getItemBidHistoryPaginated() {
+        int itemId = 123;
+        int page = 1;
+        int size = 10;
+        List<BidHistoryDto> bidHistory = new ArrayList<>();
+        bidHistory.add(new BidHistoryDto());
+        bidHistory.add(new BidHistoryDto());
+
+        when(auctionDaoMock.findBidHistoryForItemPaginated(itemId, page, size)).thenReturn(bidHistory);
+        List<BidHistoryDto> result = auctionService.getItemBidHistoryPaginated(itemId, page, size);
+        assertThat(result).isNotNull();
+        assertThat(result.size()).isEqualTo(2);
+        verify(auctionDaoMock).findBidHistoryForItemPaginated(itemId, page, size);
     }
 
     @Test

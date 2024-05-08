@@ -53,6 +53,7 @@ public class ItemServiceImpl implements ItemService {
         }
 
         try {
+            item.setSellingPrice(item.getStartingPrice());
             itemDao.insert(item);
             Objects.requireNonNull(item).getWithdrawal().setItem(item);
             Objects.requireNonNull(item).getWithdrawal().setItemId(item.getItemId());
@@ -86,7 +87,6 @@ public class ItemServiceImpl implements ItemService {
     public List<Item> searchItems(String query, List<Integer> categories, int offset, int limit) {
         return itemDao.searchItems(query, categories, offset, limit);
     }
-
 
     @Override
     public List<Item> getAllPaginated(int page, int size) {

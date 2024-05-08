@@ -89,10 +89,10 @@ public class DatabaseSeeder {
 
         testDatabaseService.clearDatabase();
 
-        userSeeder(50);
+        userSeeder(100);
         categorySeeder(20);
-        itemSeeder(100);
-        auctionSeeder(1000);
+        itemSeeder(300);
+        auctionSeeder(2000);
 
         context.close();
     }

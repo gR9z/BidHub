@@ -43,6 +43,26 @@
     position: relative;
 }
 
+.form-field--checkbox {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+    cursor: pointer;
+}
+
+.form-field--checkbox label {
+    cursor: pointer;
+    line-height: 1;
+}
+
+input[type="checkbox"] {
+    width: 1.8rem;
+    height: 1.8rem;
+    cursor: pointer;
+    accent-color: var(--secondary);
+}
+
 .form-field textarea {
     resize: vertical;
 }
@@ -156,6 +176,5 @@ input[type="file"] {
 }
 
 input[type="datetime-local"]::-webkit-calendar-picker-indicator {
-    color: red;
     cursor: pointer;
 }

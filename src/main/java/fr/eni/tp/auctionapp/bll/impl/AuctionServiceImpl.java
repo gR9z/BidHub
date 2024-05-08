@@ -3,6 +3,7 @@ package fr.eni.tp.auctionapp.bll.impl;
 import fr.eni.tp.auctionapp.bll.AuctionService;
 import fr.eni.tp.auctionapp.bo.Auction;
 import fr.eni.tp.auctionapp.dal.AuctionDao;
+import fr.eni.tp.auctionapp.dto.BidHistoryDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,12 +29,12 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     @Override
-    public List<Optional<Auction>> findAuctionsByItemIdPaginated(int itemId, int page, int size) {
+    public List<Auction> findAuctionsByItemIdPaginated(int itemId, int page, int size) {
         return auctionDao.findAuctionsByItemIdPaginated(itemId, page, size);
     }
 
     @Override
-    public List<Optional<Auction>> findAuctionsByUserIdPaginated(int userId, int page, int size) {
+    public List<Auction> findAuctionsByUserIdPaginated(int userId, int page, int size) {
         return auctionDao.findAuctionsByUserIdPaginated(userId, page, size);
     }
 
@@ -50,6 +51,11 @@ public class AuctionServiceImpl implements AuctionService {
     @Override
     public int getCountOfAuctionsByItemId(int itemId) {
         return auctionDao.countByItemId(itemId);
+    }
+
+    @Override
+    public List<BidHistoryDto> getItemBidHistoryPaginated(int itemId, int page, int size) {
+        return auctionDao.findBidHistoryForItemPaginated(itemId, page, size);
     }
 
     @Override

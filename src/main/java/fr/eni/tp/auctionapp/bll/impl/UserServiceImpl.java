@@ -51,7 +51,6 @@ public class UserServiceImpl implements UserService {
         } else {
             throw businessException;
         }
-
     }
 
     @Override

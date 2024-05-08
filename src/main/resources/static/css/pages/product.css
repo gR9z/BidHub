@@ -1,0 +1,97 @@
+.product__content {
+    display: grid;
+    gap: var(--space-6);
+}
+
+.product__image {
+    display: flex;
+}
+
+.product__image img {
+    border-radius: var(--border-radius-2);
+}
+
+.product__info {
+    display: grid;
+    gap: var(--space-4);
+}
+
+.product__title {
+    font-size: var(--h2);
+}
+
+.product__description {
+    font-size: var(--h4);
+}
+
+.product__category {
+    font-size: var(--text-small);
+}
+
+.product__category a {
+    text-decoration: underline;
+}
+
+.product__actual-price {
+    font-size: var(--h3);
+}
+
+.bid-history__title {
+    font-size: var(--h3);
+    text-align: center;
+}
+
+.bid-history__total-count {
+    text-align: center;
+    margin-top: var(--space-3);
+}
+
+table {
+    margin-top: var(--space-5);
+    border-collapse: collapse;
+    width: 100%;
+    border: 0;
+    table-layout: fixed;
+}
+
+table thead {
+    border: none;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+
+table th,
+table td {
+    padding: var(--space-2);
+    text-align: center;
+}
+
+table tr {
+    border: 0.1rem solid var(--text20);
+    border-bottom: 0.3rem solid var(--secondary);
+    display: block;
+    margin-bottom: var(--space-5);
+}
+
+table td {
+    border-bottom: 0.1rem solid var(--text20);
+    display: block;
+    font-size: var(--text-small);
+    text-align: right;
+}
+
+table td::before {
+    content: attr(data-label);
+    float: left;
+    font-weight: var(--bold);
+    text-transform: uppercase;
+}
+
+table td:last-child {
+    border-bottom: 0;
+}

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/layout :: layout-main(
+            pageContent=~{:: .main},
+            title='Let\'s buy ' + ${item.itemName} + ' on BidHub!',
+            cssPath='/css/pages/product.css',
+            jsPath=null
+        )}"
+>
+
+<main class="main">
+
+    <section class="section-content">
+        <div class="container product">
+            <div class="product__content">
+                <div class="product__image">
+                    <img src="/images/placeholder_800x800.svg" alt="Placeholder product image">
+                </div>
+
+                <div class="product__info">
+                    <h1 class="product__title">
+                        <span class="text-stroke">Auction to</span>
+                        <span th:text="${item.itemName}"></span>!
+                    </h1>
+
+                    <p class="product__description" th:text="${item.description}"></p>
+
+                    <p class="product__category">
+                        Category:
+                        <a th:href="|/category/${item.category.label.toLowerCase()}|"
+                           th:text="${item.category.label}"></a>
+                    </p>
+
+                    <p class="product__starting-price" th:text="'Starting: €' + ${item.startingPrice}"></p>
+                    <p class="product__actuel-price">
+                        <strong th:text="'€' + ${item.sellingPrice}"></strong>
+                    </p>
+
+                    <div class="product__auction-dates">
+                        <p class="product__auction-dates-starting">
+                            Starting:
+                            <span class="product__auction-dates-value"
+                                  th:text="${T(fr.eni.tp.auctionapp.utils.DateUtils).formatDateTime(item.auctionStartingDate)}"></span>
+                        </p>
+
+                        <p class="product__auction-dates-ending">
+                            Ending:
+                            <strong class="product__auction-dates-value"
+                                    th:text="${T(fr.eni.tp.auctionapp.utils.DateUtils).formatDateTime(item.auctionEndingDate)}">
+                            </strong>
+                        </p>
+                    </div>
+
+                    <div class="product__withdrawal">
+                        <p>Withdrawal Address:<br>
+                            <span th:text="${item.withdrawal.street}"></span>
+                            <br>
+                            <span th:text="${item.withdrawal.zipCode}"></span>,
+                            <strong><span th:text="${item.withdrawal.city}"></span></strong>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <span class="separator"></span>
+    </div>
+
+    <section class="section-content">
+
+        <div class="container bid-history">
+            <div class="bid-history__content">
+                <h2 class="bid-history__title">Auction History</h2>
+                <p class="bid-history__total-count">
+                    This auction counts
+                    <strong th:text="${#lists.isEmpty(bids) ? 0 : bids[0].totalCount}">0</strong> bids
+                </p>                <div class="bid-history__grid">
+                    <table th:if="${!#lists.isEmpty(bids)}">
+                        <thead>
+                            <tr>
+                                <th scope="col">Date</th>
+                                <th scope="col">Amount</th>
+                                <th scope="col">User</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="bid : ${bids}">
+                                <td data-label="Date" th:text="${bid.auctionDate}"></td>
+                                <td data-label="Amount"><strong th:text="'€' + ${bid.bidAmount}"></strong></td>
+                                <td data-label="User" th:text="${bid.username}"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+</main>
+</html>

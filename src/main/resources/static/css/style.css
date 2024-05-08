@@ -1,5 +1,5 @@
-@import url('./mini-reset.css');
-@import url('./theme.css');
-@import url('./core-layout.css');
-@import url('./form.css');
-@import url('./pagination.css');
+@import url('base/mini-reset.css');
+@import url('themes/theme.css');
+@import url('base/core-layout.css');
+@import url('components/form.css');
+@import url('components/pagination.css');

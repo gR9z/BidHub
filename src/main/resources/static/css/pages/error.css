@@ -1,0 +1,35 @@
+.error-page {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    align-items: center;
+}
+
+.error-page__title {
+    font-size: var(--h2);
+}
+
+.error-page__subtitle {
+    font-size: var(--h3);
+}
+
+.error-page__content {
+    display: flex;
+    gap: var(--space-3);
+    flex-direction: column;
+    width: 100%;
+    text-align: center;
+    margin-top: var(--space-3);
+}
+
+.error-page__content a {
+    flex-shrink: 0;
+}
+
+.error-page__actions {
+    display: flex;
+    gap: var(--space-3);
+    align-items: center;
+    flex-direction: column;
+    margin-top: var(--space-3);
+}

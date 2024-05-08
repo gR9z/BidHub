@@ -4,11 +4,10 @@ import fr.eni.tp.auctionapp.bo.Category;
 import fr.eni.tp.auctionapp.bo.Item;
 import fr.eni.tp.auctionapp.bo.User;
 import fr.eni.tp.auctionapp.dal.ItemDao;
-import org.springframework.dao.DataAccessException;
+import fr.eni.tp.auctionapp.utils.PaginationUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -19,15 +18,13 @@ import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Repository
 public class ItemDaoImpl implements ItemDao {
 
-    private static final String ORDER_BY_DATE = " ORDER BY auctionStartingDate ";
+    private static final String ORDER_BY_AUCTION_ENDING_DATE = " ORDER BY auctionEndingDate ASC ";
     private static final String OFFSET_LIMIT = "OFFSET :offset ROWS FETCH NEXT :limit ROWS ONLY";
 
     private static final String INSERT = "INSERT INTO ITEMS (itemName, description, auctionStartingDate, auctionEndingDate, startingPrice, sellingPrice, imageUrl, userId, categoryId) VALUES (:itemName, :description, :auctionStartingDate, :auctionEndingDate, :startingPrice, :sellingPrice, :imageUrl, :userId, :categoryId);";
@@ -36,9 +33,9 @@ public class ItemDaoImpl implements ItemDao {
     private static final String DELETE_BY_ID = "DELETE FROM ITEMS WHERE itemId = :itemId;";
 
     private static final String SELECT_ALL = "SELECT itemId, itemName, description, auctionStartingDate, auctionEndingDate, startingPrice, sellingPrice, imageUrl, userId, categoryId FROM ITEMS ";
-    private static final String SELECT_ALL_PAGINATED = "SELECT itemId, itemName, description, auctionStartingDate, auctionEndingDate, startingPrice, sellingPrice, imageUrl, userId, categoryId FROM ITEMS " + ORDER_BY_DATE + OFFSET_LIMIT;
-    private static final String SELECT_ALL_ITEMS_FROM_USERID_PAGINATED = "SELECT itemId, itemName, description, auctionStartingDate, auctionEndingDate, startingPrice, sellingPrice, imageUrl, userId, categoryId FROM ITEMS WHERE userId = :userId " + ORDER_BY_DATE + OFFSET_LIMIT;
-    private static final String SELECT_BY_CATEGORY_PAGINATED = "SELECT itemId, itemName, description, auctionStartingDate, auctionEndingDate, startingPrice, sellingPrice, imageUrl, userId, categoryId FROM ITEMS WHERE categoryId = :categoryId " + ORDER_BY_DATE + OFFSET_LIMIT;
+    private static final String SELECT_ALL_PAGINATED = "SELECT itemId, itemName, description, auctionStartingDate, auctionEndingDate, startingPrice, sellingPrice, imageUrl, userId, categoryId FROM ITEMS " + ORDER_BY_AUCTION_ENDING_DATE + OFFSET_LIMIT;
+    private static final String SELECT_ALL_ITEMS_FROM_USERID_PAGINATED = "SELECT itemId, itemName, description, auctionStartingDate, auctionEndingDate, startingPrice, sellingPrice, imageUrl, userId, categoryId FROM ITEMS WHERE userId = :userId " + ORDER_BY_AUCTION_ENDING_DATE + OFFSET_LIMIT;
+    private static final String SELECT_BY_CATEGORY_PAGINATED = "SELECT itemId, itemName, description, auctionStartingDate, auctionEndingDate, startingPrice, sellingPrice, imageUrl, userId, categoryId FROM ITEMS WHERE categoryId = :categoryId " + ORDER_BY_AUCTION_ENDING_DATE + OFFSET_LIMIT;
 
     private static final String COUNT_ITEM_BY_USER_ID = "SELECT COUNT(*) AS count FROM Items WHERE userId = :userId;";
     private static final String COUNT = "SELECT COUNT(*) AS count FROM Items;";
@@ -128,21 +125,16 @@ public class ItemDaoImpl implements ItemDao {
         return jdbcTemplate.query(SELECT_ALL, new ItemRowMapper());
     }
 
+    @Override
     public List<Item> findAllPaginated(int page, int size) {
-        if (page < 1) page = 1;
-        int offset = (page - 1) * size;
-
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("limit", size);
-        params.addValue("offset", offset);
+        params.addValue("offset", (page - 1) * size);
 
-        return namedParameterJdbcTemplate.query(
-                SELECT_ALL_PAGINATED,
-                params,
-                new ItemRowMapper()
-        );
+        return PaginationUtils.findPaginated(namedParameterJdbcTemplate, SELECT_ALL_PAGINATED, params, page, size, new BeanPropertyRowMapper<>(Item.class));
     }
 
+    @Override
     public List<Item> searchItems(String query, List<Integer> categories, int offset, int limit) {
         StringBuilder sql = new StringBuilder(SELECT_ALL);
 
@@ -167,7 +159,7 @@ public class ItemDaoImpl implements ItemDao {
             sql.append(" WHERE 1=1 ");
         }
 
-        sql.append(ORDER_BY_DATE);
+        sql.append(ORDER_BY_AUCTION_ENDING_DATE);
         sql.append(" OFFSET :offset ROWS FETCH NEXT :limit ROWS ONLY");
 
         MapSqlParameterSource params = new MapSqlParameterSource();
@@ -179,6 +171,7 @@ public class ItemDaoImpl implements ItemDao {
         return namedParameterJdbcTemplate.query(sql.toString(), params, new ItemRowMapper());
     }
 
+    @Override
     public List<Item> findByCategoryPaginated(int categoryId, int page, int size) {
         if (page < 1) page = 1;
         int offset = (page - 1) * size;
@@ -195,6 +188,7 @@ public class ItemDaoImpl implements ItemDao {
         );
     }
 
+    @Override
     public List<Item> findAllByUserIdPaginated(int userId, int page, int size) {
 
         int offset = (page - 1) * size;
@@ -211,17 +205,20 @@ public class ItemDaoImpl implements ItemDao {
         );
     }
 
+    @Override
     public int countByUserId(int userId) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("userId", userId);
         return Optional.ofNullable(namedParameterJdbcTemplate.queryForObject(COUNT_ITEM_BY_USER_ID, params, Integer.class)).orElse(0);
     }
 
+    @Override
     public int count() {
         return Optional.ofNullable(jdbcTemplate.queryForObject(COUNT, (rs, rowNum) -> rs.getInt("count")))
                 .orElse(0);
     }
 
+    @Override
     public int countFilteredItems(String query, List<Integer> categories) {
         StringBuilder sql = new StringBuilder("SELECT COUNT(*) AS count FROM ITEMS");
 
@@ -244,7 +241,6 @@ public class ItemDaoImpl implements ItemDao {
         return Optional.ofNullable(namedParameterJdbcTemplate.queryForObject(sql.toString(), params, (rs, rowNum) -> rs.getInt("count")))
                 .orElse(0);
     }
-
 
     private static class ItemRowMapper implements RowMapper<Item> {
         @Override

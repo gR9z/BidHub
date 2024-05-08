@@ -7,6 +7,7 @@ import fr.eni.tp.auctionapp.bo.Item;
 import fr.eni.tp.auctionapp.bo.User;
 import fr.eni.tp.auctionapp.dal.AuctionDao;
 import fr.eni.tp.auctionapp.dal.UserDao;
+import fr.eni.tp.auctionapp.dto.BidHistoryDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,11 +77,7 @@ public class TestAuctionDaoImpl {
             testDatabaseService.insertAuctionInDatabase(auction);
         }
 
-        List<Optional<Auction>> optionalAuctions = auctionDao.findAuctionsByItemIdPaginated(item.getItemId(), 1, 10);
-        List<Auction> auctions = optionalAuctions.stream()
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .toList();
+        List<Auction> auctions = auctionDao.findAuctionsByItemIdPaginated(item.getItemId(), 1, 10);
         assertThat(auctions.size()).isEqualTo(10);
     }
 
@@ -98,21 +95,34 @@ public class TestAuctionDaoImpl {
             testDatabaseService.insertAuctionInDatabase(auction);
         }
 
-        List<Optional<Auction>> optionalAuctionsFromUser = auctionDao.findAuctionsByUserIdPaginated(user.getUserId(), 1, 5);
-        List<Optional<Auction>> optionalAuctionsFromUser2 = auctionDao.findAuctionsByUserIdPaginated(user2.getUserId(), 1, 10);
-
-        List<Auction> auctionsFromUser = optionalAuctionsFromUser.stream()
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .toList();
-
-        List<Auction> auctionsFromUser2 = optionalAuctionsFromUser2.stream()
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .toList();
+        List<Auction> auctionsFromUser = auctionDao.findAuctionsByUserIdPaginated(user.getUserId(), 1, 5);
+        List<Auction> auctionsFromUser2 = auctionDao.findAuctionsByUserIdPaginated(user2.getUserId(), 1, 10);
 
         assertThat(auctionsFromUser.size()).isEqualTo(5);
         assertThat(auctionsFromUser2.size()).isEqualTo(10);
+    }
+
+    @Test
+    public void test_findBidHistoryForItemPaginated() {
+        int numberOfBids = 20;
+        for (int i = 0; i < numberOfBids; i++) {
+            Auction auction = testDatabaseService.createAuction(user, item);
+            testDatabaseService.insertAuctionInDatabase(auction);
+        }
+
+        int page = 1;
+        int size = 10;
+        List<BidHistoryDto> bidHistory = auctionDao.findBidHistoryForItemPaginated(item.getItemId(), page, size);
+
+        for (BidHistoryDto bid : bidHistory) {
+            assertThat(bid.getTotalCount()).isEqualTo(numberOfBids);
+            assertThat(bid).isNotNull();
+            assertThat(bid.getAuctionDate()).isNotNull();
+            assertThat(bid.getBidAmount()).isNotNull();
+        }
+
+        assertThat(bidHistory).isNotNull();
+        assertThat(bidHistory).hasSize(size);
     }
 
     @Test

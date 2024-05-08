@@ -4,14 +4,15 @@ import fr.eni.tp.auctionapp.bll.CategoryService;
 import fr.eni.tp.auctionapp.bll.ItemService;
 import fr.eni.tp.auctionapp.bo.Category;
 import fr.eni.tp.auctionapp.bo.Item;
+import fr.eni.tp.auctionapp.utils.URLUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 public class ShopController {
@@ -24,7 +25,7 @@ public class ShopController {
         this.categoryService = categoryService;
     }
 
-    @RequestMapping(value = "/shop", method = RequestMethod.GET)
+    @GetMapping("/shop")
     public String shop(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "12") int size,
@@ -45,10 +46,13 @@ public class ShopController {
         }
 
         totalPages = (int) Math.ceil((double) totalItems / size);
-
         List<Category> allCategories = categoryService.getAllCategories();
 
+        Map<Integer, String> itemUrls = items.stream()
+                .collect(Collectors.toMap(Item::getItemId, item -> URLUtils.toFriendlyURL(item.getItemName()) + "?id=" + item.getItemId()));
+
         model.addAttribute("items", items);
+        model.addAttribute("itemUrls", itemUrls);
         model.addAttribute("totalItems", totalItems);
         model.addAttribute("categories", allCategories);
         model.addAttribute("currentPage", page);
@@ -59,6 +63,5 @@ public class ShopController {
 
         return "shop.html";
     }
-
 
 }

@@ -19,6 +19,7 @@ public class SecurityConfiguration {
                     auth
                             .requestMatchers("/my-account/**").authenticated()
                             .requestMatchers("/").permitAll()
+                            .requestMatchers("/products/**").permitAll()
                             .requestMatchers("/css/**").permitAll()
                             .requestMatchers("/js/**").permitAll()
                             .requestMatchers("/images/**").permitAll()
@@ -32,6 +33,8 @@ public class SecurityConfiguration {
             login.failureUrl("/login?error");
             login.defaultSuccessUrl("/my-account").permitAll();
         });
+
+        http.rememberMe(rememberMe -> rememberMe.key("uniqueAndSecret").tokenValiditySeconds(2592000));
 
         http.logout(logout -> {
             logout
