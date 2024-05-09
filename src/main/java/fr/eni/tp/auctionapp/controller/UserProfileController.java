@@ -77,19 +77,34 @@ public class UserProfileController {
 //        return "/user/confirm-delete"; // Page Thymeleaf pour confirmation
 //    }
 
-    @DeleteMapping("/profile/delete/{username}")
-    public ResponseEntity<String> deleteUser(@PathVariable String username, Principal principal, HttpServletRequest request) {
+    @DeleteMapping("/profile/edit-profile")
+    public ResponseEntity<String> deleteUser(Principal principal, HttpServletRequest request) {
         User currentUser = userService.getUsername(principal.getName());
-        if (currentUser.getUsername().equals(username)) {
-            userService.deleteUser(currentUser);
-            HttpSession session = request.getSession(false);
-            if (session != null) {
-                session.invalidate();
+
+        // Vérifier si l'utilisateur actuel est valide
+        if (currentUser != null) {
+            try {
+                // Supprimer le compte utilisateur
+                userService.deleteUser(currentUser);
+
+                // Invalider la session
+                HttpSession session = request.getSession(false);
+                if (session != null) {
+                    session.invalidate();
+                }
+
+                // Retourner une réponse de succès
+                return ResponseEntity.ok("Account successfully deleted");
+            } catch (Exception e) {
+                // En cas d'erreur lors de la suppression du compte, retourner une réponse d'erreur
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting account");
             }
-            return ResponseEntity.ok("Account successfully deleted");
+        } else {
+            // Si l'utilisateur actuel n'est pas valide, retourner une réponse d'erreur
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
         }
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You can only delete your own account");
     }
+
 
 
 //    @GetMapping("/confirm")

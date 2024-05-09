@@ -18,16 +18,14 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> {
                     auth
-
                             .requestMatchers("/profile/**").permitAll()
-
                             .requestMatchers("/").permitAll()
                             .requestMatchers("/css/**").permitAll()
                             .requestMatchers("/js/**").permitAll()
                             .requestMatchers("/images/**").permitAll()
                             .requestMatchers("/fonts/**").permitAll()
+                            .requestMatchers(HttpMethod.DELETE, "/profile/edit-profile").authenticated()
                             .anyRequest().permitAll();
-
                 }
         );
 
@@ -36,8 +34,6 @@ public class SecurityConfiguration {
             login.failureUrl("/login?error");
             login.defaultSuccessUrl("/profile").permitAll();
         });
-
-
 
         http.logout(logout -> {
             logout

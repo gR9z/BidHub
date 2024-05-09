@@ -13,10 +13,10 @@
         var header = $('meta[name="_csrf_header"]').attr('content');
         $(document).ready(function() {
             $("#cancel-delete").click(function() {
-                window.location.href = "/profile/edit-profile"; // Assurez-vous que le chemin est correct
+                window.location.href = "/profile/edit-profile";
             });
             $("#delete-btn").click(function() {
-                var username = $(this).attr("data-username");  // Assurez-vous d'avoir cet attribut dans le bouton
+                var username = $(this).attr("data-username");
                 $.ajax({
                     url: '/profile/delete/' + username,
                     type: 'DELETE',
