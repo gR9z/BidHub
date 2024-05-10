@@ -8,14 +8,18 @@ import fr.eni.tp.auctionapp.bo.Category;
 import fr.eni.tp.auctionapp.bo.Item;
 import fr.eni.tp.auctionapp.bo.Withdrawal;
 import fr.eni.tp.auctionapp.dto.BidHistoryDto;
+import fr.eni.tp.auctionapp.utils.URLUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 public class ProductController {
@@ -32,15 +36,17 @@ public class ProductController {
         this.auctionService = auctionService;
     }
 
-    @GetMapping("/products/{itemName}")
+    @GetMapping("/products/{categorySlug}/{itemName}")
     public String singleProductPage(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "12") int size,
             @PathVariable String itemName,
+            @PathVariable String categorySlug,
             @RequestParam("id") int itemId,
             Model model
     ) {
         Optional<Item> optionalItem = itemService.findItemById(itemId);
+        
         if (optionalItem.isPresent()) {
             Item item = optionalItem.get();
 
@@ -56,8 +62,26 @@ public class ProductController {
                 item.setWithdrawal(withdrawal);
             }
 
+            List<Category> categoryList = categoryService.getAllCategories();
+
+            List<Integer> categorySingleton = Collections.singletonList(item.getCategory().getCategoryId());
+            List<Item> items = itemService.searchItems(null, categorySingleton, 1, 3);
+
+            Map<Integer, String> itemUrls = items.stream()
+                    .collect(Collectors.toMap(Item::getItemId, getItem -> URLUtils.toFriendlyURL(getItem.getItemName()) + "?id=" + getItem.getItemId()));
+
+            Map<Integer, String> categoryUrl = categoryList.stream()
+                    .collect(Collectors.toMap(
+                            Category::getCategoryId,
+                            category -> (category.getLabel() != null) ? URLUtils.toFriendlyURL(category.getLabel()) : "",
+                            (existingValue, newValue) -> existingValue
+                    ));
+
             List<BidHistoryDto> bidHistory = auctionService.getItemBidHistoryPaginated(item.getItemId(), page, size);
 
+            model.addAttribute("itemUrls", itemUrls);
+            model.addAttribute("categoryUrl", categoryUrl);
+            model.addAttribute("items", items);
             model.addAttribute("bids", bidHistory);
             model.addAttribute("item", item);
         } else {
@@ -66,5 +90,4 @@ public class ProductController {
 
         return "product.html";
     }
-
 }

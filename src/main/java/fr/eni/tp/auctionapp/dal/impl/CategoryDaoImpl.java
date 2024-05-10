@@ -5,13 +5,18 @@ import fr.eni.tp.auctionapp.dal.CategoryDao;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Repository
@@ -21,7 +26,8 @@ public class CategoryDaoImpl implements CategoryDao {
     private static final String SELECT_BY_ID = "SELECT categoryId, label FROM categories WHERE categoryId = :categoryId;";
     private static final String UPDATE = "UPDATE categories SET label = :label WHERE categoryId = :categoryId;";
     private static final String DELETE = "DELETE FROM categories WHERE categoryId = :categoryId;";
-    private static final String SELECT_ALL = "SELECT categoryId, label FROM categories;";
+    private static final String SELECT_ALL = "SELECT categoryId, label FROM categories ORDER BY label ASC;";
+    private static final String SELECT_COUNT_PER_CATEGORY = "SELECT categoryId, COUNT(*) AS count FROM Items GROUP BY categoryId;";
 
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private JdbcTemplate jdbcTemplate;
@@ -91,5 +97,18 @@ public class CategoryDaoImpl implements CategoryDao {
     @Override
     public List<Category> findAll() {
         return jdbcTemplate.query(SELECT_ALL, new BeanPropertyRowMapper<>(Category.class));
+    }
+
+    @Override
+    public Map<Integer, Integer> countPerCategory() {
+        return jdbcTemplate.query(SELECT_COUNT_PER_CATEGORY, rs -> {
+            Map<Integer, Integer> itemCountMap = new HashMap<>();
+            while (rs.next()) {
+                int categoryId = rs.getInt("categoryId");
+                int itemCount = rs.getInt("count");
+                itemCountMap.put(categoryId, itemCount);
+            }
+            return itemCountMap;
+        });
     }
 }

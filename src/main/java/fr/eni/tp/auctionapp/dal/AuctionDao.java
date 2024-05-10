@@ -9,6 +9,8 @@ import java.util.Optional;
 public interface AuctionDao {
     void insert(Auction auction);
     Optional<Auction> findByAuctionId(int auctionId);
+    Optional<Auction> findTopByItemIdOrderByAuctionDateDesc(int itemId);
+    List<Auction> findAllAuctionsByItemId(int itemId);
     List<Auction> findAuctionsByItemIdPaginated(int itemId, int page, int size);
     List<Auction> findAuctionsByUserIdPaginated(int userId, int page, int size);
     List<BidHistoryDto> findBidHistoryForItemPaginated(int itemId, int page, int size);

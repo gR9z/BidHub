@@ -111,6 +111,7 @@ input[type="checkbox"] {
 .form-actions {
     margin-top: var(--space-5);
     display: flex;
+    align-items: center;
     gap: var(--space-3);
 }
 
@@ -177,4 +178,11 @@ input[type="file"] {
 
 input[type="datetime-local"]::-webkit-calendar-picker-indicator {
     cursor: pointer;
+}
+
+.confirm-text {
+    color: var(--primary);
+    cursor: pointer;
+    text-underline-offset: 0.15rem;
+    text-decoration: underline;
 }

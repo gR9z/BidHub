@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/layout :: layout-main(
+            pageContent=~{:: .main},
+            title='Bidhub - Admin Panel',
+            cssPath='/css/home.css',
+            jsPath=null
+        )}"
+>
+
+<main class="main">
+    <section class="section-content">
+        <div class="container admin-dashboard">
+            <div class="admin-dashboard__title">
+                <h1>
+                    Admin <span class="text-stroke">Dashboard</span>
+                </h1>
+            </div>
+
+            <nav class="admin-dashboard__nav">
+                <ul class="admin-dashboard__nav-list">
+                    <li class="admin-dashboard__nav-item">
+                        <a href="admin/overview" class="admin-dashboard__nav-link">Overview</a>
+                    </li>
+                    <li class="admin-dashboard__nav-item">
+                        <a href="admin/users" class="admin-dashboard__nav-link">Users</a>
+                    </li>
+                    <li class="admin-dashboard__nav-item">
+                        <a href="admin/categories" class="admin-dashboard__nav-link">Categories</a>
+                    </li>
+                </ul>
+            </nav>
+
+        </div>
+    </section>
+
+    <div class="container">
+        <span class="separator"></span>
+    </div>
+
+</main>
+</html>

@@ -109,6 +109,11 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    public int getTotalItemCountByCategory(int categoryId) {
+        return itemDao.countByCategoryId(categoryId);
+    }
+
+    @Override
     public int countFilteredItems(String query, List<Integer> categories) {
         return itemDao.countFilteredItems(query, categories);
     }

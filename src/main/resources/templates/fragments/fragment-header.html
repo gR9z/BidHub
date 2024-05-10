@@ -11,7 +11,6 @@
                         <a th:href="@{/}">Home</a>
                     </li>
 
-                    <!-- NAV FOR LOGOUT USER -->
                     <li th:if="${!#authorization.expression('isAuthenticated()')}">
                         <a
                                 th:href="@{/login}"
@@ -28,7 +27,13 @@
                         >
                     </li>
 
-                    <!-- NAV FOR LOGGED USER-->
+                    <li th:if="${#authorization.expression('isAuthenticated()') and #authentication.principal.isAdmin}">
+                        <a
+                                th:href="@{/admin}"
+                                class="nav__link"
+                        >Admin</a
+                        ></li>
+
                     <li th:if="${#authorization.expression('isAuthenticated()')}"
                         th:text="'Hey ' + ${#authentication.name} + ' • €'+${#authentication.principal.credit}">
                     </li>
@@ -54,9 +59,9 @@
                 <i class="ri-sun-line" id="theme-toggle"></i>
 
                 <a
-                    th:href="@{/shop}"
-                    class="button"
-                    >Shop!
+                        th:href="@{/shop}"
+                        class="button"
+                >Shop!
                 </a>
 
                 <i

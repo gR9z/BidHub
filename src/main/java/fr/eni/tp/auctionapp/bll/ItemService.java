@@ -17,6 +17,7 @@ public interface ItemService {
     List<Item> getByUserIdPaginated(int userId, int page, int size);
     int getCountOfItemsByUserId(int userId);
     int getTotalItemCount();
+    int getTotalItemCountByCategory(int categoryId);
     int countFilteredItems(String query, List<Integer> categories);
     int getTotalPageCount(int size);
 }

@@ -55,6 +55,7 @@
     outline: none;
     background: transparent;
     text-align: right;
+    cursor: pointer;
 }
 
 .filter-form__button {

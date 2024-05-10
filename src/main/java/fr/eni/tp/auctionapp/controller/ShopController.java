@@ -38,7 +38,7 @@ public class ShopController {
         int totalPages;
 
         if (q != null || categories != null) {
-            items = itemService.searchItems(q, categories, (page - 1) * size, size);
+            items = itemService.searchItems(q, categories, page, size);
             totalItems = itemService.countFilteredItems(q, categories);
         } else {
             items = itemService.getAllPaginated((page - 1) * size, size);
@@ -46,18 +46,26 @@ public class ShopController {
         }
 
         totalPages = (int) Math.ceil((double) totalItems / size);
-        List<Category> allCategories = categoryService.getAllCategories();
+
+        List<Category> categoryList = categoryService.getAllCategories();
 
         Map<Integer, String> itemUrls = items.stream()
                 .collect(Collectors.toMap(Item::getItemId, item -> URLUtils.toFriendlyURL(item.getItemName()) + "?id=" + item.getItemId()));
 
+        Map<Integer, String> categoryUrl = categoryList.stream()
+                .collect(Collectors.toMap(
+                        Category::getCategoryId,
+                        category -> (category.getLabel() != null) ? URLUtils.toFriendlyURL(category.getLabel()) : "",
+                        (existingValue, newValue) -> existingValue
+                ));
+
         model.addAttribute("items", items);
         model.addAttribute("itemUrls", itemUrls);
         model.addAttribute("totalItems", totalItems);
-        model.addAttribute("categories", allCategories);
+        model.addAttribute("categoryUrl", categoryUrl);
+        model.addAttribute("categories", categoryList);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
-
         model.addAttribute("q", q);
         model.addAttribute("categoriesSelected", categories);
 

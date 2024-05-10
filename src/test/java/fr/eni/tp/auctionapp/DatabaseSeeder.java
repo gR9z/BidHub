@@ -1,5 +1,6 @@
 package fr.eni.tp.auctionapp;
 
+import fr.eni.tp.auctionapp.bll.AuctionService;
 import fr.eni.tp.auctionapp.bll.CategoryService;
 import fr.eni.tp.auctionapp.bll.ItemService;
 import fr.eni.tp.auctionapp.bll.UserService;
@@ -10,6 +11,8 @@ import fr.eni.tp.auctionapp.bo.User;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
+import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
@@ -19,6 +22,7 @@ public class DatabaseSeeder {
     static UserService userService;
     static CategoryService categoryService;
     static ItemService itemService;
+    static AuctionService auctionService;
 
     public static void userSeeder(int count) {
 
@@ -68,12 +72,21 @@ public class DatabaseSeeder {
         List<Item> items = itemService.getAllItems();
 
         Random random = new Random();
-        for (int i = 0; i < count - 1; i++) {
+        for (int i = 0; i < count; i++) {
             User user = users.get(random.nextInt(users.size()));
             Item item = items.get(random.nextInt(items.size()));
 
-            Auction auction = testDatabaseService.createAuction(user, item);
+            List<Auction> auctions = auctionService.getAllAuctionsByItemId(item.getItemId());
+            auctions.sort(Comparator.comparing(Auction::getAuctionDate));
+
+            Auction lastAuction = (auctions.isEmpty() ? null : auctions.get(auctions.size() - 1));
+
+            int currentHighestBid = (lastAuction != null ? lastAuction.getBidAmount() : item.getStartingPrice());
+
+            Auction auction = testDatabaseService.createAuction(user, item, currentHighestBid);
             testDatabaseService.insertAuctionInDatabase(auction);
+            item.setSellingPrice(auction.getBidAmount());
+            itemService.updateItem(item);
         }
 
         System.out.printf("%d auctions populated in the database.%n", count);
@@ -86,6 +99,7 @@ public class DatabaseSeeder {
         userService = context.getBean(UserService.class);
         categoryService = context.getBean(CategoryService.class);
         itemService = context.getBean(ItemService.class);
+        auctionService = context.getBean(AuctionService.class);
 
         testDatabaseService.clearDatabase();
 

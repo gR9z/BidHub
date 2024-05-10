@@ -3,6 +3,7 @@ package fr.eni.tp.auctionapp.dal;
 import fr.eni.tp.auctionapp.bo.Category;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface CategoryDao {
@@ -16,4 +17,6 @@ public interface CategoryDao {
     void deleteById(int id);
 
     List<Category> findAll();
+
+    Map<Integer, Integer> countPerCategory();
 }

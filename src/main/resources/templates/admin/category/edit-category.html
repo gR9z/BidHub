@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/layout :: layout-main(pageContent=~{:: .main}, title='Edit category', cssPath=null, jsPath=null)}">
+
+<main class="main">
+    <section class="section-content">
+
+        <div class="container">
+            <div class="form-container">
+                <div class="form-section">
+                    <h1 class="form-title">Edit Category</h1>
+
+                    <form id="category-form" method="POST" th:object="${category}"
+                          th:action="@{|/admin/category/${category.categoryId}/edit|}" class="category-form">
+
+                        <p class="error" th:each="error: ${#fields.errors('global')}" th:text="${error}"></p>
+
+                        <div class="form-group">
+                            <div class="form-field">
+                                <input type="text" id="categoryId" name="categoryId" readonly class="form-input"
+                                       th:value="${category.categoryId}"/>
+                                <label for="categoryId" class="form-label">ID (disabled)</label>
+                            </div>
+
+                            <div class="form-field">
+                                <input type="text" id="label" name="label" class="form-input"
+                                       th:field="${category.label}" placeholder=""/>
+                                <label for="label" class="form-label">Label</label>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button id="save-button" class="button">Save</button>
+                            <a href="/admin/categories" class="button button--secondary">Cancel</a>
+                            <p id="confirm-text" class="confirm-text visually-hidden">Confirm</p>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const saveButton = document.getElementById('save-button');
+            const confirmText = document.getElementById('confirm-text');
+            const categoryForm = document.getElementById('category-form');
+
+            saveButton.addEventListener('click', function (event) {
+                event.preventDefault();
+                confirmText.classList.remove('visually-hidden');
+
+                confirmText.addEventListener('click', function () {
+                    categoryForm.submit();
+                });
+            });
+        });
+    </script>
+</main>
+
+</html>

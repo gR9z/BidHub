@@ -49,7 +49,7 @@ public class TestAuctionDaoServiceImpl {
 
         when(auctionDaoMock.findByAuctionId(auctionId)).thenReturn(Optional.of(auction));
 
-        Optional<Auction> result = auctionService.findAuctionById(auctionId);
+        Optional<Auction> result = auctionService.getAuctionById(auctionId);
         assertThat(result).isPresent();
         assertThat(result.get()).isEqualTo(auction);
 
@@ -63,7 +63,7 @@ public class TestAuctionDaoServiceImpl {
         auctions.add(new Auction());
 
         when(auctionDaoMock.findAuctionsByItemIdPaginated(anyInt(), anyInt(), anyInt())).thenReturn(auctions);
-        List<Auction> result = auctionService.findAuctionsByItemIdPaginated(123, 1, 10);
+        List<Auction> result = auctionService.getAuctionsByItemIdPaginated(123, 1, 10);
         assertThat(result).isNotNull();
         verify(auctionDaoMock).findAuctionsByItemIdPaginated(123, 1, 10);
     }
@@ -78,7 +78,7 @@ public class TestAuctionDaoServiceImpl {
                 .toList();
 
         when(auctionDaoMock.findAuctionsByUserIdPaginated(anyInt(), anyInt(), anyInt())).thenReturn(auctionList);
-        List<Auction> result = auctionService.findAuctionsByUserIdPaginated(123, 1, 10);
+        List<Auction> result = auctionService.getAuctionsByUserIdPaginated(123, 1, 10);
         assertThat(result).isNotNull();
         verify(auctionDaoMock).findAuctionsByUserIdPaginated(123, 1, 10);
     }

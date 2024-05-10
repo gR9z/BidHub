@@ -28,14 +28,17 @@
 
                     <p class="product__category">
                         Category:
-                        <a th:href="|/category/${item.category.label.toLowerCase()}|"
+                        <a th:href="|/category/${categorySlug}|"
                            th:text="${item.category.label}"></a>
                     </p>
 
                     <p class="product__starting-price" th:text="'Starting: €' + ${item.startingPrice}"></p>
-                    <p class="product__actuel-price">
+                    <p class="product__actual-price">
                         <strong th:text="'€' + ${item.sellingPrice}"></strong>
                     </p>
+
+                    <p class="product__last-bid-user"
+                       th:utext="${#lists.isEmpty(bids) ? 'No bids yet' : 'Last bidder: <strong>' + bids[0].lastBidUser + '</strong>'}"></p>
 
                     <div class="product__auction-dates">
                         <p class="product__auction-dates-starting">
@@ -70,6 +73,21 @@
     </div>
 
     <section class="section-content">
+        <div class="container related-product">
+            <h1 class="related-product__title">
+                <span class="text-stroke">Related product for</span>
+                <span th:text="${item.category.label}"></span>!
+            </h1>
+
+            <div th:replace="fragments/fragment-product-list :: product-list(${items})"></div>
+        </div>
+    </section>
+
+    <div class="container">
+        <span class="separator"></span>
+    </div>
+
+    <section class="section-content">
 
         <div class="container bid-history">
             <div class="bid-history__content">
@@ -77,21 +95,23 @@
                 <p class="bid-history__total-count">
                     This auction counts
                     <strong th:text="${#lists.isEmpty(bids) ? 0 : bids[0].totalCount}">0</strong> bids
-                </p>                <div class="bid-history__grid">
+                </p>
+                <div class="bid-history__grid">
                     <table th:if="${!#lists.isEmpty(bids)}">
                         <thead>
-                            <tr>
-                                <th scope="col">Date</th>
-                                <th scope="col">Amount</th>
-                                <th scope="col">User</th>
-                            </tr>
+                        <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">User</th>
+                        </tr>
                         </thead>
                         <tbody>
-                            <tr th:each="bid : ${bids}">
-                                <td data-label="Date" th:text="${bid.auctionDate}"></td>
-                                <td data-label="Amount"><strong th:text="'€' + ${bid.bidAmount}"></strong></td>
-                                <td data-label="User" th:text="${bid.username}"></td>
-                            </tr>
+                        <tr th:each="bid : ${bids}">
+                            <td data-label="Date"
+                                th:text="${T(fr.eni.tp.auctionapp.utils.DateUtils).formatDateTime(bid.auctionDate)}"></td>
+                            <td data-label="Amount"><strong th:text="'€' + ${bid.bidAmount}"></strong></td>
+                            <td data-label="User" th:text="${bid.username}"></td>
+                        </tr>
                         </tbody>
                     </table>
                 </div>

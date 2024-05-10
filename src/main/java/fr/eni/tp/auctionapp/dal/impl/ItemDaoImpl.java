@@ -38,6 +38,7 @@ public class ItemDaoImpl implements ItemDao {
     private static final String SELECT_BY_CATEGORY_PAGINATED = "SELECT itemId, itemName, description, auctionStartingDate, auctionEndingDate, startingPrice, sellingPrice, imageUrl, userId, categoryId FROM ITEMS WHERE categoryId = :categoryId " + ORDER_BY_AUCTION_ENDING_DATE + OFFSET_LIMIT;
 
     private static final String COUNT_ITEM_BY_USER_ID = "SELECT COUNT(*) AS count FROM Items WHERE userId = :userId;";
+    private static final String COUNT_BY_CATEGORY_ID = "SELECT COUNT(*) AS count FROM Items WHERE categoryId = :categoryId;";
     private static final String COUNT = "SELECT COUNT(*) AS count FROM Items;";
 
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -131,11 +132,11 @@ public class ItemDaoImpl implements ItemDao {
         params.addValue("limit", size);
         params.addValue("offset", (page - 1) * size);
 
-        return PaginationUtils.findPaginated(namedParameterJdbcTemplate, SELECT_ALL_PAGINATED, params, page, size, new BeanPropertyRowMapper<>(Item.class));
+        return PaginationUtils.findPaginated(namedParameterJdbcTemplate, SELECT_ALL_PAGINATED, params, page, size, new ItemRowMapper());
     }
 
     @Override
-    public List<Item> searchItems(String query, List<Integer> categories, int offset, int limit) {
+    public List<Item> searchItems(String query, List<Integer> categories, int page, int size) {
         StringBuilder sql = new StringBuilder(SELECT_ALL);
 
         boolean hasCondition = false;
@@ -160,13 +161,15 @@ public class ItemDaoImpl implements ItemDao {
         }
 
         sql.append(ORDER_BY_AUCTION_ENDING_DATE);
+        if (page < 1) page = 1;
+        int offset = (page - 1) * size;
         sql.append(" OFFSET :offset ROWS FETCH NEXT :limit ROWS ONLY");
 
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("query", "%" + query + "%");
         params.addValue("categories", categories);
         params.addValue("offset", offset);
-        params.addValue("limit", limit);
+        params.addValue("limit", size);
 
         return namedParameterJdbcTemplate.query(sql.toString(), params, new ItemRowMapper());
     }
@@ -210,6 +213,12 @@ public class ItemDaoImpl implements ItemDao {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("userId", userId);
         return Optional.ofNullable(namedParameterJdbcTemplate.queryForObject(COUNT_ITEM_BY_USER_ID, params, Integer.class)).orElse(0);
+    }
+
+    @Override
+    public int countByCategoryId(int categoryId) {
+        return Optional.ofNullable(jdbcTemplate.queryForObject(COUNT_BY_CATEGORY_ID, (rs, rowNum) -> rs.getInt("count")))
+                .orElse(0);
     }
 
     @Override

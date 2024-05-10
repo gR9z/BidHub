@@ -20,7 +20,6 @@ import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Repository
 public class AuctionDaoImpl implements AuctionDao {
@@ -29,10 +28,24 @@ public class AuctionDaoImpl implements AuctionDao {
 
     private static final String INSERT = "INSERT INTO AUCTIONS (userId, itemId, auctionDate, bidAmount) VALUES (:userId, :itemId, :auctionDate, :bidAmount);";
     private static final String SELECT_BY_ID = "SELECT auctionId, userId, itemId, auctionDate, bidAmount FROM AUCTIONS WHERE auctionId = :auctionId;";
+    private static final String SELECT_TOP1_BY_ITEM_ID_ORDER_BY_AUCTION_DATE_DESC = "SELECT TOP 1 auctionId, userId, itemId, auctionDate, bidAmount FROM AUCTIONS WHERE itemId = :itemId ORDER BY auctionDate DESC;";
+    private static final String SELECT_ALL_BY_ITEM_ID = "SELECT auctionId, userId, itemId, auctionDate, bidAmount FROM AUCTIONS WHERE itemId = :itemId" + ORDER_BY_AUCTION_DATE;
     private static final String SELECT_BY_ITEM_ID_PAGINATED = "SELECT auctionId, userId, itemId, auctionDate, bidAmount FROM AUCTIONS WHERE itemId = :itemId" + ORDER_BY_AUCTION_DATE + OFFSET_LIMIT;
     private static final String SELECT_BY_USER_ID_PAGINATED = "SELECT auctionId, userId, itemId, auctionDate, bidAmount FROM AUCTIONS WHERE userId = :userId" + ORDER_BY_AUCTION_DATE + OFFSET_LIMIT;
 
-    private static final String SELECT_BID_HISTORY_FOR_ITEM = "SELECT auctionDate, bidAmount, a.userId, username, COUNT(*) OVER () as totalCount FROM auctions AS a INNER JOIN users AS u ON u.userId = a.userId WHERE itemId = :itemId" + ORDER_BY_AUCTION_DATE + OFFSET_LIMIT;
+    private static final String SELECT_BID_HISTORY_FOR_ITEM =
+            "SELECT auctionDate, bidAmount, userId, username, totalCount, lastBidUser\n" +
+                    "FROM (\n" +
+                    "    SELECT a.*, u.username,\n" +
+                    "           (SELECT COUNT(*) FROM auctions WHERE itemId = :itemId) AS totalCount,\n" +
+                    "           (SELECT TOP 1 u2.username FROM auctions a2 JOIN users u2 ON a2.userId = u2.userId WHERE a2.itemId = a.itemId ORDER BY auctionDate DESC) AS lastBidUser,\n" +
+                    "           ROW_NUMBER() OVER (ORDER BY auctionDate DESC) AS row_num\n" +
+                    "    FROM auctions a\n" +
+                    "    JOIN users u ON a.userId = u.userId\n" +
+                    "    WHERE itemId = :itemId\n" +
+                    ") AS subquery\n" +
+                    "WHERE row_num BETWEEN :offset + 1 AND :offset + :limit\n" +
+                    "ORDER BY auctionDate DESC;";
 
     private static final String DELETE_BY_AUCTION_ID = "DELETE FROM AUCTIONS WHERE auctionId = :auctionId;";
     private static final String COUNT = "SELECT COUNT(*) AS count FROM AUCTIONS;";
@@ -89,6 +102,31 @@ public class AuctionDaoImpl implements AuctionDao {
     }
 
     @Override
+    public Optional<Auction> findTopByItemIdOrderByAuctionDateDesc(int itemId) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("itemId", itemId);
+
+        try {
+            Auction auction = namedParameterJdbcTemplate.queryForObject(SELECT_TOP1_BY_ITEM_ID_ORDER_BY_AUCTION_DATE_DESC, params, new BeanPropertyRowMapper<>(Auction.class));
+            return Optional.ofNullable(auction);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
+    }
+
+    @Override
+    public List<Auction> findAllAuctionsByItemId(int itemId) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("itemId", itemId);
+
+        try {
+            return namedParameterJdbcTemplate.query(SELECT_ALL_BY_ITEM_ID, params, new BeanPropertyRowMapper<>(Auction.class));
+        } catch (EmptyResultDataAccessException e) {
+            return Collections.emptyList();
+        }
+    }
+
+    @Override
     public List<Auction> findAuctionsByItemIdPaginated(int itemId, int page, int size) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("itemId", itemId);
@@ -124,7 +162,6 @@ public class AuctionDaoImpl implements AuctionDao {
                 size,
                 new BidHistoryDtoRowMapper());
     }
-
 
     @Override
     public void deleteById(int auctionId) {
@@ -168,6 +205,7 @@ public class AuctionDaoImpl implements AuctionDao {
             bidHistory.setUserId(rs.getInt("userId"));
             bidHistory.setUsername(rs.getString("username"));
             bidHistory.setTotalCount(rs.getInt("totalCount"));
+            bidHistory.setLastBidUser(rs.getString("lastBidUser"));
 
             return bidHistory;
         }

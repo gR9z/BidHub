@@ -7,6 +7,7 @@ public class Category {
     private String label;
 
     private List<Item> items;
+    private int numberOfItems;
 
     public Category() {
     }
@@ -40,13 +41,21 @@ public class Category {
         this.items = items;
     }
 
+    public int getNumberOfItems() {
+        return numberOfItems;
+    }
+
+    public void setNumberOfItems(int numberOfItems) {
+        this.numberOfItems = numberOfItems;
+    }
+
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Category{");
-        sb.append("categoryId=").append(categoryId);
-        sb.append(", label='").append(label).append('\'');
-        sb.append(", items=").append(items);
-        sb.append('}');
-        return sb.toString();
+        return "Category{" +
+                "categoryId=" + categoryId +
+                ", label='" + label + '\'' +
+                ", items=" + items +
+                ", numberOfItems=" + numberOfItems +
+                '}';
     }
 }

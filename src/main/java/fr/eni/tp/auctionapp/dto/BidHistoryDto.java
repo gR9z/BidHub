@@ -8,15 +8,17 @@ public class BidHistoryDto {
     private int userId;
     private String username;
     private int totalCount;
+    private String lastBidUser;
 
     public BidHistoryDto() {}
 
-    public BidHistoryDto(LocalDateTime auctionDate, int bidAmount, int userId, String username, int totalCount) {
+    public BidHistoryDto(LocalDateTime auctionDate, int bidAmount, int userId, String username, int totalCount, String lastBidUser) {
         this.auctionDate = auctionDate;
         this.bidAmount = bidAmount;
         this.userId = userId;
         this.username = username;
         this.totalCount = totalCount;
+        this.lastBidUser = lastBidUser;
     }
 
     public LocalDateTime getAuctionDate() {
@@ -59,6 +61,14 @@ public class BidHistoryDto {
         this.totalCount = totalCount;
     }
 
+    public String getLastBidUser() {
+        return lastBidUser;
+    }
+
+    public void setLastBidUser(String lastBidUser) {
+        this.lastBidUser = lastBidUser;
+    }
+
     @Override
     public String toString() {
         return "BidHistoryDto{" +
@@ -67,6 +77,7 @@ public class BidHistoryDto {
                 ", userId=" + userId +
                 ", username='" + username + '\'' +
                 ", totalCount=" + totalCount +
+                ", lastBidUser='" + lastBidUser + '\'' +
                 '}';
     }
 }

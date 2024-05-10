@@ -8,9 +8,11 @@ import java.util.Optional;
 
 public interface AuctionService {
     void createAuction(Auction auction);
-    Optional<Auction> findAuctionById(int auctionId);
-    List<Auction> findAuctionsByItemIdPaginated(int itemId, int page, int size);
-    List<Auction> findAuctionsByUserIdPaginated(int userId, int page, int size);
+    Optional<Auction> getAuctionById(int auctionId);
+    Optional<Auction> getTopByItemIdOrderByAuctionDateDesc(int itemId);
+    List<Auction> getAuctionsByItemIdPaginated(int itemId, int page, int size);
+    List<Auction> getAuctionsByUserIdPaginated(int userId, int page, int size);
+    List<Auction> getAllAuctionsByItemId(int itemId);
     void removeAuctionById(int auctionId);
     int getTotalAuctionCount();
     List<BidHistoryDto> getItemBidHistoryPaginated(int itemId, int page, int size);
