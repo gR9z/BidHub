@@ -51,17 +51,16 @@ public class UserServiceImpl implements UserService {
         } else {
             throw businessException;
         }
-
     }
 
     @Override
     public void updateUser(User user) {
-
+        userDao.update(user);
     }
 
     @Override
-    public void removeUserById(int id) {
-
+    public void removeUserById(int userId) {
+        userDao.deleteById(userId);
     }
 
     @Override
@@ -86,12 +85,10 @@ public class UserServiceImpl implements UserService {
     }
 
     public boolean arePasswordsMatching(String password, String confirmPassword, BusinessException businessException) {
-
         if(!password.equals(confirmPassword)) {
             businessException.addKey("Passwords do not match!");
             return false;
         }
-
         return true;
     }
 }

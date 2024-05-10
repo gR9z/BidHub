@@ -2,6 +2,7 @@ package fr.eni.tp.auctionapp.dal.impl;
 
 import fr.eni.tp.auctionapp.bo.Withdrawal;
 import fr.eni.tp.auctionapp.dal.WithdrawalDao;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -10,13 +11,14 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 
 @Repository
 public class WithdrawalDaoImpl implements WithdrawalDao {
 
-    private static final String INSERT_INTO = "INSERT INTO WITHDRAWALS (itemId, street, zipCode, city) VALUES (:itemId, :street, :zipCode, :city)";
-    private static final String SELECT_BY_ITEM_ID = "SELECT itemId, street, zipCode, city FROM WITHDRAWALS WHERE itemId = : :id";
-    private static final String UPDATE = "UPDATE WITHDRAWALS SET itemId = :itemId, street = :street, zipCode = :zipCode WHERE itemId = :itemId";
+    private static final String INSERT_INTO = "INSERT INTO WITHDRAWALS (itemId, street, zipCode, city) VALUES (:itemId, :street, :zipCode, :city);";
+    private static final String SELECT_BY_ITEM_ID = "SELECT itemId, street, zipCode, city FROM WITHDRAWALS WHERE itemId = :itemId;";
+    private static final String UPDATE = "UPDATE WITHDRAWALS SET itemId = :itemId, city = :city, street = :street, zipCode = :zipCode WHERE itemId = :itemId;";
     private static final String DELETE_BY_ITEM_ID = "DELETE FROM WITHDRAWALS WHERE itemId = :itemId;";
 
     private final JdbcTemplate jdbcTemplate;
@@ -45,17 +47,21 @@ public class WithdrawalDaoImpl implements WithdrawalDao {
     }
 
     @Override
-    public Withdrawal getById(int itemId) {
+    public Optional<Withdrawal> getByItemId(int itemId) {
         MapSqlParameterSource namedParameters = new MapSqlParameterSource();
         namedParameters.addValue("itemId", itemId);
 
-        Withdrawal withdrawal = namedParameterJdbcTemplate.queryForObject(
-                SELECT_BY_ITEM_ID,
-                namedParameters,
-                new WithdrawalRowMapper()
-        );
+        try {
+            Withdrawal withdrawal = namedParameterJdbcTemplate.queryForObject(
+                    SELECT_BY_ITEM_ID,
+                    namedParameters,
+                    new WithdrawalRowMapper()
+            );
 
-        return withdrawal;
+            return Optional.ofNullable(withdrawal);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
     }
 
     @Override
@@ -70,7 +76,7 @@ public class WithdrawalDaoImpl implements WithdrawalDao {
     }
 
     @Override
-    public void delete(int itemId) {
+    public void deleteByItemId(int itemId) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("itemId", itemId);
         namedParameterJdbcTemplate.update(DELETE_BY_ITEM_ID, params);

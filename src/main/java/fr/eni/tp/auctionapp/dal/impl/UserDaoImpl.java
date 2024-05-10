@@ -51,6 +51,7 @@ public class UserDaoImpl implements UserDao {
             return Optional.empty();
         }
     }
+
     @Override
     public void insert(User user) {
 

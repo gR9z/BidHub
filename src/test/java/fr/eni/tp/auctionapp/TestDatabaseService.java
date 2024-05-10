@@ -5,16 +5,15 @@ import fr.eni.tp.auctionapp.bll.AuctionService;
 import fr.eni.tp.auctionapp.bll.CategoryService;
 import fr.eni.tp.auctionapp.bll.ItemService;
 import fr.eni.tp.auctionapp.bll.UserService;
-import fr.eni.tp.auctionapp.bo.Auction;
-import fr.eni.tp.auctionapp.bo.Category;
-import fr.eni.tp.auctionapp.bo.Item;
-import fr.eni.tp.auctionapp.bo.User;
+import fr.eni.tp.auctionapp.bo.*;
+import fr.eni.tp.auctionapp.dal.AuctionDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -34,6 +33,9 @@ public class TestDatabaseService {
 
     @Autowired
     private AuctionService auctionService;
+
+    @Autowired
+    private AuctionDao auctionDao;
 
     private Faker faker = new Faker();
 
@@ -93,16 +95,16 @@ public class TestDatabaseService {
         item.setItemName(faker.commerce().productName());
         item.setDescription(faker.lorem().sentence());
 
-        java.util.Date date = faker.date().past(30, TimeUnit.DAYS);
+        java.util.Date date = faker.date().past(15, TimeUnit.DAYS);
         LocalDateTime startDateTime = date.toInstant()
                 .atZone(ZoneId.systemDefault())
                 .toLocalDateTime();
         item.setAuctionStartingDate(startDateTime);
         item.setAuctionEndingDate(startDateTime.plusDays(7));
 
-        int startingPrice = faker.number().numberBetween(100, 1000);
+        int startingPrice = faker.number().numberBetween(100, 500);
         item.setStartingPrice(startingPrice);
-        item.setSellingPrice(startingPrice + faker.number().numberBetween(1, 500));
+        item.setSellingPrice(startingPrice + faker.number().numberBetween(1, 2));
         item.setImageUrl(faker.internet().url());
 
         item.setSeller(seller);
@@ -116,18 +118,47 @@ public class TestDatabaseService {
         return item;
     }
 
-    public Auction createAuction(User user, Item item) {
+    public Auction createAuction(User user, Item item, int currentHighestBid) {
+        Optional<Auction> optionalLastAuction = auctionDao.findTopByItemIdOrderByAuctionDateDesc(item.getItemId());
+
+        LocalDateTime auctionDate;
+        if (optionalLastAuction.isPresent()) {
+            Auction lastAuction = optionalLastAuction.get();
+            int randomMinutes = faker.number().numberBetween(1, 60);
+            auctionDate = lastAuction.getAuctionDate().plusMinutes(randomMinutes);
+        } else {
+            LocalDateTime auctionStartDate = item.getAuctionStartingDate();
+            int randomHours = faker.number().numberBetween(1, 4);
+            auctionDate = auctionStartDate.plusHours(randomHours);
+        }
+
+        int newBidAmount = currentHighestBid + faker.number().numberBetween(50, 150);
+
         Auction auction = new Auction();
         auction.setUserId(user.getId());
         auction.setItemId(item.getItemId());
-        auction.setAuctionDate(item.getAuctionStartingDate().plusDays(faker.number().numberBetween(2, 6)));
-        auction.setBidAmount(faker.number().numberBetween(100, 2500));
+        auction.setAuctionDate(auctionDate);
+        auction.setBidAmount(newBidAmount);
 
         return auction;
     }
 
+
+
     public Auction insertAuctionInDatabase(Auction auction) {
         auctionService.createAuction(auction);
         return auction;
+    }
+
+    public Withdrawal createRandomWithdrawal(Item item) {
+        Withdrawal withdrawal = new Withdrawal();
+        withdrawal.setItem(item);
+        withdrawal.setItemId(item.getItemId());
+        withdrawal.setCity(faker.address().city());
+        withdrawal.setStreet(faker.address().streetAddress());
+        withdrawal.setZipCode(faker.address().zipCode());
+        item.setWithdrawal(withdrawal);
+
+        return withdrawal;
     }
 }

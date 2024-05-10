@@ -10,12 +10,11 @@ public class Withdrawal {
     public Withdrawal() {
     }
 
-    public Withdrawal(int itemId, String street, String zipCode, String city, Item item) {
+    public Withdrawal(int itemId, String street, String zipCode, String city) {
         this.itemId = itemId;
         this.street = street;
         this.zipCode = zipCode;
         this.city = city;
-        this.item = item;
     }
 
     public int getItemId() {

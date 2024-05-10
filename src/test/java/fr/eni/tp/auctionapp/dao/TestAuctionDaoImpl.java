@@ -7,6 +7,7 @@ import fr.eni.tp.auctionapp.bo.Item;
 import fr.eni.tp.auctionapp.bo.User;
 import fr.eni.tp.auctionapp.dal.AuctionDao;
 import fr.eni.tp.auctionapp.dal.UserDao;
+import fr.eni.tp.auctionapp.dto.BidHistoryDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -30,10 +32,12 @@ public class TestAuctionDaoImpl {
     @Autowired
     private UserDao userDao;
 
-    User user;
-    Category category;
-    Item item;
-    Auction auction = new Auction();
+    private User user;
+    private Category category;
+    private Item item;
+    private final Auction auction = new Auction();
+    private int initialPrice;
+    Random random = new Random();
 
     @BeforeEach
     public void setup() {
@@ -45,6 +49,8 @@ public class TestAuctionDaoImpl {
 
         auction.setItemId(item.getItemId());
         auction.setUserId(user.getUserId());
+
+        initialPrice = item.getStartingPrice();
     }
 
     @Test
@@ -72,15 +78,12 @@ public class TestAuctionDaoImpl {
     @Test
     void test_findAuctionsByItemIdPaginated() {
         for (int i = 0; i < 25; i++) {
-            Auction auction = testDatabaseService.createAuction(user, item);
+            Auction auction = testDatabaseService.createAuction(user, item, initialPrice);
             testDatabaseService.insertAuctionInDatabase(auction);
+            initialPrice = auction.getBidAmount() + random.nextInt(100);
         }
 
-        List<Optional<Auction>> optionalAuctions = auctionDao.findAuctionsByItemIdPaginated(item.getItemId(), 1, 10);
-        List<Auction> auctions = optionalAuctions.stream()
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .toList();
+        List<Auction> auctions = auctionDao.findAuctionsByItemIdPaginated(item.getItemId(), 1, 10);
         assertThat(auctions.size()).isEqualTo(10);
     }
 
@@ -89,30 +92,46 @@ public class TestAuctionDaoImpl {
         User user2 = testDatabaseService.insertUserInDatabase(testDatabaseService.createRandomUser());
 
         for (int i = 0; i < 25; i++) {
-            Auction auction = testDatabaseService.createAuction(user, item);
+            Auction auction = testDatabaseService.createAuction(user, item, initialPrice);
             testDatabaseService.insertAuctionInDatabase(auction);
+            initialPrice = auction.getBidAmount() + random.nextInt(150);
         }
 
         for (int i = 0; i < 15; i++) {
-            Auction auction = testDatabaseService.createAuction(user2, item);
+            Auction auction = testDatabaseService.createAuction(user2, item, initialPrice);
             testDatabaseService.insertAuctionInDatabase(auction);
+            initialPrice = auction.getBidAmount() + random.nextInt(150);
         }
 
-        List<Optional<Auction>> optionalAuctionsFromUser = auctionDao.findAuctionsByUserIdPaginated(user.getUserId(), 1, 5);
-        List<Optional<Auction>> optionalAuctionsFromUser2 = auctionDao.findAuctionsByUserIdPaginated(user2.getUserId(), 1, 10);
-
-        List<Auction> auctionsFromUser = optionalAuctionsFromUser.stream()
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .toList();
-
-        List<Auction> auctionsFromUser2 = optionalAuctionsFromUser2.stream()
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .toList();
+        List<Auction> auctionsFromUser = auctionDao.findAuctionsByUserIdPaginated(user.getUserId(), 1, 5);
+        List<Auction> auctionsFromUser2 = auctionDao.findAuctionsByUserIdPaginated(user2.getUserId(), 1, 10);
 
         assertThat(auctionsFromUser.size()).isEqualTo(5);
         assertThat(auctionsFromUser2.size()).isEqualTo(10);
+    }
+
+    @Test
+    public void test_findBidHistoryForItemPaginated() {
+        int numberOfBids = 20;
+        for (int i = 0; i < numberOfBids; i++) {
+            Auction auction = testDatabaseService.createAuction(user, item, initialPrice);
+            testDatabaseService.insertAuctionInDatabase(auction);
+            initialPrice = auction.getBidAmount() + random.nextInt(150);
+        }
+
+        int page = 1;
+        int size = 10;
+        List<BidHistoryDto> bidHistory = auctionDao.findBidHistoryForItemPaginated(item.getItemId(), page, size);
+
+        for (BidHistoryDto bid : bidHistory) {
+            assertThat(bid.getTotalCount()).isEqualTo(numberOfBids);
+            assertThat(bid).isNotNull();
+            assertThat(bid.getAuctionDate()).isNotNull();
+            assertThat(bid.getBidAmount()).isNotNull();
+        }
+
+        assertThat(bidHistory).isNotNull();
+        assertThat(bidHistory).hasSize(size);
     }
 
     @Test
@@ -130,13 +149,16 @@ public class TestAuctionDaoImpl {
     void test_count() {
         User user2 = testDatabaseService.insertUserInDatabase(testDatabaseService.createRandomUser());
         Item item2 = testDatabaseService.insertItemInDatabase(testDatabaseService.createRandomItem(user2, category));
+        int initialPrice2 = item2.getStartingPrice();
 
         for (int i = 0; i < 7; i++) {
-            testDatabaseService.insertAuctionInDatabase(testDatabaseService.createAuction(user, item));
+            testDatabaseService.insertAuctionInDatabase(testDatabaseService.createAuction(user, item, initialPrice));
+            initialPrice = auction.getBidAmount() + random.nextInt(150);
         }
 
         for (int i = 0; i < 9; i++) {
-            testDatabaseService.insertAuctionInDatabase(testDatabaseService.createAuction(user2, item2));
+            testDatabaseService.insertAuctionInDatabase(testDatabaseService.createAuction(user2, item2, initialPrice2));
+            initialPrice2 = auction.getBidAmount() + random.nextInt(150);
         }
 
         int auctions = auctionDao.count();
@@ -147,13 +169,16 @@ public class TestAuctionDaoImpl {
     void test_countByItemId() {
         User user2 = testDatabaseService.insertUserInDatabase(testDatabaseService.createRandomUser());
         Item item2 = testDatabaseService.insertItemInDatabase(testDatabaseService.createRandomItem(user2, category));
+        int initialPrice2 = item2.getStartingPrice();
 
         for (int i = 0; i < 7; i++) {
-            testDatabaseService.insertAuctionInDatabase(testDatabaseService.createAuction(user, item));
+            testDatabaseService.insertAuctionInDatabase(testDatabaseService.createAuction(user, item, initialPrice));
+            initialPrice = auction.getBidAmount() + random.nextInt(150);
         }
 
         for (int i = 0; i < 9; i++) {
-            testDatabaseService.insertAuctionInDatabase(testDatabaseService.createAuction(user2, item2));
+            testDatabaseService.insertAuctionInDatabase(testDatabaseService.createAuction(user2, item2, initialPrice2));
+            initialPrice2 = auction.getBidAmount() + random.nextInt(150);
         }
 
         int auctions = auctionDao.countByItemId(item.getItemId());
@@ -165,13 +190,14 @@ public class TestAuctionDaoImpl {
     @Test
     void test_countByItemIdAndUserId() {
         User user2 = testDatabaseService.insertUserInDatabase(testDatabaseService.createRandomUser());
+        initialPrice = auction.getBidAmount() + random.nextInt(150);
 
         for (int i = 0; i < 12; i++) {
-            testDatabaseService.insertAuctionInDatabase(testDatabaseService.createAuction(user, item));
+            testDatabaseService.insertAuctionInDatabase(testDatabaseService.createAuction(user, item, initialPrice));
         }
 
         for (int i = 0; i < 8; i++) {
-            testDatabaseService.insertAuctionInDatabase(testDatabaseService.createAuction(user2, item));
+            testDatabaseService.insertAuctionInDatabase(testDatabaseService.createAuction(user2, item, initialPrice));
         }
 
         int auctions = auctionDao.countByItemIdAndUserId(item.getItemId(), user.getUserId());

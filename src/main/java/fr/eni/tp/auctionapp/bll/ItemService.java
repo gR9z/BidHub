@@ -12,8 +12,12 @@ public interface ItemService {
     void updateItem(Item item);
     void removeItemById(int itemId);
     List<Item> getAllItems();
+    List<Item> searchItems(String query, List<Integer> categories, int offset, int limit);
     List<Item> getAllPaginated(int page, int size);
     List<Item> getByUserIdPaginated(int userId, int page, int size);
     int getCountOfItemsByUserId(int userId);
     int getTotalItemCount();
+    int getTotalItemCountByCategory(int categoryId);
+    int countFilteredItems(String query, List<Integer> categories);
+    int getTotalPageCount(int size);
 }

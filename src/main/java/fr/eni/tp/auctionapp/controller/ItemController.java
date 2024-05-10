@@ -16,6 +16,8 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Controller
@@ -35,6 +37,14 @@ public class ItemController {
         if (authenticatedUser != null) {
 
             Item item = new Item();
+
+            LocalDateTime now = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+            String formattedDateTime = now.format(formatter);
+
+            item.setAuctionStartingDate(LocalDateTime.parse(formattedDateTime, formatter));
+            item.setAuctionEndingDate(LocalDateTime.now().plusDays(7));
+
             Category category = new Category();
             Withdrawal withdrawal = new Withdrawal();
 
@@ -49,10 +59,15 @@ public class ItemController {
 
             List<Category> categories = categoryService.getAllCategories();
 
+            String formattedStartDate = formatDateTime(item.getAuctionStartingDate());
+            String formattedEndDate = formatDateTime(item.getAuctionEndingDate());
+
             model.addAttribute("item", item);
             model.addAttribute("categories", categories);
             model.addAttribute("withdrawal", withdrawal);
             model.addAttribute("authenticatedUser", authenticatedUser);
+            model.addAttribute("formattedStartDate", formattedStartDate);
+            model.addAttribute("formattedEndDate", formattedEndDate);
 
             return "item/create-item.html";
         }
@@ -92,5 +107,9 @@ public class ItemController {
             }
         }
     }
-}
 
+    public String formatDateTime(LocalDateTime dateTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+        return dateTime.format(formatter);
+    }
+}

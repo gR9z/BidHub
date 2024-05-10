@@ -1,4 +1,4 @@
-package fr.eni.tp.auctionapp.controller;
+package fr.eni.tp.auctionapp.controller.converter;
 
 import fr.eni.tp.auctionapp.bll.CategoryService;
 import fr.eni.tp.auctionapp.bo.Category;

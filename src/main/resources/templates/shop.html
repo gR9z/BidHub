@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/layout :: layout-main(
+            pageContent=~{:: .main},
+            title='BidHub - Browse BidHub\'s Hidden Treasures',
+            cssPath=null,
+            jsPath=null
+        )}"
+>
+
+<main class="main">
+
+    <section class="section-content">
+        <div class="container shop">
+            <div class="shop__content">
+                <h1 class="shop__title">
+                    Let's start <span class="text-stroke">shopping</span>!
+                </h1>
+
+                <p class="shop__subtitle" th:text="${totalItems} + ' items available for auction'"></p>
+
+                <div class="filter">
+                    <form class="filter-form" th:action="@{/shop}" method="GET">
+                        <div class="filter-form__search">
+                            <i class="ri-search-line filter-form__icon"></i>
+                            <input class="filter-form__input" type="text" name="q" th:value="${q}"
+                                   placeholder="Search...">
+                        </div>
+
+                        <div class="filter-form__select">
+                            <select class="filter-form__select-input" name="categories">
+                                <option value="" selected disabled>Select Category</option>
+                                <option th:each="category : ${categories}"
+                                        th:value="${category.categoryId}"
+                                        th:text="${category.label}"
+                                        th:selected="${categoriesSelected != null and categoriesSelected.contains(category.categoryId)}">
+                                </option>
+                            </select>
+                            <button type="submit" class="filter-form__button">Search</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div th:replace="fragments/fragment-product-list :: product-list(${items})"></div>
+
+                <div class="pagination">
+                    <ul class="pagination__list">
+                        <!-- First page -->
+                        <th:block th:if="${currentPage > 2}">
+                            <li class="pagination__item">
+                                <a th:href="@{/shop(page=1, q=${param.q}, categories=${param.categories})}"
+                                   class="pagination__link">
+                                    <i class="ri-skip-left-line"></i>
+                                </a>
+                            </li>
+                        </th:block>
+
+                        <!-- Previous page -->
+                        <th:block th:if="${currentPage > 1}">
+                            <li class="pagination__item">
+                                <a th:href="@{/shop(page=${currentPage - 1}, q=${param.q}, categories=${param.categories})}"
+                                   class="pagination__link">
+                                    <i th:if="${currentPage == 2}" class="ri-skip-left-line"></i>
+                                    <i th:unless="${currentPage == 2}" class="ri-arrow-left-s-fill"></i>
+                                </a>
+                            </li>
+                        </th:block>
+
+                        <!-- Current page (active) -->
+                        <li class="pagination__item pagination__item--active">
+                            <span class="pagination__link" th:text="${currentPage}"></span>
+                        </li>
+
+                        <!-- Next page -->
+                        <th:block th:if="${currentPage < totalPages}">
+                            <li class="pagination__item">
+                                <a th:href="@{/shop(page=${currentPage + 1}, q=${param.q}, categories=${param.categories})}"
+                                   class="pagination__link">
+                                    <i th:if="${currentPage == totalPages - 1}" class="ri-skip-right-line"></i>
+                                    <i th:unless="${currentPage == totalPages - 1}" class="ri-arrow-right-s-fill"></i>
+                                </a>
+                            </li>
+                        </th:block>
+
+                        <!-- Last page -->
+                        <th:block th:if="${currentPage < totalPages - 1}">
+                            <li class="pagination__item">
+                                <a th:href="@{/shop(page=${totalPages}, q=${param.q}, categories=${param.categories})}"
+                                   class="pagination__link">
+                                    <i class="ri-skip-right-line"></i>
+                                </a>
+                            </li>
+                        </th:block>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <span class="separator"></span>
+    </div>
+
+</main>
+</html>

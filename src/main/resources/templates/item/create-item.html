@@ -18,6 +18,7 @@
                                 <input type="text" id="itemName" name="itemName" required class="form-input"
                                        placeholder="" th:field="*{itemName}"/>
                                 <label for="itemName" class="form-label">Item</label>
+                                <div th:replace="~{fragments/fragment-error :: frag-error('itemName')}"></div>
                             </div>
 
                             <div class="form-field">
@@ -25,6 +26,7 @@
                                           class="form-input textarea-custom" placeholder=""
                                           th:field="*{description}" rows="8"></textarea>
                                 <label for="description" class="form-label">Description</label>
+                                <div th:replace="~{fragments/fragment-error :: frag-error('description')}"></div>
                             </div>
 
                             <div class="form-field">
@@ -33,7 +35,7 @@
                                     <i class="ri-image-circle-line"></i>
                                     Add a Picture
                                 </label>
-                                <div id="imageContainer"></div>
+                                <div id="image-container"></div>
                                 <div th:replace="~{fragments/fragment-error :: frag-error('imageUrl')}"></div>
                             </div>
 
@@ -46,6 +48,7 @@
                                                 th:text="${category.label}"></option>
                                     </select>
                                     <label for="category" class="form-label">Category</label>
+                                    <div th:replace="~{fragments/fragment-error :: frag-error('category')}"></div>
                                 </div>
 
                                 <div class="form-field">
@@ -53,32 +56,46 @@
                                            class="form-input"
                                            placeholder="" value="0" th:field="*{startingPrice}"/>
                                     <label for="startingPrice" class="form-label">Price</label>
+                                    <div th:replace="~{fragments/fragment-error :: frag-error('startingPrice')}"></div>
                                 </div>
                             </div>
 
                             <div class="form-row">
                                 <div class="form-field">
-                                    <input type="datetime-local" th:min="${T(java.time.LocalDate).now()}" id="auctionStartingdate"
-                                           name="auctionStartingdate"
-                                           required class="form-input" placeholder=""
-                                           th:field="*{auctionStartingDate}"/>
-
-                                    <label for="auctionStartingdate" class="form-label">Start of auction</label>
+                                    <input type="datetime-local"
+                                           id="auctionStartingDate"
+                                           name="auctionStartingDate"
+                                           required
+                                           class="form-input"
+                                           placeholder=""
+                                           th:attr="min=${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd''T''HH:mm')}"
+                                           th:value="${formattedStartDate}"
+                                    />
+                                    <label for="auctionStartingDate" class="form-label">Start of auction</label>
+                                    <!-- <div th:replace="~{fragments/fragment-error :: frag-error('auctionStartingDate')}"></div> -->
                                 </div>
 
                                 <div class="form-field">
-                                    <input type="datetime-local" th:min="${T(java.time.LocalDate).now()}" id="auctionEndingdate"
-                                           name="auctionEndingdate"
+                                    <input type="datetime-local"
+                                           id="auctionEndingDate"
+                                           name="auctionEndingDate"
                                            required
-                                           class="form-input" placeholder="" th:field="*{auctionEndingDate}"/>
-                                    <label for="auctionEndingdate" class="form-label">End of auction</label>
+                                           class="form-input"
+                                           placeholder=""
+                                           th:attr="min=${#temporals.format(#temporals.createNow().plusDays(7), 'yyyy-MM-dd''T''HH:mm')}"
+                                           th:value="${formattedEndDate}"
+                                    />
+                                    <label for="auctionEndingDate" class="form-label">End of auction</label>
+                                    <!-- <div th:replace="~{fragments/fragment-error :: frag-error('auctionEndingDate')}"></div> -->
                                 </div>
                             </div>
+
 
                             <div class="form-field">
                                 <input type="text" id="street" name="street" required class="form-input" placeholder=""
                                        th:field="*{withdrawal.street}"/>
                                 <label for="street" class="form-label">Street</label>
+                                <div th:replace="~{fragments/fragment-error :: frag-error('withdrawal.street')}"></div>
                             </div>
 
                             <div class="form-row">
@@ -86,12 +103,14 @@
                                     <input type="text" id="zipCode" name="zipCode" required class="form-input"
                                            placeholder="" th:field="*{withdrawal.zipCode}"/>
                                     <label for="zipCode" class="form-label">Zip Code</label>
+                                    <div th:replace="~{fragments/fragment-error :: frag-error('withdrawal.zipCode')}"></div>
                                 </div>
 
                                 <div class="form-field">
                                     <input type="text" id="city" name="city" required class="form-input" placeholder=""
                                            th:field="*{withdrawal.city}"/>
                                     <label for="city" class="form-label">City</label>
+                                    <div th:replace="~{fragments/fragment-error :: frag-error('withdrawal.city')}"></div>
                                 </div>
                             </div>
                         </div>
@@ -109,8 +128,9 @@
 
         <script>
             document.addEventListener('DOMContentLoaded', () => {
-                const inputFile = document.getElementById('image');
-                const imageContainer = document.getElementById('imageContainer');
+
+                const inputFile = document.querySelector('#image');
+                const imageContainer = document.querySelector('#image-container');
 
                 inputFile.addEventListener('change', function (event) {
                     while (imageContainer.firstChild) {
@@ -129,6 +149,17 @@
                         };
 
                         imageContainer.appendChild(frame);
+
+                        const fileInfo = document.createElement('div');
+                        fileInfo.classList.add('file-info');
+                        const fileName = document.createElement('p');
+                        fileName.textContent = `File name: ${file.name} `;
+                        const fileSize = document.createElement('p');
+                        fileSize.textContent = `Size: ${(file.size / 1024).toFixed(2)} KB`;
+
+                        fileInfo.appendChild(fileName);
+                        fileInfo.appendChild(fileSize);
+                        imageContainer.appendChild(fileInfo);
                     }
                 });
             });

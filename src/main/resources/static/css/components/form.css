@@ -43,6 +43,26 @@
     position: relative;
 }
 
+.form-field--checkbox {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+    cursor: pointer;
+}
+
+.form-field--checkbox label {
+    cursor: pointer;
+    line-height: 1;
+}
+
+input[type="checkbox"] {
+    width: 1.8rem;
+    height: 1.8rem;
+    cursor: pointer;
+    accent-color: var(--secondary);
+}
+
 .form-field textarea {
     resize: vertical;
 }
@@ -91,6 +111,7 @@
 .form-actions {
     margin-top: var(--space-5);
     display: flex;
+    align-items: center;
     gap: var(--space-3);
 }
 
@@ -133,11 +154,18 @@ input[type="file"] {
     font-size: clamp(3.5rem, 1.542rem + 5.222vw, 6rem);
 }
 
+#image-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    align-items: flex-start;
+    font-size: var(--text-small);
+}
+
 .image-preview {
-    width: 100%;
     display: flex;
     height: auto;
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 1 / 1;
     max-height: clamp(15rem, 11.429rem + 9.524vw, 20rem);
     object-fit: cover;
     border-radius: var(--border-radius-2);
@@ -149,6 +177,12 @@ input[type="file"] {
 }
 
 input[type="datetime-local"]::-webkit-calendar-picker-indicator {
-    color: red;
     cursor: pointer;
+}
+
+.confirm-text {
+    color: var(--primary);
+    cursor: pointer;
+    text-underline-offset: 0.15rem;
+    text-decoration: underline;
 }

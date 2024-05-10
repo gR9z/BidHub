@@ -2,7 +2,6 @@ package fr.eni.tp.auctionapp.bll;
 
 import com.github.javafaker.Faker;
 import fr.eni.tp.auctionapp.TestDatabaseService;
-import fr.eni.tp.auctionapp.bo.Auction;
 import fr.eni.tp.auctionapp.bo.Category;
 import fr.eni.tp.auctionapp.bo.Item;
 import fr.eni.tp.auctionapp.bo.User;
@@ -10,7 +9,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.time.LocalDateTime;
 import java.util.List;

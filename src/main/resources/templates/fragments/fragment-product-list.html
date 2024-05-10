@@ -1,0 +1,17 @@
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="product-list(item)" class="shop__list">
+
+    <div class="shop__item" th:each="item : ${items}">
+        <a th:href="@{|/products/${categoryUrl[item.category.categoryId]}/${itemUrls[item.itemId]}|}" th:title="${item.itemName}">
+            <img src="/images/placeholder_800x800.svg" alt="Placeholder image">
+            <div class="item__info">
+                <h1 class="info__name" th:text="${item.itemName}"></h1>
+                <p class="info__price" th:text="'€' + ${item.sellingPrice}"></p>
+                <p class="info__ending-date">
+                    Ending auction in:
+                    <span th:text="${T(fr.eni.tp.auctionapp.utils.DateUtils).formatDateTime(item.auctionEndingDate)}"></span>
+                </p>
+            </div>
+        </a>
+    </div>
+
+</div>

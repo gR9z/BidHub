@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/layout :: layout-main(
+            pageContent=~{:: .main},
+            title='List of product categories',
+            cssPath='/css/admin/categories.css',
+            jsPath=null
+        )}"
+>
+
+<main class="main">
+    <section class="section-content">
+        <div class="container categories">
+            <div class="categories__header">
+                <h1 class="categories__title">
+                    List of product <span class="text-stroke">categories</span>!
+                </h1>
+
+                <p class="categories__total-count">
+                    There are
+                    <strong th:text="${#lists.isEmpty(categories) ? 0 : categories.size()}"></strong>
+                    categories for the items
+                </p>
+
+                <a href="category/add" class="categories__add-button button">Add new category</a>
+            </div>
+
+            <div class="categories__grid">
+                <table th:if="${!#lists.isEmpty(categories)}">
+                    <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Label</th>
+                        <th scope="col">Items</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr th:each="category : ${categories}">
+                        <td data-label="id" th:text="${category.categoryId}"></td>
+                        <td data-label="label" th:text="${category.label}"></td>
+                        <td data-label="items" th:text="${category.numberOfItems}"></td>
+
+                        <td data-label="action" class="grid__action show">
+                            <a th:href="@{'/admin/category/' + ${category.categoryId} + '/edit'}">
+                                <i class="ri-pencil-fill"></i>
+                            </a>
+
+                            <form class="action__form"
+                                  th:action="@{'/admin/categories/' + ${category.categoryId} + '/delete'}"
+                                  method="post">
+                                <button type="submit" class="action__button-link">
+                                    <i class="ri-delete-bin-7-line"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <span class="separator"></span>
+    </div>
+
+</main>
+</html>

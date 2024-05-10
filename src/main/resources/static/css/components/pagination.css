@@ -1,0 +1,20 @@
+.pagination {
+    margin-top: var(--space-6);
+    font-weight: var(--bold);
+}
+
+.pagination__list {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3);
+}
+
+.pagination__item span {
+    font-size: 2rem;
+}
+
+.pagination__item i {
+    font-size: 3rem;
+}
+
