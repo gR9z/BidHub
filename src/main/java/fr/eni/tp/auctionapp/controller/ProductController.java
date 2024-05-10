@@ -4,17 +4,17 @@ import fr.eni.tp.auctionapp.bll.AuctionService;
 import fr.eni.tp.auctionapp.bll.CategoryService;
 import fr.eni.tp.auctionapp.bll.ItemService;
 import fr.eni.tp.auctionapp.bll.WithdrawalService;
-import fr.eni.tp.auctionapp.bo.Category;
-import fr.eni.tp.auctionapp.bo.Item;
-import fr.eni.tp.auctionapp.bo.Withdrawal;
+import fr.eni.tp.auctionapp.bo.*;
 import fr.eni.tp.auctionapp.dto.BidHistoryDto;
 import fr.eni.tp.auctionapp.utils.URLUtils;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.security.Principal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -40,9 +40,8 @@ public class ProductController {
     public String singleProductPage(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "12") int size,
-            @PathVariable String itemName,
-            @PathVariable String categorySlug,
             @RequestParam("id") int itemId,
+            @AuthenticationPrincipal User authenticatedUser,
             Model model
     ) {
         Optional<Item> optionalItem = itemService.findItemById(itemId);
@@ -79,11 +78,21 @@ public class ProductController {
 
             List<BidHistoryDto> bidHistory = auctionService.getItemBidHistoryPaginated(item.getItemId(), page, size);
 
+            Auction auction = new Auction();
+            if(authenticatedUser != null) {
+                auction.setItemId(item.getItemId());
+                auction.setUserId(authenticatedUser.getUserId());
+
+                int bidPlusTenPerCent = (int) Math.ceil(item.getSellingPrice() * 1.10);
+                auction.setBidAmount(bidPlusTenPerCent);
+            }
+
             model.addAttribute("itemUrls", itemUrls);
             model.addAttribute("categoryUrl", categoryUrl);
             model.addAttribute("items", items);
             model.addAttribute("bids", bidHistory);
             model.addAttribute("item", item);
+            model.addAttribute("auction", auction);
         } else {
             return null;
         }

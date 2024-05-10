@@ -43,6 +43,60 @@
     font-size: var(--h3);
 }
 
+.auction__form-group {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.auction__form-field {
+    position: relative;
+}
+
+.auction__form-field::before {
+    content: '€';
+    position: absolute;
+    top: 50%;
+    left: var(--space-2);
+    transform: translateY(-50%);
+    font-size: var(--h5);
+    font-weight: var(--bold);
+}
+
+.auction__form-field input {
+    border-radius: var(--space-1);
+    padding: var(--space-1) var(--space-2) var(--space-1) var(--space-5);
+    text-align: center;
+    width: clamp(7rem, 4.291rem + 9.029vw, 12rem);
+    font-size: var(--h4);
+    background: none;
+    border: none;
+}
+
+.auction__form-field::after {
+    content: '';
+    display: block;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    border-bottom: 0.1rem solid var(--text);
+}
+
+.auction__form-field input:focus {
+    outline: none;
+    background: var(--text15);
+}
+
+.auction__form-field input[type="number"]::-webkit-inner-spin-button,
+.auction__form-field input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.auction__form-field input[type="number"] {
+    -moz-appearance: textfield;
+}
+
 .bid-history__title {
     font-size: var(--h3);
     text-align: center;

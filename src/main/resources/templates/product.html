@@ -19,10 +19,7 @@
                 </div>
 
                 <div class="product__info">
-                    <h1 class="product__title">
-                        <span class="text-stroke">Auction to</span>
-                        <span th:text="${item.itemName}"></span>!
-                    </h1>
+                    <h1 class="product__title" th:text="${item.itemName}"></h1>
 
                     <p class="product__description" th:text="${item.description}"></p>
 
@@ -63,8 +60,28 @@
                             <strong><span th:text="${item.withdrawal.city}"></span></strong>
                         </p>
                     </div>
+
+                    <form class="auction__form" th:action="@{${requestURI}(id=${item.itemId})}" method="POST"
+                          th:object="${auction}">
+                        <p class="error" th:each="error : ${#fields.errors('global')}" th:text="${error}"></p>
+
+                        <div class="auction__form-group">
+                            <div class="auction__form-field">
+                                <input type="number" class="auction__form-input"
+                                       th:min="${auction.bidAmount}"
+                                       th:field="${auction.bidAmount}" placeholder=""/>
+                            </div>
+
+                            <div class="auction__form-actions">
+                                <button class="button" type="submit">Bid now!</button>
+                            </div>
+                        </div>
+                    </form>
+
                 </div>
             </div>
+
+
         </div>
     </section>
 
