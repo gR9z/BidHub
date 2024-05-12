@@ -58,8 +58,17 @@
     cursor: pointer;
 }
 
+.filter-form__select-input option {
+    background: var(--bg);
+    cursor: pointer;
+}
+
+option {
+    cursor: pointer;
+}
+
 .filter-form__button {
-    font-size:var(--text);
+    font-size: var(--text);
     cursor: pointer;
     border-radius: var(--border-radius-1);
     background: var(--primary);

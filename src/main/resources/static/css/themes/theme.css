@@ -483,12 +483,23 @@ a {
     -webkit-text-stroke: 0.20rem var(--secondary);
 }
 
-.error {
-    background-color: var(--error-color);
+.alert {
     display: inline-flex;
     font-weight: var(--bold);
     padding: var(--space-1) var(--space-4);
     border-radius: var(--border-radius-1);
+}
+
+.alert-error {
+    background-color: var(--error-color);
+}
+
+.alert-success {
+    background-color: var(--success-color)
+}
+
+.alert-warning {
+    background-color: var(--warning-color);
 }
 
 .error--form {
