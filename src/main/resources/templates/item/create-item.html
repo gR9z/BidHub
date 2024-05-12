@@ -11,7 +11,7 @@
 
                     <form method="POST" th:object="${item}" th:action="@{/create-item}" class="auth-form">
 
-                        <p class="error" th:each="error: ${#fields.errors('global')}" th:text="${error}"></p>
+                        <p class="alert alert-error" th:each="error: ${#fields.errors('global')}" th:text="${error}"></p>
 
                         <div class="form-group">
                             <div class="form-field">

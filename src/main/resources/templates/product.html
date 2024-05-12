@@ -25,7 +25,7 @@
 
                     <p class="product__category">
                         Category:
-                        <a th:href="|/category/${categorySlug}|"
+                        <a th:href="|/category/${categoryUrl[item.category.categoryId]}|"
                            th:text="${item.category.label}"></a>
                     </p>
 
@@ -61,21 +61,39 @@
                         </p>
                     </div>
 
+                    <div th:if="${successMessage}">
+                        <div class="alert alert-success" th:text="${successMessage}"></div>
+                    </div>
+
+                    <div th:if="${errorMessage}">
+                        <div th:each="error : ${errorMessage}" class="alert alert-error" th:text="${error}"></div>
+                    </div>
+
                     <form class="auction__form" th:action="@{${requestURI}(id=${item.itemId})}" method="POST"
                           th:object="${auction}">
-                        <p class="error" th:each="error : ${#fields.errors('global')}" th:text="${error}"></p>
+                        <p class="alert alert-error" th:each="error : ${#fields.errors('global')}"
+                           th:text="${error}"></p>
 
-                        <div class="auction__form-group">
+                        <div th:if="${#authorization.expression('isAuthenticated()')}" class="auction__form-group">
                             <div class="auction__form-field">
                                 <input type="number" class="auction__form-input"
                                        th:min="${auction.bidAmount}"
-                                       th:field="${auction.bidAmount}" placeholder=""/>
+                                       th:field="${auction.bidAmount}" placeholder=""
+                                />
+
+                                <input type="hidden" th:field="${auction.userId}"/>
+                                <input type="hidden" th:field="${auction.itemId}"/>
                             </div>
 
                             <div class="auction__form-actions">
                                 <button class="button" type="submit">Bid now!</button>
                             </div>
+
                         </div>
+
+                        <a href="/login" class="button" th:if="${!#authorization.expression('isAuthenticated()')}">Please
+                            log in to bid</a>
+
                     </form>
 
                 </div>
@@ -96,7 +114,7 @@
                 <span th:text="${item.category.label}"></span>!
             </h1>
 
-            <div th:replace="fragments/fragment-product-list :: product-list(${items})"></div>
+            <div th:replace="~{fragments/fragment-product-list :: product-list(${items})}"></div>
         </div>
     </section>
 

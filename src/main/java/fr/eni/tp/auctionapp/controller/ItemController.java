@@ -23,8 +23,8 @@ import java.util.List;
 @Controller
 public class ItemController {
 
-    private CategoryService categoryService;
-    private ItemService itemService;
+    private final CategoryService categoryService;
+    private final ItemService itemService;
 
     public ItemController(CategoryService categoryService, ItemService itemService) {
         this.categoryService = categoryService;

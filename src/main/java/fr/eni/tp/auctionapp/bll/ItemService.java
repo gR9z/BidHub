@@ -1,7 +1,8 @@
 package fr.eni.tp.auctionapp.bll;
 
+import fr.eni.tp.auctionapp.bo.Auction;
 import fr.eni.tp.auctionapp.bo.Item;
-import org.springframework.web.multipart.MultipartFile;
+import fr.eni.tp.auctionapp.exceptions.BusinessException;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,4 +21,6 @@ public interface ItemService {
     int getTotalItemCountByCategory(int categoryId);
     int countFilteredItems(String query, List<Integer> categories);
     int getTotalPageCount(int size);
+
+    Item updateItemAfterAuction(Auction auction, int itemId) throws BusinessException;
 }
