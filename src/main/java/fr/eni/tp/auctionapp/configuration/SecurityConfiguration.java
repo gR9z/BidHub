@@ -17,6 +17,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> {
                     auth
+                            //.requestMatchers("/profile/**").authenticated()
                             .requestMatchers("/my-account/**").authenticated()
                             .requestMatchers("/").permitAll()
                             .requestMatchers("/products/**").permitAll()
@@ -31,7 +32,7 @@ public class SecurityConfiguration {
         http.formLogin(login -> {
             login.loginPage("/login").permitAll();
             login.failureUrl("/login?error");
-            login.defaultSuccessUrl("/my-account").permitAll();
+            login.defaultSuccessUrl("/profile").permitAll();
         });
 
         http.rememberMe(rememberMe -> rememberMe.key("uniqueAndSecret").tokenValiditySeconds(2592000));

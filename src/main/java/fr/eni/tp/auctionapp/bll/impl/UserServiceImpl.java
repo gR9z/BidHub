@@ -171,7 +171,7 @@ public class UserServiceImpl implements UserService {
 
     public boolean arePasswordsMatching(String password, String confirmPassword, BusinessException businessException) {
         if (!password.equals(confirmPassword)) {
-            businessException.addKey("Passwords do not match!");
+            businessException.addKey("Passwords does not match!");
             return false;
         }
         return true;
