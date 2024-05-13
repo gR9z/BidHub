@@ -27,7 +27,7 @@ public class TestCategoryServiceImpl {
     private CategoryServiceImpl categoryService;
 
     @BeforeEach
-    void setUp() {
+    void setup() {
     }
 
     @Test
@@ -76,15 +76,19 @@ public class TestCategoryServiceImpl {
     @Test
     void test_getAllCategories() {
         List<Category> categories = new ArrayList<>();
-        categories.add(new Category());
-        categories.add(new Category());
+        Category cat1 = new Category();
+        cat1.setCategoryId(1);
+        Category cat2 = new Category();
+        cat2.setCategoryId(2);
+        categories.add(cat1);
+        categories.add(cat2);
 
         when(categoryDaoMock.findAll()).thenReturn(categories);
 
+        categoryService.preloadCache();
+
         List<Category> result = categoryService.getAllCategories();
         assertThat(result).isNotNull();
-        assertThat(result.size()).isEqualTo(categories.size());
-
-        verify(categoryDaoMock).findAll();
+        assertThat(result.size()).isEqualTo(2);
     }
 }
