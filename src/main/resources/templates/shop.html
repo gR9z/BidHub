@@ -42,7 +42,7 @@
                     </form>
                 </div>
 
-                <div th:replace="fragments/fragment-product-list :: product-list(${items})"></div>
+                <div th:replace="~{fragments/fragment-product-list :: product-list(${items})}"></div>
 
                 <div class="pagination">
                     <ul class="pagination__list">

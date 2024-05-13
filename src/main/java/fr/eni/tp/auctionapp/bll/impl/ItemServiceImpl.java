@@ -1,10 +1,7 @@
 package fr.eni.tp.auctionapp.bll.impl;
 
 import fr.eni.tp.auctionapp.bll.ItemService;
-import fr.eni.tp.auctionapp.bo.Category;
-import fr.eni.tp.auctionapp.bo.Item;
-import fr.eni.tp.auctionapp.bo.User;
-import fr.eni.tp.auctionapp.bo.Withdrawal;
+import fr.eni.tp.auctionapp.bo.*;
 import fr.eni.tp.auctionapp.dal.ItemDao;
 import fr.eni.tp.auctionapp.dal.WithdrawalDao;
 import fr.eni.tp.auctionapp.exceptions.BusinessException;
@@ -122,6 +119,23 @@ public class ItemServiceImpl implements ItemService {
     public int getTotalPageCount(int size) {
         int totalItemCount = getTotalItemCount();
         return (int) Math.ceil((double) totalItemCount / size);
+    }
+
+    @Override
+    public Item updateItemAfterAuction(Auction auction, int itemId) throws BusinessException {
+        BusinessException businessException = new BusinessException();
+
+        Optional<Item> optionalItem = findItemById(itemId);
+        if (optionalItem.isEmpty()) {
+            businessException.addKey("Item not found, cannot create auction!");
+            throw businessException;
+        }
+
+        Item item = optionalItem.get();
+        item.setSellingPrice(auction.getBidAmount());
+
+        updateItem(item);
+        return item;
     }
 
     private boolean isItemNameValid(String itemName, BusinessException businessException) {

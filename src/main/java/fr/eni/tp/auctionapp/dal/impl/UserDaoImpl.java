@@ -20,6 +20,7 @@ import java.util.Optional;
 public class UserDaoImpl implements UserDao {
 
     private static String SELECT_BY_USERNAME = "SELECT * FROM users WHERE username = :username;";
+    private static String SELECT_BY_ID = "SELECT * FROM users WHERE userId = :userId;";
     private static String INSERT = "INSERT INTO users (username, lastName, firstName, email, phone, street, zipCode, city, password, credit, isAdmin) " +
             "VALUES (:username, :lastName, :firstName, :email, :phone, :street, :zipCode, :city, :password, :credit, :isAdmin);";
     private static String UPDATE_BY_ID = "UPDATE users SET username = :username, lastName = :lastName, firstName = :firstName, email = :email, phone = :phone, street = :street, zipCode = :zipCode, city = :city, credit = :credit, isAdmin = :isAdmin WHERE userId = :userId;";
@@ -43,6 +44,23 @@ public class UserDaoImpl implements UserDao {
         try {
             User user = namedParameterJdbcTemplate.queryForObject(
                     SELECT_BY_USERNAME,
+                    namedParameters,
+                    new UserRowMapper()
+            );
+            return Optional.ofNullable(user);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
+    }
+
+    @Override
+    public Optional<User> findById(int userId) {
+        MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+        namedParameters.addValue("userId", userId);
+
+        try {
+            User user = namedParameterJdbcTemplate.queryForObject(
+                    SELECT_BY_ID,
                     namedParameters,
                     new UserRowMapper()
             );

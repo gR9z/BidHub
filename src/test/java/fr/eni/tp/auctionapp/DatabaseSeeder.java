@@ -26,7 +26,7 @@ public class DatabaseSeeder {
 
     public static void userSeeder(int count) {
 
-        for (int i = 0; i < count - 1; i++) {
+        for (int i = 0; i < count; i++) {
             User user = testDatabaseService.createRandomUser();
             if (i == 0) {
                 user.setUsername("user");
@@ -43,7 +43,7 @@ public class DatabaseSeeder {
 
     public static void categorySeeder(int count) {
 
-        for (int i = 0; i < count - 1; i++) {
+        for (int i = 0; i < count; i++) {
             Category category = testDatabaseService.createRandomCategory();
             testDatabaseService.insertCategoryInDatabase(category);
         }
@@ -56,7 +56,7 @@ public class DatabaseSeeder {
         List<Category> categories = categoryService.getAllCategories();
 
         Random random = new Random();
-        for (int i = 0; i < count - 1; i++) {
+        for (int i = 0; i < count; i++) {
             User user = users.get(random.nextInt(users.size()));
             Category category = categories.get(random.nextInt(categories.size()));
 
@@ -103,10 +103,10 @@ public class DatabaseSeeder {
 
         testDatabaseService.clearDatabase();
 
-        userSeeder(100);
+        userSeeder(20);
         categorySeeder(20);
-        itemSeeder(300);
-        auctionSeeder(2000);
+        itemSeeder(100);
+        auctionSeeder(800);
 
         context.close();
     }

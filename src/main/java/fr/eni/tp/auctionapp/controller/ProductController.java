@@ -11,10 +11,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.security.Principal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -79,8 +77,9 @@ public class ProductController {
             List<BidHistoryDto> bidHistory = auctionService.getItemBidHistoryPaginated(item.getItemId(), page, size);
 
             Auction auction = new Auction();
+            auction.setItemId(item.getItemId());
+
             if(authenticatedUser != null) {
-                auction.setItemId(item.getItemId());
                 auction.setUserId(authenticatedUser.getUserId());
 
                 int bidPlusTenPerCent = (int) Math.ceil(item.getSellingPrice() * 1.10);
