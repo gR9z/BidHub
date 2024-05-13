@@ -1,7 +1,7 @@
-@import url('./mini-reset.css');
-@import url('./theme.css');
-@import url('./core-layout.css');
-@import url('./login-form.css');
-@import url('./responsive.css');
-@import url('./modal.css');
-
+@import url('base/mini-reset.css');
+@import url('themes/theme.css');
+@import url('base/core-layout.css');
+@import url('components/form.css');
+@import url('components/pagination.css');
+@import url('components/table.css');
+@import url('pages/shop.css');

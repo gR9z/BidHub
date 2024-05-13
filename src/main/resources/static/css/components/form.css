@@ -1,0 +1,188 @@
+.form-container {
+    max-width: var(--max-width-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    align-items: center;
+    margin-inline: auto;
+}
+
+.form-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    width: 100%;
+    border-radius: var(--border-radius-2);
+    padding: var(--space-5);
+    box-shadow: var(--box-shadow);
+}
+
+.form-section--register {
+    background-color: initial;
+}
+
+.form-title {
+    font-size: var(--h3);
+    margin-bottom: var(--space-4);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+}
+
+.form-row {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+}
+
+.form-field {
+    width: 100%;
+    position: relative;
+}
+
+.form-field--checkbox {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+    cursor: pointer;
+}
+
+.form-field--checkbox label {
+    cursor: pointer;
+    line-height: 1;
+}
+
+input[type="checkbox"] {
+    width: 1.8rem;
+    height: 1.8rem;
+    cursor: pointer;
+    accent-color: var(--secondary);
+}
+
+.form-field textarea {
+    resize: vertical;
+}
+
+.form-input {
+    width: 100%;
+    padding: var(--space-1) 0;
+    font-size: var(--body-fs);
+    color: var(--text);
+    border: none;
+    border-bottom: 0.0625rem solid var(--text30);
+    outline: none;
+    background: transparent;
+}
+
+.form-label,
+.form-icon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size: var(--body-fs);
+    pointer-events: none;
+    transition: 0.3s;
+}
+
+.form-icon {
+    left: unset;
+    right: 0;
+    pointer-events: initial;
+    cursor: pointer;
+}
+
+.form-field input:focus + .form-label,
+.form-field textarea:focus + .form-label,
+.form-field select:focus + .form-label,
+.form-field input:not(:placeholder-shown) + .form-label,
+.form-field textarea:not(:placeholder-shown) + .form-label,
+.form-field select:not(:placeholder-shown) + .form-label {
+    top: -2rem;
+    left: 0;
+    color: var(--primary);
+    font-size: var(--text-small);
+}
+
+
+.form-actions {
+    margin-top: var(--space-5);
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.form-link {
+    text-decoration: underline;
+}
+
+.form-link--centered {
+    text-align: center;
+    display: block;
+    margin-top: var(--space-5);
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.upload-label {
+    display: flex;
+    gap: var(--space-1);
+    flex-direction: column;
+    align-items: center;
+    line-height: 1;
+    background-color: var(--text5);
+    color: var(--text);
+    padding: var(--space-5);
+    text-align: center;
+    border-radius: 5px;
+    border: 0.125rem solid var(--text15);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.upload-label:hover,
+.upload-label:focus {
+    background-color: var(--text10);
+}
+
+.upload-label i {
+    font-size: clamp(3.5rem, 1.542rem + 5.222vw, 6rem);
+}
+
+#image-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    align-items: flex-start;
+    font-size: var(--text-small);
+}
+
+.image-preview {
+    display: flex;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    max-height: clamp(15rem, 11.429rem + 9.524vw, 20rem);
+    object-fit: cover;
+    border-radius: var(--border-radius-2);
+    margin-top: var(--space-4);
+}
+
+.form-input[type="datetime-local"], .textarea-custom {
+    font-family: var(--body-font), sans-serif;
+}
+
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+}
+
+.confirm-text {
+    color: var(--primary);
+    cursor: pointer;
+    text-underline-offset: 0.15rem;
+    text-decoration: underline;
+}

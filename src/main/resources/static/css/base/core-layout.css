@@ -10,14 +10,10 @@
 }
 
 .logo {
-    width: clamp(2.5rem, 1.071rem + 3.81vw, 4.5rem);
+    width: clamp(14rem, 7.571rem + 17.143vw, 23rem);
     display: flex;
     align-items: center;
     gap: var(--space-3);
-}
-
-.logo span {
-    font-size: var(--h4);
 }
 
 .nav__btns {
@@ -28,7 +24,7 @@
 
 .nav__toggle,
 #theme-toggle {
-    font-size: var(--h5);
+    font-size: var(--h4);
     cursor: pointer;
 }
 

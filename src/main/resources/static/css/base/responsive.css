@@ -1,0 +1,203 @@
+@media screen and (min-width: 480px) {
+    /* ==================================== */
+    /* =============== FORM =============== */
+    /* ==================================== */
+    .form-group, .form-row {
+        gap: var(--space-7);
+    }
+
+    .filter {
+        margin-bottom: var(--space-7);
+    }
+
+    .shop__list {
+        gap: var(--space-7);
+    }
+
+    /* ==================================== */
+    /* ============ ERROR PAGE ============ */
+    /* ==================================== */
+    .error-page__actions {
+        flex-direction: row;
+        justify-content: center;
+    }
+}
+
+@media screen and (min-width: 568px) {
+}
+
+@media screen and (min-width: 768px) {
+    /* ============================== */
+    /* ======== HEADER & NAV ======== */
+    /* ============================== */
+    .nav {
+        position: initial;
+        margin-left: auto;
+        opacity: 1;
+    }
+
+    .nav__list {
+        display: flex;
+        padding: 0;
+        background-color: initial;
+        gap: var(--space-4);
+    }
+
+    .nav__list li:not(:last-child)::after {
+        content: none;
+    }
+
+    .nav__list a {
+        color: var(--primary);
+    }
+
+    .nav__toggle {
+        display: none;
+    }
+
+    /* ============================== */
+    /* =========== FOOTER =========== */
+    /* ============================== */
+    .footer__container {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    /* ==================================== */
+    /* =============== FORM =============== */
+    /* ==================================== */
+    .form-group, .form-row {
+        gap: var(--space-6);
+    }
+
+    .form-container, .form-row {
+        flex-direction: row;
+    }
+
+    #image-container {
+        flex-direction: row;
+        align-items: center;
+        gap: var(--space-4);
+    }
+
+
+    @media screen and (min-width: 768px) {
+        /* ================================== */
+        /* ======= SINGLE PRODUCT PAGE ====== */
+        /* ================================== */
+        .bid-history__total-count {
+            font-size: var(--h4);
+        }
+
+        /* =================================== */
+        /* ========= RESPONSIVE TABLE ======== */
+        /* =================================== */
+        table {
+            border: 0;
+        }
+
+        table thead {
+            background-color: var(--text10);
+            border: initial;
+            clip: initial;
+            height: initial;
+            margin: initial;
+            overflow: initial;
+            padding: initial;
+            position: initial;
+            width: initial;
+        }
+
+        table tr {
+            display: table-row;
+            text-align: center;
+            background-color: var(--text5);
+            margin-bottom: 0;
+            border: 0.1rem solid var(--text20);
+            padding: .35em;
+        }
+
+        table tr:nth-child(even) {
+            background-color: var(--text10);
+        }
+
+        table td {
+            display: table-cell;
+            border: 0;
+            text-align: center;
+        }
+
+        table th {
+            font-size: var(--text-small);
+            text-transform: uppercase;
+        }
+
+        table td::before {
+            content: initial;
+            float: initial;
+            font-weight: initial;
+            text-transform: initial;
+        }
+    }
+
+    /* ==================================== */
+    /* ============ FILTER FORM =========== */
+    /* ==================================== */
+    .filter {
+        margin-bottom: var(--space-6);
+    }
+
+    .filter-form {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .filter-form__search {
+        width: initial;
+    }
+
+    /* ==================================== */
+    /* ============= SHOP LIST ============ */
+    /* ==================================== */
+    .shop__list {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-6);
+    }
+
+    .related-product__title {
+        margin-inline: auto;
+        text-align: center;
+    }
+
+    /* ============================================== */
+    /* ============= PRODUCT SINGLE PAGE ============ */
+    /* ============================================== */
+    .product__content {
+        grid-template-columns: 3fr 2fr;
+        align-items: center;
+    }
+
+    /* ====================================== */
+    /* ============= ADMIN PAGES ============ */
+    /* ====================================== */
+    .categories__title {
+        margin-inline: auto;
+        text-align: center;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    /* ============================= */
+    /* ============ FORM =========== */
+    /* ============================= */
+    .form-group, .form-row {
+        gap: calc(var(--space-5) + var(--space-2));
+    }
+
+    /* ==================================== */
+    /* ============= SHOP LIST ============ */
+    /* ==================================== */
+    .shop__list {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
