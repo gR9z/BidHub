@@ -22,4 +22,12 @@ public interface UserService extends UserDetailsService {
 
     void debitUserCredit(Authentication authentication, Auction auction) throws BusinessException;
     void refundUser(int userId, int refundAmount) throws BusinessException;
+
+    User getUsername(String name);
+
+    void editUserProfile(User user);
+
+    void deleteUser(User currentUser);
+
+    void saveUser(User testUser);
 }

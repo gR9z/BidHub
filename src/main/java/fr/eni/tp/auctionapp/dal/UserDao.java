@@ -14,4 +14,8 @@ public interface UserDao {
     List<User> findAll();
     List<User> findAllPagination(int page, int size);
     int count();
+
+    void insertUser(User user);
+
+    void editUserProfile(User user);
 }

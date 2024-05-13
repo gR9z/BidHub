@@ -154,6 +154,16 @@ public class UserDaoImpl implements UserDao {
                 .orElse(0);
     }
 
+    @Override
+    public void insertUser(User user) {
+
+    }
+
+    @Override
+    public void editUserProfile(User user) {
+
+    }
+
     public static class UserRowMapper implements RowMapper<User> {
         @Override
         public User mapRow(ResultSet rs, int rowNum) throws SQLException {
