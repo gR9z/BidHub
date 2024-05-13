@@ -9,7 +9,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 
+import java.util.Optional;
+
 public interface UserService extends UserDetailsService {
+
+    static Optional<User> selectUserByUsername(String username) {
+        return null;
+    }
     void createUser(User user);
     void createUserWithConfirmPassword(User user, String confirmPassword);
     void updateUser(User user);
@@ -22,4 +28,7 @@ public interface UserService extends UserDetailsService {
 
     void debitUserCredit(Authentication authentication, Auction auction) throws BusinessException;
     void refundUser(int userId, int refundAmount) throws BusinessException;
+    User getUsername(String username);
+    void editUserProfile(User user);
+    void deleteUser(User user);
 }

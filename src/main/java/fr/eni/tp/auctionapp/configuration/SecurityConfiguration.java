@@ -2,6 +2,7 @@ package fr.eni.tp.auctionapp.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -17,13 +18,14 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> {
                     auth
-                            .requestMatchers("/my-account/**").authenticated()
+                            .requestMatchers("/profile/**").permitAll()
                             .requestMatchers("/").permitAll()
                             .requestMatchers("/products/**").permitAll()
                             .requestMatchers("/css/**").permitAll()
                             .requestMatchers("/js/**").permitAll()
                             .requestMatchers("/images/**").permitAll()
                             .requestMatchers("/fonts/**").permitAll()
+                            .requestMatchers(HttpMethod.DELETE, "/profile/edit-profile").authenticated()
                             .anyRequest().permitAll();
                 }
         );
@@ -31,7 +33,7 @@ public class SecurityConfiguration {
         http.formLogin(login -> {
             login.loginPage("/login").permitAll();
             login.failureUrl("/login?error");
-            login.defaultSuccessUrl("/my-account").permitAll();
+            login.defaultSuccessUrl("/profile").permitAll();
         });
 
         http.rememberMe(rememberMe -> rememberMe.key("uniqueAndSecret").tokenValiditySeconds(2592000));

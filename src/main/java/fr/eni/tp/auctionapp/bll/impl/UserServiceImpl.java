@@ -68,6 +68,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getUsername(String username) {
+        return userDao.selectUserByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("fail: " + username));
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> optUser = userDao.selectUserByUsername(username);
 
@@ -151,4 +157,18 @@ public class UserServiceImpl implements UserService {
         }
         return true;
     }
+
+    public Optional<User> selectUserByUsername(String username) {
+        return userDao.selectUserByUsername(username);
+    }
+
+    public void editUserProfile(User user) {
+        userDao.editUserProfile(user);
+    }
+
+    @Override
+    public void deleteUser(User user) {
+        userDao.deleteUser(user.getUsername());
+    }
+
 }
