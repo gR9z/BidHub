@@ -139,14 +139,6 @@ public class UserServiceImpl implements UserService {
             User user = optionalUser.get();
             user.setCredit(user.getCredit() + refundAmount);
             userDao.update(user);
-            updateSessionUserCredit(user);
-        }
-    }
-
-    private void updateSessionUserCredit(User user) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null && auth.getPrincipal() instanceof User authenticatedUser) {
-            authenticatedUser.setCredit(user.getCredit());
         }
     }
 
@@ -158,17 +150,13 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
-    public Optional<User> selectUserByUsername(String username) {
-        return userDao.selectUserByUsername(username);
-    }
-
     public void editUserProfile(User user) {
         userDao.editUserProfile(user);
     }
 
     @Override
     public void deleteUser(User user) {
-        userDao.deleteUser(user.getUsername());
+        // TODO Problème de foreign key
+        userDao.deleteById(user.getUserId());
     }
-
 }

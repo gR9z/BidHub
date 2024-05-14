@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserDao {
+    void editUserProfile(User user);
+
     Optional<User> findById(int userId);
     void insert(User user);
     Optional<User> selectUserByUsername(String username);

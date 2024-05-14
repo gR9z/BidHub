@@ -7,10 +7,13 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -126,7 +129,7 @@ public class UserDaoImpl implements UserDao {
 
         Number key = (Number) keyHolder.getKey();
 
-        if(key != null) {
+        if (key != null) {
             user.setId(key.intValue());
         }
     }
@@ -184,13 +187,9 @@ public class UserDaoImpl implements UserDao {
                 .orElse(0);
     }
 
-    public static class UserRowMapper implements RowMapper<User> {
     public void deleteUser(String username) {
         jdbcTemplate.update(DELETE_BY_USERNAME, username);
     }
-
-
-
 
     public static class UserRowMapper implements RowMapper<User> {
         @Override
