@@ -29,7 +29,7 @@ public class UserProfileController {
         User user = userService.getUsername(principal.getName());
         model.addAttribute("user", user);
 
-        return "/account/profile-account";
+        return "account/profile-account";
     }
 
     @GetMapping("/profile/edit-profile")
@@ -78,7 +78,8 @@ public class UserProfileController {
     @GetMapping("/error-profile")
     public String userError(
             @RequestParam(name = "error", required = false) String error,
-            Model model
+            Model model,
+            Principal principal
     ) {
 
         if (error != null) {
@@ -86,6 +87,9 @@ public class UserProfileController {
             model.addAttribute("error", errorMessage);
             System.out.println(model);
         }
+
+        User user = userService.getUsername(principal.getName());
+        model.addAttribute("user", user);
 
         return "/account/profile-account";
     }
