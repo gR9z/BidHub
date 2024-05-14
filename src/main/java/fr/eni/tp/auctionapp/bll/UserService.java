@@ -14,22 +14,13 @@ public interface UserService extends UserDetailsService {
     void createUserWithConfirmPassword(User user, String confirmPassword);
     void updateUser(User user);
     void removeUserById(int id);
-
     UserDetails getUserByUserId(int userId);
-
     List<User> getAllUsers();
     int getTotalUserCount();
-
     void debitUserCredit(Authentication authentication, Auction auction) throws BusinessException;
     void refundUser(int userId, int refundAmount) throws BusinessException;
-
-    //User getUsername(String name);
-
     UserDetails loadUserByUsername(String username);
-
     void editUserProfile(User user);
-
     void deleteUser(User currentUser);
-
     void saveUser(User testUser);
 }

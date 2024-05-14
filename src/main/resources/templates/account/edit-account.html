@@ -16,31 +16,29 @@
 
     <form method="post" th:action="@{/profile}">
 
-        <div class="username">Pseudo :</div>
+        <label for="username-input">Pseudo :</label>
+        <input type="text" name="username" id="username-input" th:value="${user.username}">
 
-<!--        <label for="username-input">Pseudo :</label>-->
-<!--        <input type="text" name="username" id="username-input" th:value="${user.username}">-->
+        <label for="name-input">Name :</label>
+        <input type="text" name="name" id="name-input" th:value="${user.lastName}">
 
-<!--        <label for="name-input">Name :</label>-->
-<!--        <input type="text" name="name" id="name-input" th:value="${user.lastName}">-->
+        <label for="firstname-input">Firstname :</label>
+        <input type="text" name="firstname" id="firstname-input" th:value="${user.firstName}">
 
-<!--        <label for="firstname-input">Firstname :</label>-->
-<!--        <input type="text" name="firstname" id="firstname-input" th:value="${user.firstName}">-->
+        <label for="email-input">Email :</label>
+        <input type="text" name="email" id="email-input" th:value="${user.email}">
 
-<!--        <label for="email-input">Email :</label>-->
-<!--        <input type="text" name="email" id="email-input" th:value="${user.email}">-->
+        <label for="phone-input">Phone :</label>
+        <input type="number" name="phone" id="phone-input" th:value="${user.phone}">
 
-<!--        <label for="phone-input">Phone :</label>-->
-<!--        <input type="number" name="phone" id="phone-input" th:value="${user.phone}">-->
+        <label for="street-input">Street</label>
+        <input type="text" name="street" id="street-input" th:value="${user.street}">
 
-<!--        <label for="street-input">Street</label>-->
-<!--        <input type="text" name="street" id="street-input" th:value="${user.street}">-->
+        <label for="zipcode-input">Zip Code :</label>
+        <input type="number" name="zipcode" id="zipcode-input" th:value="${user.zipCode}">
 
-<!--        <label for="zipcode-input">Zip Code :</label>-->
-<!--        <input type="number" name="zipcode" id="zipcode-input" th:value="${user.zipCode}">-->
-
-<!--        <label for="city-input">City :</label>-->
-<!--        <input type="text" name="city" id="city-input" th:value="${user.city}">-->
+        <label for="city-input">City :</label>
+        <input type="text" name="city" id="city-input" th:value="${user.city}">
 
 
         <div class="submit-btns">
