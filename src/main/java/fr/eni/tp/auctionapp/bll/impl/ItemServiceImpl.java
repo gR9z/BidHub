@@ -1,5 +1,6 @@
 package fr.eni.tp.auctionapp.bll.impl;
 
+import fr.eni.tp.auctionapp.bll.FileStorageService;
 import fr.eni.tp.auctionapp.bll.ItemService;
 import fr.eni.tp.auctionapp.bo.*;
 import fr.eni.tp.auctionapp.dal.ItemDao;
@@ -18,10 +19,12 @@ public class ItemServiceImpl implements ItemService {
 
     private final ItemDao itemDao;
     private final WithdrawalDao withdrawalDao;
+    private final FileStorageService fileStorageService;
 
-    public ItemServiceImpl(ItemDao itemDao, WithdrawalDao withdrawalDao) {
+    public ItemServiceImpl(ItemDao itemDao, WithdrawalDao withdrawalDao, FileStorageService fileStorageService) {
         this.itemDao = itemDao;
         this.withdrawalDao = withdrawalDao;
+        this.fileStorageService = fileStorageService;
     }
 
     @Override
@@ -50,6 +53,9 @@ public class ItemServiceImpl implements ItemService {
         }
 
         try {
+            String imageFileName = fileStorageService.store(item.getImageFile(), item.getItemId());
+            item.setImageUrl(imageFileName);
+
             item.setSellingPrice(item.getStartingPrice());
             itemDao.insert(item);
             Objects.requireNonNull(item).getWithdrawal().setItem(item);

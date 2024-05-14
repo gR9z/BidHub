@@ -9,7 +9,7 @@
                 <div class="form-section">
                     <h1 class="form-title">New sale</h1>
 
-                    <form method="POST" th:object="${item}" th:action="@{/create-item}" class="auth-form">
+                    <form method="POST" enctype="multipart/form-data" th:object="${item}" th:action="@{/create-item}" class="auth-form">
 
                         <p class="alert alert-error" th:each="error: ${#fields.errors('global')}" th:text="${error}"></p>
 
@@ -30,7 +30,7 @@
                             </div>
 
                             <div class="form-field">
-                                <input type="file" name="imageUrl" th:field="*{imageUrl}" accept="image/*" id="image">
+                                <input type="file" id="image" th:field="*{imageFile}" accept="image/*">
                                 <label for="image" class="upload-label">
                                     <i class="ri-image-circle-line"></i>
                                     Add a Picture
