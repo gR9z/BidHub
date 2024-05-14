@@ -16,9 +16,9 @@
             <div class="product__content">
                 <div class="product__image">
                     <img src="/images/placeholder_800x800.svg" alt="Placeholder product image">
-                    <span th:if="${item.saleStatus == 'pending'}" class="item__status item__status--pending" th:text="${item.saleStatus}"></span>
-                    <span th:if="${item.saleStatus == 'active'}" class="item__status item__status--active" th:text="${item.saleStatus}"></span>
-                    <span th:if="${item.saleStatus == 'concluded'}" class="item__status item__status--concluded" th:text="${item.saleStatus}"></span>
+                    <span th:if="${item.saleStatus == 'pending'}" class="badge__item badge__item--pending" th:text="${item.saleStatus}"></span>
+                    <span th:if="${item.saleStatus == 'active'}" class="badge__item badge__item--active" th:text="${item.saleStatus}"></span>
+                    <span th:if="${item.saleStatus == 'concluded'}" class="badge__item badge__item--concluded" th:text="${item.saleStatus}"></span>
                 </div>
 
                 <div class="product__info">

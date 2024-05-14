@@ -7,6 +7,10 @@
     text-align: center;
 }
 
+.users .alert {
+    margin-top: var(--space-4);
+}
+
 .users__total-count {
     margin-top: var(--space-3);
 }

@@ -84,7 +84,9 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<Item> searchItems(String query, List<Integer> categories, int offset, int limit) {
-        return itemDao.searchItems(query, categories, offset, limit);
+        List<Item> items =  itemDao.searchItems(query, categories, offset, limit);
+        items.forEach(item -> item.setSaleStatus(calculateItemStatus(item)));
+        return items;
     }
 
     @Override

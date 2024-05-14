@@ -94,8 +94,10 @@ option {
     transform: translateY(-1rem);
 }
 
-.shop__item img {
+.item__image {
     border-radius: var(--border-radius-2);
+    position: relative;
+    overflow: hidden;
 }
 
 .item__info {

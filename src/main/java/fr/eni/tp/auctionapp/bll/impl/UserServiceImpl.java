@@ -42,11 +42,18 @@ public class UserServiceImpl implements UserService {
 
         BusinessException businessException = new BusinessException();
 
+        user.setCredit(0);
+        user.setAdmin(false);
+
         if (arePasswordsMatching(user.getPassword(), confirmPassword, businessException)) {
             try {
                 user.setPassword(this.passwordEncoder.encode(user.getPassword()));
                 userDao.insert(user);
-                request.login(user.getUsername(), confirmPassword);
+
+                if (request.getUserPrincipal() == null) {
+                    request.login(user.getUsername(), confirmPassword);
+                }
+
             } catch (BusinessException dalBusinessException) {
                 throw dalBusinessException;
             } catch (ServletException e) {

@@ -480,7 +480,7 @@ a {
 
 .text-stroke {
     color: transparent;
-    -webkit-text-stroke: 0.20rem var(--secondary);
+    -webkit-text-stroke: clamp(0.15rem, 0.111rem + 0.104vw, 0.2rem) var(--secondary);
 }
 
 .alert {
