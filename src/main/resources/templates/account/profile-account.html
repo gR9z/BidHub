@@ -34,13 +34,13 @@
     <div class="street">Street</div>
     <div id="street" th:text="${user.street}"></div>
 
-    <div class="zipcode">Zip Code :<</div>
+    <div class="zipcode">Zip Code :</div>
     <div id="zipcode" th:text="${user.zipCode}"></div>
 
     <div class="city">City :</div>
     <div id="city" th:text="${user.city}"></div>
 
-    <a href="profile/edit-profile">Edit</a>
+    <a th:href="@{/profile/edit-profile}">Edit</a>
 
 
 </main>

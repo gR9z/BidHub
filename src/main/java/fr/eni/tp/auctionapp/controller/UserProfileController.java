@@ -26,7 +26,7 @@ public class UserProfileController {
             Principal principal,
             Model model
     ) {
-        User user = userService.getUsername(principal.getName());
+        User user = (User) userService.loadUserByUsername(principal.getName());
         model.addAttribute("user", user);
 
         return "account/profile-account";
@@ -37,10 +37,10 @@ public class UserProfileController {
             Principal principal,
             Model model
     ) {
-        User user = userService.getUsername(principal.getName());
+        User user = (User) userService.loadUserByUsername(principal.getName());
         model.addAttribute("user", user);
 
-        return "/account/edit-account";
+        return "account/edit-account";
     }
 
     @PostMapping("/profile/edit-profile")
@@ -54,7 +54,7 @@ public class UserProfileController {
 
     @DeleteMapping("/profile/edit-profile")
     public ResponseEntity<String> deleteUser(@RequestParam("username") String username, HttpServletRequest request) {
-        User currentUser = userService.getUsername(username);
+        User currentUser = (User) userService.loadUserByUsername(username);
 
         if (currentUser != null) {
             try {
@@ -88,7 +88,7 @@ public class UserProfileController {
             System.out.println(model);
         }
 
-        User user = userService.getUsername(principal.getName());
+        User user = (User) userService.loadUserByUsername(principal.getName());
         model.addAttribute("user", user);
 
         return "/account/profile-account";

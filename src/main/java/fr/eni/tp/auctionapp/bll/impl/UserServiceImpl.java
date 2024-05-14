@@ -137,10 +137,10 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    @Override
-    public User getUsername(String name) {
-        return null;
-    }
+//    @Override
+//    public User getUsername(String name) {
+//        return null;
+//    }
 
     @Override
     public void editUserProfile(User user) {

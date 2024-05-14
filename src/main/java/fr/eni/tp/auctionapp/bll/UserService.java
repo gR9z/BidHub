@@ -23,7 +23,9 @@ public interface UserService extends UserDetailsService {
     void debitUserCredit(Authentication authentication, Auction auction) throws BusinessException;
     void refundUser(int userId, int refundAmount) throws BusinessException;
 
-    User getUsername(String name);
+    //User getUsername(String name);
+
+    UserDetails loadUserByUsername(String username);
 
     void editUserProfile(User user);
 
