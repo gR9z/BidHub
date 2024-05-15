@@ -19,7 +19,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @PostConstruct
-    private void preloadCache() {
+    public void preloadCache() {
         List<Category> categories = categoryDao.findAll();
 
         for (Category category : categories) {

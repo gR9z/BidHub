@@ -28,6 +28,21 @@ public class UserDaoImpl implements UserDao {
     private static String SELECT_ALL = "SELECT * FROM users;";
     private static final String SELECT_ALL_PAGINATED = "SELECT * FROM USERS ORDER BY userId OFFSET :offset ROWS FETCH NEXT :limit ROWS ONLY;";
     private static final String COUNT = "SELECT COUNT(*) AS count FROM users;";
+    private String EDIT_VALUES_BY_USERNAME = "UPDATE USERS\n" +
+            "SET username = :username,\n" +
+            "    lastName = :lastName,\n" +
+            "    firstName = :firstName,\n" +
+            "    email = :email,\n" +
+            "    phone = :phone,\n" +
+            "    street = :street,\n" +
+            "    zipCode = :zipCode,\n" +
+            "    city = :city,\n" +
+            "    password = :password,\n" +
+            "    credit = :credit,\n" +
+            "    isAdmin = :isAdmin\n" +
+            "WHERE username = :username;";
+    private String DELETE_BY_USERNAME = "DELETE FROM USERS WHERE username = ?";
+
 
     private JdbcTemplate jdbcTemplate;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -51,6 +66,24 @@ public class UserDaoImpl implements UserDao {
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }
+    }
+
+    @Override
+    public void editUserProfile(User user) {
+        MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+        namedParameters.addValue("username", user.getUsername());
+        namedParameters.addValue("lastName", user.getLastName());
+        namedParameters.addValue("firstName", user.getFirstName());
+        namedParameters.addValue("email", user.getEmail());
+        namedParameters.addValue("phone", user.getPhone());
+        namedParameters.addValue("street", user.getStreet());
+        namedParameters.addValue("zipCode", user.getZipCode());
+        namedParameters.addValue("city", user.getCity());
+        namedParameters.addValue("password", user.getPassword());
+        namedParameters.addValue("credit", user.getCredit());
+        namedParameters.addValue("isAdmin", user.isAdmin());
+
+        namedParameterJdbcTemplate.update(EDIT_VALUES_BY_USERNAME, namedParameters);
     }
 
     @Override
@@ -96,7 +129,7 @@ public class UserDaoImpl implements UserDao {
 
         Number key = (Number) keyHolder.getKey();
 
-        if(key != null) {
+        if (key != null) {
             user.setId(key.intValue());
         }
     }
@@ -154,14 +187,8 @@ public class UserDaoImpl implements UserDao {
                 .orElse(0);
     }
 
-    @Override
-    public void insertUser(User user) {
-
-    }
-
-    @Override
-    public void editUserProfile(User user) {
-
+    public void deleteUser(String username) {
+        jdbcTemplate.update(DELETE_BY_USERNAME, username);
     }
 
     public static class UserRowMapper implements RowMapper<User> {

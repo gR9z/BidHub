@@ -16,9 +16,13 @@
             <div class="product__content">
                 <div class="product__image">
                     <img src="/images/placeholder_800x800.svg" alt="Placeholder product image">
+                    <span th:if="${item.saleStatus == 'pending'}" class="item__status item__status--pending" th:text="${item.saleStatus}"></span>
+                    <span th:if="${item.saleStatus == 'active'}" class="item__status item__status--active" th:text="${item.saleStatus}"></span>
+                    <span th:if="${item.saleStatus == 'concluded'}" class="item__status item__status--concluded" th:text="${item.saleStatus}"></span>
                 </div>
 
                 <div class="product__info">
+
                     <h1 class="product__title" th:text="${item.itemName}"></h1>
 
                     <p class="product__description" th:text="${item.description}"></p>
@@ -74,7 +78,7 @@
                         <p class="alert alert-error" th:each="error : ${#fields.errors('global')}"
                            th:text="${error}"></p>
 
-                        <div th:if="${#authorization.expression('isAuthenticated()')}" class="auction__form-group">
+                        <div th:if="${#authorization.expression('isAuthenticated()') && item.saleStatus == 'active'}" class="auction__form-group">
                             <div class="auction__form-field">
                                 <input type="number" class="auction__form-input"
                                        th:min="${auction.bidAmount}"

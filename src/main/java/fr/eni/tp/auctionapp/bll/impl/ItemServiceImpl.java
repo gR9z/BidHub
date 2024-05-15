@@ -17,7 +17,7 @@ import java.util.Optional;
 public class ItemServiceImpl implements ItemService {
 
     private final ItemDao itemDao;
-    private WithdrawalDao withdrawalDao;
+    private final WithdrawalDao withdrawalDao;
 
     public ItemServiceImpl(ItemDao itemDao, WithdrawalDao withdrawalDao) {
         this.itemDao = itemDao;
@@ -62,7 +62,9 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public Optional<Item> findItemById(int id) {
-        return itemDao.findById(id);
+        Optional<Item> item = itemDao.findById(id);
+        item.ifPresent(it -> it.setSaleStatus(calculateItemStatus(it)));
+        return item;
     }
 
     @Override
@@ -87,12 +89,16 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<Item> getAllPaginated(int page, int size) {
-        return itemDao.findAllPaginated(page, size);
+        List<Item> items = itemDao.findAllPaginated(page, size);
+        items.forEach(item -> item.setSaleStatus(calculateItemStatus(item)));
+        return items;
     }
 
     @Override
     public List<Item> getByUserIdPaginated(int userId, int page, int size) {
-        return itemDao.findAllByUserIdPaginated(userId, page, size);
+        List<Item> items = itemDao.findAllByUserIdPaginated(userId, page, size);
+        items.forEach(item -> item.setSaleStatus(calculateItemStatus(item)));
+        return items;
     }
 
     @Override
@@ -136,6 +142,17 @@ public class ItemServiceImpl implements ItemService {
 
         updateItem(item);
         return item;
+    }
+
+    private String calculateItemStatus(Item item) {
+        LocalDateTime now = LocalDateTime.now();
+        if (now.isBefore(item.getAuctionStartingDate())) {
+            return "pending";
+        } else if (now.isAfter(item.getAuctionEndingDate())) {
+            return "concluded";
+        } else {
+            return "active";
+        }
     }
 
     private boolean isItemNameValid(String itemName, BusinessException businessException) {
