@@ -1,7 +1,5 @@
 @media screen and (min-width: 480px) {
-    /* ==================================== */
     /* =============== FORM =============== */
-    /* ==================================== */
     .form-group, .form-row {
         gap: var(--space-7);
     }
@@ -14,9 +12,7 @@
         gap: var(--space-7);
     }
 
-    /* ==================================== */
     /* ============ ERROR PAGE ============ */
-    /* ==================================== */
     .error-page__actions {
         flex-direction: row;
         justify-content: center;
@@ -24,12 +20,15 @@
 }
 
 @media screen and (min-width: 568px) {
+    /* ============ ADMIN PAGE ============ */
+    .admin-dashboard__nav-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
 }
 
 @media screen and (min-width: 768px) {
-    /* ============================== */
     /* ======== HEADER & NAV ======== */
-    /* ============================== */
     .nav {
         position: initial;
         margin-left: auto;
@@ -55,17 +54,13 @@
         display: none;
     }
 
-    /* ============================== */
     /* =========== FOOTER =========== */
-    /* ============================== */
     .footer__container {
         flex-direction: row;
         justify-content: space-between;
     }
 
-    /* ==================================== */
     /* =============== FORM =============== */
-    /* ==================================== */
     .form-group, .form-row {
         gap: var(--space-6);
     }
@@ -82,16 +77,12 @@
 
 
     @media screen and (min-width: 768px) {
-        /* ================================== */
         /* ======= SINGLE PRODUCT PAGE ====== */
-        /* ================================== */
         .bid-history__total-count {
             font-size: var(--h4);
         }
 
-        /* =================================== */
         /* ========= RESPONSIVE TABLE ======== */
-        /* =================================== */
         table {
             border: 0;
         }
@@ -140,9 +131,7 @@
         }
     }
 
-    /* ==================================== */
     /* ============ FILTER FORM =========== */
-    /* ==================================== */
     .filter {
         margin-bottom: var(--space-6);
     }
@@ -156,9 +145,7 @@
         width: initial;
     }
 
-    /* ==================================== */
     /* ============= SHOP LIST ============ */
-    /* ==================================== */
     .shop__list {
         grid-template-columns: repeat(2, 1fr);
         gap: var(--space-6);
@@ -169,17 +156,17 @@
         text-align: center;
     }
 
-    /* ============================================== */
     /* ============= PRODUCT SINGLE PAGE ============ */
-    /* ============================================== */
     .product__content {
         grid-template-columns: 3fr 2fr;
         align-items: center;
     }
 
-    /* ====================================== */
     /* ============= ADMIN PAGES ============ */
-    /* ====================================== */
+    .admin-dashboard__nav-list {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
     .categories__title {
         margin-inline: auto;
         text-align: center;
@@ -187,17 +174,18 @@
 }
 
 @media screen and (min-width: 1024px) {
-    /* ============================= */
     /* ============ FORM =========== */
-    /* ============================= */
     .form-group, .form-row {
         gap: calc(var(--space-5) + var(--space-2));
     }
 
-    /* ==================================== */
     /* ============= SHOP LIST ============ */
-    /* ==================================== */
     .shop__list {
         grid-template-columns: repeat(3, 1fr);
+    }
+
+    /* ============= ADMIN PAGES ============ */
+    .admin-dashboard__nav-list {
+        grid-template-columns: repeat(4, 1fr);
     }
 }

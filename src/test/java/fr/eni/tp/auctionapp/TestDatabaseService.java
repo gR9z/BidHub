@@ -13,7 +13,10 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -91,6 +94,12 @@ public class TestDatabaseService {
 
     public Item createRandomItem(User seller, Category category) {
         Item item = new Item();
+        Random random = new Random();
+
+        List<String> images = new ArrayList<>();
+        for (int i = 1; i <= 20; i++) {
+            images.add("image-produit-" + i + ".jpg");
+        }
 
         item.setItemName(faker.commerce().productName());
         item.setDescription(faker.lorem().sentence());
@@ -105,7 +114,8 @@ public class TestDatabaseService {
         int startingPrice = faker.number().numberBetween(100, 500);
         item.setStartingPrice(startingPrice);
         item.setSellingPrice(startingPrice + faker.number().numberBetween(1, 2));
-        item.setImageUrl(faker.internet().url());
+
+        item.setImageUrl(images.get(random.nextInt(images.size())));
 
         item.setSeller(seller);
         item.setCategory(category);
@@ -142,8 +152,6 @@ public class TestDatabaseService {
 
         return auction;
     }
-
-
 
     public Auction insertAuctionInDatabase(Auction auction) {
         auctionService.createAuction(auction);

@@ -2,7 +2,13 @@
 
     <div class="shop__item" th:each="item : ${items}">
         <a th:href="@{|/products/${categoryUrl[item.category.categoryId]}/${itemUrls[item.itemId]}|}" th:title="${item.itemName}">
-            <img src="/images/placeholder_800x800.svg" alt="Placeholder image">
+            <div class="item__image">
+                <img th:src="'/images/products/' + ${item.imageUrl}" th:alt="${item.itemName}">
+                <span th:if="${item.saleStatus == 'pending'}" class="badge__item badge__item--pending" th:text="${item.saleStatus}"></span>
+                <span th:if="${item.saleStatus == 'active'}" class="badge__item badge__item--active" th:text="${item.saleStatus}"></span>
+                <span th:if="${item.saleStatus == 'concluded'}" class="badge__item badge__item--concluded" th:text="${item.saleStatus}"></span>
+            </div>
+
             <div class="item__info">
                 <h1 class="info__name" th:text="${item.itemName}"></h1>
                 <p class="info__price" th:text="'€' + ${item.sellingPrice}"></p>

@@ -40,6 +40,7 @@ public class ItemController {
 
             Item item = new Item();
 
+            // TODO à faire dans TL
             LocalDateTime now = LocalDateTime.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
             String formattedDateTime = now.format(formatter);
@@ -83,6 +84,7 @@ public class ItemController {
             BindingResult bindingResult,
             Model model
     ) {
+
         if (bindingResult.hasErrors()) {
             List<Category> categories = categoryService.getAllCategories();
             model.addAttribute("categories", categories);
