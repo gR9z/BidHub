@@ -96,6 +96,7 @@ option {
 
 .item__image {
     border-radius: var(--border-radius-2);
+    display: flex;
     position: relative;
     overflow: hidden;
 }
@@ -110,6 +111,7 @@ option {
 }
 
 .info__name {
+    color: var(--text);
     font-size: var(--h4);
 }
 

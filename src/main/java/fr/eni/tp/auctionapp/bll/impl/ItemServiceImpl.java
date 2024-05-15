@@ -99,7 +99,7 @@ public class ItemServiceImpl implements ItemService {
 
             updateItem(item);
             item.getWithdrawal().setItemId(itemId);
-            withdrawalService.updateWithdrawal(item.getWithdrawal());
+            withdrawalDao.update(item.getWithdrawal());
 
         } catch (BusinessException businessException) {
             throw businessException;
