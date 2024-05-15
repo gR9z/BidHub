@@ -40,13 +40,6 @@ public class ItemController {
 
             Item item = new Item();
 
-            LocalDateTime now = LocalDateTime.now();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
-            String formattedDateTime = now.format(formatter);
-
-            item.setAuctionStartingDate(LocalDateTime.parse(formattedDateTime, formatter));
-            item.setAuctionEndingDate(LocalDateTime.now().plusDays(7));
-
             Category category = new Category();
             Withdrawal withdrawal = new Withdrawal();
 
@@ -59,17 +52,14 @@ public class ItemController {
 
             item.setWithdrawal(withdrawal);
 
-            List<Category> categories = categoryService.getAllCategories();
+            System.out.println(item.getAuctionStartingDate());
 
-            String formattedStartDate = formatDateTime(item.getAuctionStartingDate());
-            String formattedEndDate = formatDateTime(item.getAuctionEndingDate());
+            List<Category> categories = categoryService.getAllCategories();
 
             model.addAttribute("item", item);
             model.addAttribute("categories", categories);
             model.addAttribute("withdrawal", withdrawal);
             model.addAttribute("authenticatedUser", authenticatedUser);
-            model.addAttribute("formattedStartDate", formattedStartDate);
-            model.addAttribute("formattedEndDate", formattedEndDate);
 
             return "item/create-item.html";
         }

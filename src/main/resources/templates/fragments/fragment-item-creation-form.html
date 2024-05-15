@@ -1,7 +1,5 @@
 <div xmlns:th="http://www.thymeleaf.org" th:fragment="item-form">
 
-    <p class="error" th:each="error: ${#fields.errors('global')}" th:text="${error}"></p>
-
     <div class="form-group">
         <div class="form-field">
             <input type="text" id="itemName" name="itemName" required class="form-input"
@@ -51,31 +49,65 @@
 
         <div class="form-row">
             <div class="form-field">
-                <input type="datetime-local"
-                       id="auctionStartingDate"
-                       name="auctionStartingDate"
-                       required
-                       class="form-input"
-                       placeholder=""
-                       th:attr="min=${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd''T''HH:mm')}"
-                       th:value="${formattedStartDate}"
-                />
-                <label for="auctionStartingDate" class="form-label">Start of auction</label>
-                <!-- <div th:replace="~{fragments/fragment-error :: frag-error('auctionStartingDate')}"></div> -->
+                <div th:if="${item.auctionStartingDate != null} and ${isBefore}">
+                    <div >
+                    <input type="datetime-local"
+                           name="auctionStartingDate"
+                           required
+                           class="form-input"
+                           placeholder=""
+                           th:attr="min=${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd''T''HH:mm')}"
+                           th:value="${formattedStartDate}"
+                           readonly
+                    />
+
+                    <label for="auctionStartingDate" class="form-label">Start of auction</label>
+                    </div>
+                </div>
+
+                <div th:unless="${item.auctionStartingDate != null} and ${isBefore}">
+                    <input type="datetime-local"
+                           id="auctionStartingDate"
+                           name="auctionStartingDate"
+                           required
+                           class="form-input"
+                           placeholder=""
+                           th:attr="min=${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd''T''HH:mm')}"
+                           th:value="${formattedStartDate}"
+                    />
+
+                    <label for="auctionStartingDate" class="form-label">Start of auction</label>
+                </div>
             </div>
 
             <div class="form-field">
-                <input type="datetime-local"
-                       id="auctionEndingDate"
-                       name="auctionEndingDate"
-                       required
-                       class="form-input"
-                       placeholder=""
-                       th:attr="min=${#temporals.format(#temporals.createNow().plusDays(7), 'yyyy-MM-dd''T''HH:mm')}"
-                       th:value="${formattedEndDate}"
-                />
-                <label for="auctionEndingDate" class="form-label">End of auction</label>
-                <!-- <div th:replace="~{fragments/fragment-error :: frag-error('auctionEndingDate')}"></div> -->
+                <div th:if="${item.auctionEndingDate != null} and ${isBefore}">
+                    <input type="datetime-local"
+                           name="auctionEndingDate"
+                           required
+                           class="form-input"
+                           placeholder=""
+                           th:attr="min=${#temporals.format(#temporals.createNow().plusDays(7), 'yyyy-MM-dd''T''HH:mm')}"
+                           th:value="${formattedEndDate}"
+                           readonly
+                    />
+
+                    <label for="auctionEndingDate" class="form-label">End of auction</label>
+                </div>
+
+                <div th:unless="${item.auctionEndingDate != null} and ${isBefore}">
+                    <input type="datetime-local"
+                           id="auctionEndingDate"
+                           name="auctionEndingDate"
+                           required
+                           class="form-input"
+                           placeholder=""
+                           th:attr="min=${#temporals.format(#temporals.createNow().plusDays(7), 'yyyy-MM-dd''T''HH:mm')}"
+                           th:value="${formattedEndDate}"
+                    />
+
+                    <label for="auctionEndingDate" class="form-label">End of auction</label>
+                </div>
             </div>
         </div>
 
@@ -107,6 +139,10 @@
     <div class="form-actions">
         <button class="button" type="submit">Save</button>
         <a href="/" class="button button--secondary">Cancel</a>
+    </div>
+
+    <div th:if="${errorMessage}">
+        <div th:each="error : ${errorMessage}" class="alert alert-error" th:text="${error}"></div>
     </div>
 
     <p class="auth-form__message auth-form__message--login"></p>
