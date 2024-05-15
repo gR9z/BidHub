@@ -53,7 +53,7 @@ public class ItemServiceImpl implements ItemService {
         }
 
         try {
-            String imageFileName = fileStorageService.store(item.getImageFile(), item.getItemId());
+            String imageFileName = fileStorageService.store(item.getImageFile());
             item.setImageUrl(imageFileName);
 
             item.setSellingPrice(item.getStartingPrice());
