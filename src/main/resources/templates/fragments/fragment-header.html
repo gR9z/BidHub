@@ -11,7 +11,7 @@
                         <a th:href="@{/}">Home</a>
                     </li>
 
-                    <li th:if="${!#authorization.expression('isAuthenticated()')}">
+                    <li th:unless="${isLoginPage}">
                         <a
                                 th:href="@{/login}"
                                 class="nav__link"
@@ -19,7 +19,7 @@
                         >
                     </li>
 
-                    <li th:if="${!#authorization.expression('isAuthenticated()')}">
+                    <li th:unless="${isLoginPage}">
                         <a
                                 th:href="@{/create-account}"
                                 class="nav__link"
