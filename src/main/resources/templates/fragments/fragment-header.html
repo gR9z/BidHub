@@ -27,6 +27,23 @@
                         >
                     </li>
 
+                    <li th:if="${#authorization.expression('isAuthenticated()')}">
+                        <a
+                                th:href="@{/profile}"
+                                class="nav__link"
+                        >My Profile</a
+                        >
+                    </li>
+
+                    <li th:if="${#authorization.expression('isAuthenticated()')}">
+<!--                    TODO: Màj du lien @Cléa-->
+                        <a
+                                th:href="@{/my-items}"
+                                class="nav__link"
+                        >My items</a
+                        >
+                    </li>
+
                     <li th:if="${#authorization.expression('isAuthenticated()') and #authentication.principal.isAdmin}">
                         <a
                                 th:href="@{/admin}"
