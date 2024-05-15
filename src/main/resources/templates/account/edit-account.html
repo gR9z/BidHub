@@ -16,31 +16,35 @@
 
     <h2>Edit my Profile</h2>
 
-    <form method="post" th:action="@{/profile}">
+    <form method="post" th:action="@{/profile}" id="form-edit-profile">
 
         <label for="username-input">Pseudo :</label>
-        <input type="text" name="username" id="username-input" th:value="${user.username}">
+        <input type="text" name="username" id="username-input" th:field="*{user.username}">
 
-        <label for="name-input">Name :</label>
-        <input type="text" name="name" id="name-input" th:value="${user.lastName}">
+        <label for="lastname-input">Lastname :</label>
+        <input type="text" name="lastname" id="lastname-input" th:field="*{user.lastName}">
 
         <label for="firstname-input">Firstname :</label>
-        <input type="text" name="firstname" id="firstname-input" th:value="${user.firstName}">
+        <input type="text" name="firstname" id="firstname-input" th:field="*{user.firstName}">
 
         <label for="email-input">Email :</label>
-        <input type="text" name="email" id="email-input" th:value="${user.email}">
+        <input type="text" name="email" id="email-input" th:field="*{user.email}">
 
         <label for="phone-input">Phone :</label>
-        <input type="number" name="phone" id="phone-input" th:value="${user.phone}">
+        <input type="number" name="phone" id="phone-input" th:field="*{user.phone}">
 
         <label for="street-input">Street</label>
-        <input type="text" name="street" id="street-input" th:value="${user.street}">
+        <input type="text" name="street" id="street-input" th:field="*{user.street}">
 
         <label for="zipcode-input">Zip Code :</label>
-        <input type="number" name="zipcode" id="zipcode-input" th:value="${user.zipCode}">
+        <input type="number" name="zipcode" id="zipcode-input" th:field="*{user.zipCode}">
 
         <label for="city-input">City :</label>
-        <input type="text" name="city" id="city-input" th:value="${user.city}">
+        <input type="text" name="city" id="city-input" th:field="*{user.city}">
+
+        <input type="hidden" th:field="*{user.password}">
+        <input type="hidden" th:field="*{user.credit}">
+
 
 
         <div class="submit-btns">

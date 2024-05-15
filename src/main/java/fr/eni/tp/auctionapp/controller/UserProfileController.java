@@ -43,13 +43,13 @@ public class UserProfileController {
         return "account/edit-account";
     }
 
-    @PostMapping("/profile/edit-profile")
+    @PostMapping("/profile")
     public String saveEditProfile(
             @ModelAttribute User user,
             Principal principal
     ) {
-        userService.editUserProfile(user);
-        return "redirect:/profile";
+        userService.updateUserByUsername(user);
+        return "redirect:profile";
     }
 
     @DeleteMapping("/profile/edit-profile")
