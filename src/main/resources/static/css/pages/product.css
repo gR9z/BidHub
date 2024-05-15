@@ -12,6 +12,8 @@
 
 .product__image img {
     border-radius: var(--border-radius-2);
+    aspect-ratio: 1/1;
+    object-fit: cover;
 }
 
 .product__info {

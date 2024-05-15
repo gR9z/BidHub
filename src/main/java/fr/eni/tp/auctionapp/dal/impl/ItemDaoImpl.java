@@ -24,7 +24,7 @@ import java.util.Optional;
 @Repository
 public class ItemDaoImpl implements ItemDao {
 
-    private static final String ORDER_BY_AUCTION_ENDING_DATE = " ORDER BY auctionEndingDate ASC ";
+    private static final String ORDER_BY_RAND = " ORDER BY NEWID() ";
     private static final String OFFSET_LIMIT = "OFFSET :offset ROWS FETCH NEXT :limit ROWS ONLY";
 
     private static final String INSERT = "INSERT INTO ITEMS (itemName, description, auctionStartingDate, auctionEndingDate, startingPrice, sellingPrice, imageUrl, userId, categoryId) VALUES (:itemName, :description, :auctionStartingDate, :auctionEndingDate, :startingPrice, :sellingPrice, :imageUrl, :userId, :categoryId);";
@@ -36,10 +36,10 @@ public class ItemDaoImpl implements ItemDao {
 
     private static final String SELECT_ALL_PAGINATED = "SELECT itemId, itemName, description, auctionStartingDate, auctionEndingDate, startingPrice, sellingPrice, imageUrl, userId, categoryId FROM ITEMS " +
             "WHERE auctionEndingDate >= DATEADD(day, -2, GETDATE()) " +
-            ORDER_BY_AUCTION_ENDING_DATE + OFFSET_LIMIT;
+            ORDER_BY_RAND + OFFSET_LIMIT;
 
-    private static final String SELECT_ALL_ITEMS_FROM_USERID_PAGINATED = "SELECT itemId, itemName, description, auctionStartingDate, auctionEndingDate, startingPrice, sellingPrice, imageUrl, userId, categoryId FROM ITEMS WHERE userId = :userId " + ORDER_BY_AUCTION_ENDING_DATE + OFFSET_LIMIT;
-    private static final String SELECT_BY_CATEGORY_PAGINATED = "SELECT itemId, itemName, description, auctionStartingDate, auctionEndingDate, startingPrice, sellingPrice, imageUrl, userId, categoryId FROM ITEMS WHERE categoryId = :categoryId " + ORDER_BY_AUCTION_ENDING_DATE + OFFSET_LIMIT;
+    private static final String SELECT_ALL_ITEMS_FROM_USERID_PAGINATED = "SELECT itemId, itemName, description, auctionStartingDate, auctionEndingDate, startingPrice, sellingPrice, imageUrl, userId, categoryId FROM ITEMS WHERE userId = :userId " + ORDER_BY_RAND + OFFSET_LIMIT;
+    private static final String SELECT_BY_CATEGORY_PAGINATED = "SELECT itemId, itemName, description, auctionStartingDate, auctionEndingDate, startingPrice, sellingPrice, imageUrl, userId, categoryId FROM ITEMS WHERE categoryId = :categoryId " + ORDER_BY_RAND + OFFSET_LIMIT;
 
     private static final String COUNT_ITEM_BY_USER_ID = "SELECT COUNT(*) AS count FROM Items WHERE userId = :userId;";
     private static final String COUNT_BY_CATEGORY_ID = "SELECT COUNT(*) AS count FROM Items WHERE categoryId = :categoryId;";
@@ -143,8 +143,6 @@ public class ItemDaoImpl implements ItemDao {
     public List<Item> searchItems(String query, List<Integer> categories, int page, int size) {
         StringBuilder sql = new StringBuilder(SELECT_ALL);
 
-        boolean hasCondition = false;
-
         sql.append(" WHERE auctionEndingDate >= DATEADD(day, -2, GETDATE()) ");
 
         if (query != null && !query.isEmpty()) {
@@ -157,7 +155,7 @@ public class ItemDaoImpl implements ItemDao {
             sql.append("categoryId IN (:categories) ");
         }
 
-        sql.append(ORDER_BY_AUCTION_ENDING_DATE);
+        sql.append(ORDER_BY_RAND);
         if (page < 1) page = 1;
         int offset = (page - 1) * size;
         sql.append(" OFFSET :offset ROWS FETCH NEXT :limit ROWS ONLY");

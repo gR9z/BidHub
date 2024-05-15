@@ -15,7 +15,7 @@
         <div class="container product">
             <div class="product__content">
                 <div class="product__image">
-                    <img th:src="'D:/auctionapp-image-products/' + ${item.imageUrl}" alt="Placeholder product image">
+                    <img th:src="'/images/products/' + ${item.imageUrl}" th:alt="${item.itemName}">
                     <span th:if="${item.saleStatus == 'pending'}" class="badge__item badge__item--pending" th:text="${item.saleStatus}"></span>
                     <span th:if="${item.saleStatus == 'active'}" class="badge__item badge__item--active" th:text="${item.saleStatus}"></span>
                     <span th:if="${item.saleStatus == 'concluded'}" class="badge__item badge__item--concluded" th:text="${item.saleStatus}"></span>
