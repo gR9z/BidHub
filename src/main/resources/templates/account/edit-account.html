@@ -95,11 +95,13 @@
                                 <h3>Are you sure ?</h3>
                                 <img src="https://c.tenor.com/zAjBu56Jzk0AAAAd/tenor.gif" alt="jiji">
                                 <div id="btns">
-                    <!--                TODO: gérer DELETE-->
                                     <button id="confirm-btn" class="button" type="button">Yes</button>
                                     <button id="cancel-btn-delete" class="button" type="button">Actually, no</button>
                                 </div>
                             </div>
+
+
+
 
                         </div>
 
@@ -117,7 +119,9 @@
         document.addEventListener('DOMContentLoaded', function () {
             const deleteBtn = document.getElementById('delete-btn');
             const btnsContainer = document.getElementById('btns-container');
+            const confirmBtn = document.getElementById('confirm-btn');
             const cancelBtnDelete = document.getElementById('cancel-btn-delete');
+            const form = document.getElementById('form-edit-profile');
 
             deleteBtn.addEventListener('click', function (event) {
                 event.preventDefault();
@@ -127,6 +131,25 @@
                 cancelBtnDelete.addEventListener('click', function () {
                     btnsContainer.classList.add('visually-hidden');
                 });
+            });
+
+            confirmBtn.addEventListener('click', function () {
+                const username = document.getElementById('username-input').value;
+
+                fetch(`/profile?username=${username}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': form.querySelector('input[name="_csrf"]').value
+                    }
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            window.location.href = '/login';
+                        } else {
+                            alert('Failed to delete account');
+                        }
+                    });
             });
         });
     </script>

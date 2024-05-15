@@ -11,20 +11,20 @@
                         <a th:href="@{/}">Home</a>
                     </li>
 
-                    <li th:unless="${isLoginPage}">
-                        <a
-                                th:href="@{/login}"
-                                class="nav__link"
-                        >Login</a
-                        >
+                    <li th:if="${#authorization.expression('!isAuthenticated()')}">
+                            <a
+                                    th:href="@{/login}"
+                                    class="nav__link"
+                            >Login</a
+                            >
                     </li>
 
-                    <li th:unless="${isLoginPage}">
-                        <a
-                                th:href="@{/create-account}"
-                                class="nav__link"
-                        >Register</a
-                        >
+                    <li th:if="${#authorization.expression('!isAuthenticated()')}">
+                            <a
+                                    th:href="@{/create-account}"
+                                    class="nav__link"
+                            >Register</a
+                            >
                     </li>
 
                     <li th:if="${#authorization.expression('isAuthenticated()')}">
@@ -38,7 +38,7 @@
                     <li th:if="${#authorization.expression('isAuthenticated()')}">
 <!--                    TODO: Màj du lien @Cléa-->
                         <a
-                                th:href="@{/my-items}"
+                                th:href="@{/profile/my-items}"
                                 class="nav__link"
                         >My items</a
                         >
