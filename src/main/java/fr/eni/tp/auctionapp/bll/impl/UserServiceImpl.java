@@ -68,12 +68,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUsername(String username) {
-        return userDao.selectUserByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("fail: " + username));
-    }
-
-    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> optUser = userDao.selectUserByUsername(username);
 
@@ -139,6 +133,29 @@ public class UserServiceImpl implements UserService {
             User user = optionalUser.get();
             user.setCredit(user.getCredit() + refundAmount);
             userDao.update(user);
+            updateSessionUserCredit(user);
+        }
+    }
+
+    public void deleteUser(User currentUser) {
+        // TODO Problème de foreign key
+        Optional<User> existingUser = userDao.findById(currentUser.getUserId());
+        if (existingUser.isPresent()) {
+            userDao.deleteById(currentUser.getUserId());
+            updateSessionUserCredit(currentUser);
+        } else {
+            throw new RuntimeException("User not found");
+        }
+    }
+
+    @Override
+    public void saveUser(User testUser) {
+    }
+
+    private void updateSessionUserCredit(User user) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.getPrincipal() instanceof User authenticatedUser) {
+            authenticatedUser.setCredit(user.getCredit());
         }
     }
 
@@ -152,11 +169,5 @@ public class UserServiceImpl implements UserService {
 
     public void editUserProfile(User user) {
         userDao.editUserProfile(user);
-    }
-
-    @Override
-    public void deleteUser(User user) {
-        // TODO Problème de foreign key
-        userDao.deleteById(user.getUserId());
     }
 }

@@ -18,7 +18,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> {
                     auth
-                            .requestMatchers("/profile/**").permitAll()
+                            .requestMatchers("/my-account/**").authenticated()
                             .requestMatchers("/").permitAll()
                             .requestMatchers("/products/**").permitAll()
                             .requestMatchers("/css/**").permitAll()
