@@ -137,6 +137,21 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    public void deleteUser(User currentUser) {
+        // TODO Problème de foreign key
+        Optional<User> existingUser = userDao.findById(currentUser.getUserId());
+        if (existingUser.isPresent()) {
+            userDao.deleteById(currentUser.getUserId());
+            updateSessionUserCredit(currentUser);
+        } else {
+            throw new RuntimeException("User not found");
+        }
+    }
+
+    @Override
+    public void saveUser(User testUser) {
+    }
+
     private void updateSessionUserCredit(User user) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && auth.getPrincipal() instanceof User authenticatedUser) {
@@ -150,5 +165,9 @@ public class UserServiceImpl implements UserService {
             return false;
         }
         return true;
+    }
+
+    public void editUserProfile(User user) {
+        userDao.editUserProfile(user);
     }
 }
