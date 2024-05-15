@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/layout :: layout-main(pageContent=~{:: .main}, title='Add a new item for sale', cssPath=null, jsPath=null)}">
+
+<main class="main">
+    <section class="section-content">
+        <div class="container">
+            <div class="form-container">
+                <div class="form-section">
+                    <h1 class="form-title">Edit item</h1>
+
+                    <form method="POST" th:object="${item}" th:action="@{|/profile/my-items/edit/${itemUrl}|}" class="auth-form">
+                        <div th:replace="fragments/fragment-item-creation-form :: item-form"></div>
+
+                        <div>
+                            <input type="hidden" id="sellerId" name="sellerId" required class="form-input" placeholder=""
+                                   th:value="${sellerId}"/>
+                        </div>
+
+                        <div th:if="${successMessage}">
+                            <div class="alert alert-success" th:text="${successMessage}"></div>
+                        </div>
+
+                        <div th:if="${errorMessage}">
+                            <div th:each="error : ${errorMessage}" class="alert alert-error" th:text="${error}"></div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+
+                const inputFile = document.querySelector('#image');
+                const imageContainer = document.querySelector('#image-container');
+
+                inputFile.addEventListener('change', function (event) {
+                    while (imageContainer.firstChild) {
+                        imageContainer.removeChild(imageContainer.firstChild);
+                    }
+
+                    if (event.target.files.length > 0) {
+                        const file = event.target.files[0];
+                        const frame = document.createElement('img');
+                        frame.classList.add('image-preview');
+                        frame.src = URL.createObjectURL(file);
+                        frame.alt = "Image preview";
+
+                        frame.onload = function () {
+                            URL.revokeObjectURL(frame.src);
+                        };
+
+                        imageContainer.appendChild(frame);
+
+                        const fileInfo = document.createElement('div');
+                        fileInfo.classList.add('file-info');
+                        const fileName = document.createElement('p');
+                        fileName.textContent = `File name: ${file.name} `;
+                        const fileSize = document.createElement('p');
+                        fileSize.textContent = `Size: ${(file.size / 1024).toFixed(2)} KB`;
+
+                        fileInfo.appendChild(fileName);
+                        fileInfo.appendChild(fileSize);
+                        imageContainer.appendChild(fileInfo);
+                    }
+                });
+            });
+        </script>
+
+    </section>
+</main>
+
+</html>

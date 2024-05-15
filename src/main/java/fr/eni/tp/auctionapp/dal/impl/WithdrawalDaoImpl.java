@@ -67,7 +67,7 @@ public class WithdrawalDaoImpl implements WithdrawalDao {
     @Override
     public void update(Withdrawal withdrawal) {
         MapSqlParameterSource namedParameters = new MapSqlParameterSource();
-        namedParameters.addValue("itemId", withdrawal.getItem().getItemId());
+        namedParameters.addValue("itemId", withdrawal.getItemId());
         namedParameters.addValue("street", withdrawal.getStreet());
         namedParameters.addValue("zipCode", withdrawal.getZipCode());
         namedParameters.addValue("city", withdrawal.getCity());

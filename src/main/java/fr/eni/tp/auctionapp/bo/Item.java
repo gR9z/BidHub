@@ -32,7 +32,7 @@ public class Item {
 
     private int sellingPrice;
 
-    @Pattern(regexp = ".*\\.(jpeg|jpg|png|gif)$", message = "Invalid image file format")
+    @Pattern(regexp = ".*\\.(jpeg|jpg|png|gif|PNG)$", message = "Invalid image file format")
     private String imageUrl;
 
     private MultipartFile imageFile;

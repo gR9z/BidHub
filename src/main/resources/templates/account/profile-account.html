@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/layout :: layout-main(
+            pageContent=~{:: .main},
+            title='My Profile',
+            cssPath=null,
+            jsPath=null
+        )}"
+>
+
+
+<main class="main">
+
+    <h2>My Profile</h2>
+
+    <p>Welcome, </p><p th:text="${user.username}"></p>
+
+    <div class="username">Pseudo :</div>
+    <div id="username" th:text="${user.username}"></div>
+
+    <div class="name">Name :</div>
+    <div id="name" th:text="${user.lastName}"></div>
+
+    <div class="firstname">Firstname :</div>
+    <div id="firstname" th:text="${user.firstName}"></div>
+
+    <div class="email">Email :</div>
+    <div id="email" th:text="${user.email}"></div>
+
+    <div class="phone">Phone :</div>
+    <div id="phone" th:text="${user.phone}"></div>
+
+    <div class="street">Street</div>
+    <div id="street" th:text="${user.street}"></div>
+
+    <div class="zipcode">Zip Code :</div>dd
+    <div id="zipcode" th:text="${user.zipCode}"></div>
+
+    <div class="city">City :</div>
+    <div id="city" th:text="${user.city}"></div>
+
+    <a th:href="@{/account/edit-account}">Edit</a>
+
+
+</main>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/layout :: layout-main(pageContent=~{:: .main}, title='Add a new item for sale', cssPath=null, jsPath=null)}">
+
+<main class="main">
+    <section class="section-content">
+        <div class="container">
+            <div class="form-container">
+                <div class="form-section">
+
+                    <form method="GET" th:object="${item}" class="auth-form">
+                        <h1 class="form-title" th:text="${item.itemName}"></h1>
+
+                        <div class="form-group">
+
+                            <div class="form-field">
+                                <input type="text" id="description" name="description"
+                                          class="form-input textarea-custom" placeholder=""
+                                          th:text="${item.description}" th:readonly="true"></input>
+                                <label for="description" class="form-label">Description</label>
+                            </div>
+
+                            <div class="form-field">
+                                <img th:src="@{item.imageUrl}" alt="Picture of the item" onerror="this.onerror=null; this.th:src='@{/images/no-image.png}';">
+                                <div id="image-container"></div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-field">
+                                    <input type="text" name="category" id="category" th:value="${item.category.label}" class="form-input" th:readonly="true">
+                                    <label for="category" class="form-label">Category</label>
+                                </div>
+
+                                <div class="form-field">
+                                    <input type="text" id="startingPrice" name="startingPrice"
+                                           class="form-input"
+                                           placeholder="" th:value="'€' + ${item.startingPrice}" th:readonly="true"/>
+                                    <label for="startingPrice" class="form-label">Price</label>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-field">
+                                    <input type="text"
+                                           id="auctionStartingDate"
+                                           name="auctionStartingDate"
+                                           class="form-input"
+                                           placeholder=""
+                                           th:value="${formattedAuctionStartingDate}"
+                                           th:readonly="true"
+                                    />
+                                    <label for="auctionStartingDate" class="form-label">Start of auction</label>
+                                </div>
+
+                                <div class="form-field">
+                                    <input type="text"
+                                           id="auctionEndingDate"
+                                           name="auctionEndingDate"
+                                           class="form-input"
+                                           placeholder=""
+                                           th:value="${formattedAuctionEndingDate}"
+                                           th:readonly="true"
+                                    />
+                                    <label for="auctionEndingDate" class="form-label">End of auction</label>
+                                </div>
+                            </div>
+
+
+                            <div class="form-field">
+                                <input type="text" id="street" name="street" required class="form-input" placeholder=""
+                                       th:value="${item.withdrawal.street}" th:readonly="true"/>
+                                <label for="street" class="form-label">Street</label>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-field">
+                                    <input type="text" id="zipCode" name="zipCode" class="form-input"
+                                           placeholder="" th:value="${item.withdrawal.zipCode}" th:readonly="true"/>
+                                    <label for="zipCode" class="form-label">Zip Code</label>
+                                </div>
+
+                                <div class="form-field">
+                                    <input type="text" id="city" name="city" class="form-input" placeholder=""
+                                           th:value="${item.withdrawal.city}" th:readonly="true"/>
+                                    <label for="city" class="form-label">City</label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="form-actions">
+                        <a th:href="@{|/profile/my-items/edit/${itemUrl}|}" class="button button--secondary">Update</a>
+                        <form th:action="@{|/profile/my-items/delete/${itemUrl}|}"
+                              method="POST"
+                              id="delete-form">
+                            <button type="submit" class="action__button-link" id="delete-btn">Delete</button>
+                        </form>
+                        <p class="confirm-text visually-hidden" id="confirm-text">Confirm</p>
+
+                        <div th:if="${successMessage}">
+                            <div class="alert alert-success" th:text="${successMessage}"></div>
+                        </div>
+
+                        <div th:if="${errorMessage}">
+                            <div th:each="error : ${errorMessage}" class="alert alert-error" th:text="${error}"></div>
+                        </div>
+                    </div>
+
+                    <p class="auth-form__message auth-form__message--login"></p>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const deleteButton = document.getElementById('delete-btn');
+            const confirmText = document.getElementById('confirm-text');
+            const deleteForm = document.getElementById('delete-form');
+
+            deleteButton.addEventListener('click', function (event) {
+                event.preventDefault();
+                confirmText.classList.remove('visually-hidden');
+
+                confirmText.addEventListener('click', function () {
+                    deleteForm.submit();
+                });
+            });
+        });
+    </script>
+</main>
+
+</html>
