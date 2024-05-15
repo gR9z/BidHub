@@ -22,5 +22,4 @@ public interface UserService extends UserDetailsService {
     void refundUser(int userId, int refundAmount) throws BusinessException;
     UserDetails loadUserByUsername(String username);
     void deleteUser(User currentUser);
-    void saveUser(User testUser);
 }
