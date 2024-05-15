@@ -1,0 +1,35 @@
+<div id="delete-confirmation" xmlns:th="http://www.thymeleaf.org" th:fragment="frag-delete">
+    <div id="container-delete">
+        <h3>Are you sure ?</h3>
+        <img src="https://c.tenor.com/StIhgDKUHqEAAAAC/tenor.gif" alt="">
+        <div id="btns">
+            <button id="delete-btn" th:data-username="${user.username}" type="button">Yes</button>
+            <button id="cancel-delete" type="button">No</button>
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        var token = $('meta[name="_csrf"]').attr('content');
+        var header = $('meta[name="_csrf_header"]').attr('content');
+        $(document).ready(function() {
+            $("#cancel-delete").click(function() {
+                window.location.href = "/profile/edit-profile";
+            });
+            $("#delete-btn").click(function() {
+                var username = $(this).attr("data-username");
+                $.ajax({
+                    url: '/profile/delete/' + username,
+                    type: 'DELETE',
+                    success: function(result) {
+                        alert("Account deleted successfully.");
+                        window.location.href = "/login";
+                    },
+                    error: function(error) {
+                        alert("Error deleting account: " + error.responseText);
+                    }
+                });
+            });
+        });
+    </script>
+</div>
+

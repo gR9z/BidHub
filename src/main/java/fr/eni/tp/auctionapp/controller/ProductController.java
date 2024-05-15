@@ -43,10 +43,9 @@ public class ProductController {
             Model model
     ) {
         Optional<Item> optionalItem = itemService.findItemById(itemId);
-        
+
         if (optionalItem.isPresent()) {
             Item item = optionalItem.get();
-
             Optional<Category> optionalCategory = categoryService.findCategoryById(item.getCategory().getCategoryId());
             if (optionalCategory.isPresent()) {
                 Category category = optionalCategory.get();
