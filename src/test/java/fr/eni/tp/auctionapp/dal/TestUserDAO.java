@@ -43,9 +43,9 @@ public class TestUserDAO {
                 false
         );
 
-        userDao.insertUser(user);
+        userDao.insert(user);
         user.setCity("quimper");
-        userDao.editUserProfile(user);
+        userDao.updateByUsername(user);
         Optional<User> getUser = userDao.selectUserByUsername("user");
         User newUser = getUser.get();
         assertThat(newUser.getCity()).isEqualTo("quimper");
