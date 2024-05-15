@@ -14,15 +14,14 @@
                         <div class="form-group">
 
                             <div class="form-field">
-                                <textarea id="description" name="description"
+                                <input type="text" id="description" name="description"
                                           class="form-input textarea-custom" placeholder=""
-                                          th:text="${item.description}" th:readonly="true"></textarea>
+                                          th:text="${item.description}" th:readonly="true"></input>
                                 <label for="description" class="form-label">Description</label>
                             </div>
 
                             <div class="form-field">
-<!--                                <img th:src="@{item.imageUrl}" alt="Picture of the item" onerror="this.onerror=null; this.th.src='@{./images/no-image.png}';">-->
-                                    <img src="./images/no-image.png" alt="no picture found">
+                                <img th:src="@{item.imageUrl}" alt="Picture of the item" onerror="this.onerror=null; this.th:src='@{/images/no-image.png}';">
                                 <div id="image-container"></div>
                             </div>
 
@@ -87,19 +86,49 @@
                                 </div>
                             </div>
                         </div>
+                    </form>
 
-                        <div class="form-actions">
-<!--                            <a th:href="@{|/user/my-items/${itemUrl[item.itemId]/edit}|}" class="button button&#45;&#45;secondary">Update</a>-->
-<!--                            <a th:href="@{|/user/my-items/${itemUrls[item.itemId]}/delete|}" class="button button&#45;&#45;secondary">Delete</a>-->
+                    <div class="form-actions">
+                        <a th:href="@{|/profile/my-items/edit/${itemUrl}|}" class="button button--secondary">Update</a>
+                        <form th:action="@{|/profile/my-items/delete/${itemUrl}|}"
+                              method="POST"
+                              id="delete-form">
+                            <button type="submit" class="action__button-link" id="delete-btn">Delete</button>
+                        </form>
+                        <p class="confirm-text visually-hidden" id="confirm-text">Confirm</p>
+
+                        <div th:if="${successMessage}">
+                            <div class="alert alert-success" th:text="${successMessage}"></div>
                         </div>
 
-                        <p class="auth-form__message auth-form__message--login"></p>
-                    </form>
+                        <div th:if="${errorMessage}">
+                            <div th:each="error : ${errorMessage}" class="alert alert-error" th:text="${error}"></div>
+                        </div>
+                    </div>
+
+                    <p class="auth-form__message auth-form__message--login"></p>
 
                 </div>
             </div>
         </div>
     </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const deleteButton = document.getElementById('delete-btn');
+            const confirmText = document.getElementById('confirm-text');
+            const deleteForm = document.getElementById('delete-form');
+
+            deleteButton.addEventListener('click', function (event) {
+                event.preventDefault();
+                confirmText.classList.remove('visually-hidden');
+
+                confirmText.addEventListener('click', function () {
+                    deleteForm.submit();
+                });
+            });
+        });
+    </script>
 </main>
 
 </html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/layout :: layout-main(
+            pageContent=~{:: .main},
+            title='List of product categories',
+            cssPath='/css/admin/categories.css',
+            jsPath=null
+        )}"
+>
+
+<main class="main">
+    <section class="section-content">
+        <div class="container categories">
+            <div class="categories__header">
+                <h1 class="categories__title">
+                    List of product <span class="text-stroke">My items</span>!
+                </h1>
+
+                <p class="categories__total-count">
+                    You are selling
+                    <strong th:text="${#lists.isEmpty(items) ? 0 : items.size()}"></strong>
+                    items
+                </p>
+
+                <a href="/create-item" class="categories__add-button button">Sell a new item</a>
+            </div>
+
+            <div class="categories__grid">
+                <table th:if="${!#lists.isEmpty(items)}">
+                    <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Category</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr th:each="item : ${items}">
+                        <td data-label="name"><a th:href="@{|/profile/my-items/${itemUrls[item.itemId]}|}" th:text="${item.itemName}"></a></td>
+                        <td data-label="category" th:text="${item.category.label}"></td>
+                        <td data-label="price" th:text="'€' + ${item.startingPrice}"></td>
+
+                        <td data-label="action" class="grid__action show container">
+                            <a th:href="@{|/profile/my-items/edit/${itemUrls[item.itemId]}|}">
+                                <i class="ri-pencil-fill"></i>
+                            </a>
+
+                            <form class="action__form delete-form"
+                                  th:action="@{|/profile/my-items/delete/${itemUrls[item.itemId]}|}"
+                                  method="POST">
+                                <button type="submit" class="action__button-link delete-btn">
+                                    <i class="ri-delete-bin-7-line"></i>
+                                </button>
+
+                                <div th:if="${errorMessage}">
+                                    <div th:each="error : ${errorMessage}" class="alert alert-error" th:text="${error}"></div>
+                                </div>
+
+                                <p class="confirm-text visually-hidden">Confirm</p>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <span class="separator"></span>
+    </div>
+
+    <script>
+        let deleteButtons = document.querySelectorAll(".delete-btn");
+
+        deleteButtons.forEach(function(button){button.addEventListener("click", function (event){
+                event.preventDefault();
+                ConfirmLink(this);
+
+            });
+        });
+
+
+        function ConfirmLink(button){
+            let container = button.closest(".container");
+
+            let confirmText = container.querySelector(".confirm-text");
+            let deleteForm = container.querySelector(".delete-form");
+
+            confirmText.classList.remove("visually-hidden");
+
+            confirmText.addEventListener('click', function () {
+                deleteForm.submit();
+            });
+        }
+
+
+
+    </script>
+
+</main>
+</html>

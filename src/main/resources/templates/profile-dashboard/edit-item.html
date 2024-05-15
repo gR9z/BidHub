@@ -7,10 +7,23 @@
         <div class="container">
             <div class="form-container">
                 <div class="form-section">
-                    <h1 class="form-title">New sale</h1>
+                    <h1 class="form-title">Edit item</h1>
 
-                    <form method="POST" th:object="${item}" th:action="@{/create-item}" class="auth-form">
+                    <form method="POST" th:object="${item}" th:action="@{|/profile/my-items/edit/${itemUrl}|}" class="auth-form">
                         <div th:replace="fragments/fragment-item-creation-form :: item-form"></div>
+
+                        <div>
+                            <input type="hidden" id="sellerId" name="sellerId" required class="form-input" placeholder=""
+                                   th:value="${sellerId}"/>
+                        </div>
+
+                        <div th:if="${successMessage}">
+                            <div class="alert alert-success" th:text="${successMessage}"></div>
+                        </div>
+
+                        <div th:if="${errorMessage}">
+                            <div th:each="error : ${errorMessage}" class="alert alert-error" th:text="${error}"></div>
+                        </div>
                     </form>
 
                 </div>

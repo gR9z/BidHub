@@ -1,4 +1,4 @@
-<form method="POST" th:object="${item}" th:action="@{/create-item}" class="auth-form" xmlns:th="http://www.thymeleaf.org" th:fragment="item-form">
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="item-form">
 
     <p class="error" th:each="error: ${#fields.errors('global')}" th:text="${error}"></p>
 
@@ -110,4 +110,4 @@
     </div>
 
     <p class="auth-form__message auth-form__message--login"></p>
-</form>
+</div>
