@@ -1,10 +1,13 @@
 package fr.eni.tp.auctionapp.bll.impl;
 
 import fr.eni.tp.auctionapp.bll.ItemService;
+import fr.eni.tp.auctionapp.bll.WithdrawalService;
 import fr.eni.tp.auctionapp.bo.*;
 import fr.eni.tp.auctionapp.dal.ItemDao;
 import fr.eni.tp.auctionapp.dal.WithdrawalDao;
 import fr.eni.tp.auctionapp.exceptions.BusinessException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,11 +20,13 @@ import java.util.Optional;
 public class ItemServiceImpl implements ItemService {
 
     private final ItemDao itemDao;
-    private final WithdrawalDao withdrawalDao;
+    private WithdrawalDao withdrawalDao;
+    private WithdrawalService withdrawalService;
 
-    public ItemServiceImpl(ItemDao itemDao, WithdrawalDao withdrawalDao) {
+    public ItemServiceImpl(ItemDao itemDao, WithdrawalDao withdrawalDao, WithdrawalService withdrawalService) {
         this.itemDao = itemDao;
         this.withdrawalDao = withdrawalDao;
+        this.withdrawalService = withdrawalService;
     }
 
     @Override
@@ -69,12 +74,103 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public void updateItem(Item item) {
-        itemDao.update(item);
+            itemDao.update(item);
     }
+
+    @Override
+    public void handleItemUpdate(Item item, Authentication authentication, int itemId, int sellerId) throws BusinessException {
+        BusinessException bException = new BusinessException();
+
+        try {
+            item.setItemId(itemId);
+            User seller = new User();
+            seller.setUserId(sellerId);
+            item.setSeller(seller);
+
+            isAuctionstarted(item);
+            hasAuctionEnded(item);
+            isUserAuthorized(item, authentication);
+
+            updateItem(item);
+            item.getWithdrawal().setItemId(itemId);
+            withdrawalService.updateWithdrawal(item.getWithdrawal());
+
+        } catch (BusinessException businessException) {
+            throw businessException;
+        } catch (Exception e) {
+            bException.addKey("An unexpected error occurred during auction creation: " + e.getMessage());
+            throw bException;
+        }
+    }
+
+    private void isAuctionstarted(Item item) throws BusinessException {
+        BusinessException businessException = new BusinessException();
+
+        if (item.getAuctionStartingDate().isBefore(LocalDateTime.now())) {
+            businessException.addKey("You can't perform this action as the auction has already started");
+            throw businessException;
+        }
+    }
+
+    private void hasAuctionEnded(Item item) throws BusinessException {
+        BusinessException businessException = new BusinessException();
+
+        if (item.getAuctionEndingDate().isBefore(LocalDateTime.now())) {
+            businessException.addKey("You can't perform this action as the auction has already ended");
+            throw businessException;
+        }
+    }
+
+    private void isUserAuthorized(Item item, Authentication authentication) throws BusinessException {
+        BusinessException businessException = new BusinessException();
+
+        if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
+            businessException.addKey("Please log in to perform this action");
+            throw businessException;
+        }
+
+        if (!(authentication.getPrincipal() instanceof User authenticatedUser)) {
+            businessException.addKey("An unexpected error occurred. Please try again");
+            throw businessException;
+        }
+
+        if (!(authenticatedUser.getUserId().equals(item.getSeller().getUserId()))) {
+            businessException.addKey("You do not have permission to perform this action");
+            throw businessException;
+        }
+    }
+
+
 
     @Override
     public void removeItemById(int itemId) {
         itemDao.deleteById(itemId);
+    }
+
+    @Override
+    public void handleItemDeletion(int itemId, Authentication authentication) throws BusinessException {
+        BusinessException bException = new BusinessException();
+
+        try {
+            Optional<Item> optionalItem = findItemById(itemId);
+
+            if (optionalItem.isPresent()) {
+                Item item = optionalItem.get();
+
+                System.out.println(itemId);
+                isAuctionstarted(item);
+                hasAuctionEnded(item);
+                isUserAuthorized(item, authentication);
+
+                removeItemById(itemId);
+            }
+
+        } catch (BusinessException businessException) {
+            throw businessException;
+        } catch (Exception e) {
+            bException.addKey("An unexpected error occurred during auction creation: " + e.getMessage());
+            throw bException;
+        }
     }
 
     @Override
