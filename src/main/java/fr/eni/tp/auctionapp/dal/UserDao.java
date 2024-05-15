@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserDao {
-    void editUserProfile(User user);
-
     Optional<User> findById(int userId);
     void insert(User user);
     Optional<User> selectUserByUsername(String username);
@@ -16,6 +14,5 @@ public interface UserDao {
     List<User> findAll();
     List<User> findAllPagination(int page, int size);
     int count();
-    void insertUser(User user);
     void editUserProfile(User user);
 }
