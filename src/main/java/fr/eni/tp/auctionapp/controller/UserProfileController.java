@@ -32,7 +32,7 @@ public class UserProfileController {
         return "account/profile-account";
     }
 
-    @GetMapping("/profile/edit-profile")
+    @RequestMapping("/account/edit-account")
     public String editProfile(
             Principal principal,
             Model model
