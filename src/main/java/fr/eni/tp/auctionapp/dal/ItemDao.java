@@ -25,6 +25,8 @@ public interface ItemDao {
 
     List<Item> findByCategoryPaginated(int categoryId, int page, int size);
 
+    List<Item> findLastAddedItems();
+
     int countFilteredItems(String query, List<Integer> categories);
 
     int countByUserId(int userId);

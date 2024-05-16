@@ -14,7 +14,6 @@ public interface ItemService {
     Optional<Item> findItemById(int id);
     void updateItem(Item item);
     void removeItemById(int itemId);
-
     List<Item> getAllItems();
     List<Item> searchItems(String query, List<Integer> categories, int offset, int limit);
     List<Item> getAllPaginated(int page, int size);
@@ -26,6 +25,5 @@ public interface ItemService {
     int getTotalPageCount(int size);
     void handleItemUpdate(Item item, Authentication authentication, int itemId, int sellerId);
     void handleItemDeletion(int itemId, Authentication authentication);
-
     Item updateItemAfterAuction(Auction auction, int itemId) throws BusinessException;
 }

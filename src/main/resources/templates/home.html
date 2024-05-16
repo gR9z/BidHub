@@ -18,13 +18,19 @@
                 </h1>
 
             </div>
+                <div th:each="item : ${items}">
+                    <p>fais chier</p>
+                </div>
 
-            <div class="hero__image">
-                <img
-                        src="./images/home_hero-banner.jpg"
-                        alt="Auction room with spotlighted art piece and excited bidders."
-                />
-            </div>
+            <div th:replace="~{fragments/fragment-product-list :: product-list(${items})}"></div>
+
+
+<!--            <div class="hero__image">-->
+<!--                <img-->
+<!--                        src="./images/home_hero-banner.jpg"-->
+<!--                        alt="Auction room with spotlighted art piece and excited bidders."-->
+<!--                />-->
+<!--            </div>-->
         </div>
     </section>
 
