@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html
+        lang="en" data-theme="light"
+        xmlns:th="http://www.thymeleaf.org"
+        th:replace="~{layouts/layout :: layout-main(
+        pageContent=~{:: .main},
+        title=~{:: .main-title},
+        cssPath=null,
+        jsPath=null
+    )}"
+>
+
+<main class="main">
+    <section class="section-content">
+        <div class="container">
+            <div class="form-container">
+                <div class="form-section">
+                    <h1 class="form-title">My Profile</h1>
+                    <form method="post" th:action="@{/profile(id=${user.userId}, action='edit')}">
+
+                        <div class="form-group">
+
+                            <div class="form-row">
+
+                                <div class="form-field">
+                                    <input
+                                            type="text"
+                                            id="username"
+                                            name="username"
+                                            required
+                                            class="form-input"
+                                            placeholder=""
+                                            th:field="*{user.username}"
+                                    />
+                                    <label for="username" class="form-label">Username</label>
+                                </div>
+
+                                <div class="form-field">
+                                    <input
+                                            type="email"
+                                            id="email"
+                                            name="email"
+                                            required
+                                            class="form-input"
+                                            placeholder=""
+                                            th:field="*{user.email}"
+                                    />
+                                    <label for="email" class="form-label">Email</label>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-field">
+                                    <input
+                                            type="text"
+                                            id="firstName"
+                                            name="firstName"
+                                            required
+                                            class="form-input"
+                                            placeholder=""
+                                            th:field="*{user.firstName}"
+                                    />
+                                    <label for="firstName" class="form-label">First Name</label>
+
+                                </div>
+
+                                <div class="form-field">
+                                    <input
+                                            type="text"
+                                            id="lastName"
+                                            name="lastName"
+                                            required
+                                            class="form-input"
+                                            placeholder=""
+                                            th:field="*{user.lastName}"
+                                    />
+                                    <label for="lastName" class="form-label">Last Name</label>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-field">
+                                    <input
+                                            type="text"
+                                            id="phone"
+                                            name="phone"
+                                            required
+                                            class="form-input"
+                                            placeholder=""
+                                            th:field="*{user.phone}"
+                                    />
+                                    <label for="phone" class="form-label">Phone</label>
+                                </div>
+
+                                <div class="form-field">
+                                    <input
+                                            type="text"
+                                            id="street"
+                                            name="street"
+                                            required
+                                            class="form-input"
+                                            placeholder=""
+                                            th:field="*{user.street}"
+                                    />
+                                    <label for="street" class="form-label">Street Address</label>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-field">
+                                    <input
+                                            type="text"
+                                            id="zipCode"
+                                            name="zipCode"
+                                            required
+                                            class="form-input"
+                                            placeholder=""
+                                            th:field="*{user.zipCode}"
+                                    />
+                                    <label for="zipCode" class="form-label">Zip Code</label>
+                                </div>
+
+                                <div class="form-field">
+                                    <input
+                                            type="text"
+                                            id="city"
+                                            name="city"
+                                            required
+                                            class="form-input"
+                                            placeholder=""
+                                            th:field="*{user.city}"
+                                    />
+                                    <label for="city" class="form-label">City</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div th:if="${successMessage}">
+                            <p class="alert alert-success" th:text="${successMessage}"></p>
+                        </div>
+
+                        <div th:if="${errorMessage}">
+                            <p class="alert alert-error" th:text="${errorMessage}"></p>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="button">Save</button>
+                            <a href="/" class="form-link">Cancel</a>
+                        </div>
+                    </form>
+
+                    <form th:action="@{/profile(id=${user.id}, action='delete')}" method="post">
+                        <button type="submit" class="button button--secondary">Delete my account</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+</html>

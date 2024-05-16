@@ -7,6 +7,7 @@ import fr.eni.tp.auctionapp.bo.Item;
 import fr.eni.tp.auctionapp.bo.User;
 import fr.eni.tp.auctionapp.bo.Withdrawal;
 import fr.eni.tp.auctionapp.exceptions.BusinessException;
+import fr.eni.tp.auctionapp.utils.URLUtils;
 import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -90,8 +91,11 @@ public class ItemController {
         } else {
             try {
                 item.setSeller(authenticatedUser);
+
                 itemService.createItem(item);
-                return "redirect:/";
+                return "redirect:/products/" + URLUtils.toFriendlyURL(item.getCategory().getLabel())
+                        + "/" + URLUtils.toFriendlyURL(item.getItemName())
+                        + "?id=" + item.getItemId();
             } catch (BusinessException businessException) {
 
                 List<Category> categories = categoryService.getAllCategories();
@@ -115,6 +119,5 @@ public class ItemController {
     }
 
 
-
-    }
+}
 
