@@ -52,14 +52,14 @@
                         ></li>
 
                     <li th:if="${#authorization.expression('isAuthenticated()')}"
-                        th:text="'Hey ' + ${#authentication.name} + ' • €'+${#authentication.principal.credit}">
+                        th:text="'€'+${#authentication.principal.credit}">
                     </li>
 
                     <li th:if="${#authorization.expression('isAuthenticated()')}">
                         <a
                                 th:href="@{/create-item}"
                                 class="nav__link"
-                        >Sell Item!</a
+                        >Sell!</a
                         >
                     </li>
 

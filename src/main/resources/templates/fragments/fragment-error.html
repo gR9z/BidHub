@@ -2,7 +2,7 @@
         xmlns:th="http://www.thymeleaf.org"
         th:fragment="frag-error(inputName)"
         th:if="${#fields.hasErrors(inputName)}"
-        class="error error--form"
+        class="alert alert-error"
 >
     <p th:each="error: ${#fields.errors(inputName)}" th:text="${error}"></p>
 </div>

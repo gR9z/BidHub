@@ -8,6 +8,8 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -24,75 +26,44 @@ public class UserProfileController {
         this.userService = userService;
     }
 
-    @GetMapping("/profile")
-    public String userProfile(
+
+    @RequestMapping("/profile")
+    public String editProfileForm(
             Principal principal,
             Model model
     ) {
         User user = (User) userService.loadUserByUsername(principal.getName());
         model.addAttribute("user", user);
 
-        return "account/profile-account";
-    }
-
-    @RequestMapping("/account/edit-account")
-    public String editProfile(
-            Principal principal,
-            Model model
-    ) {
-        User user = (User) userService.loadUserByUsername(principal.getName());
-        model.addAttribute("user", user);
-
-        return "account/edit-account";
+        return "account/profile";
     }
 
     @PostMapping("/profile")
-    public String saveEditProfile(
+    public String handleProfileAction(
             @ModelAttribute User user,
-            Principal principal
+            @RequestParam(name = "id", required = true) Integer id,
+            @RequestParam(name = "action", required = true) String action,
+            @AuthenticationPrincipal User authenticatedUser,
+            Model model
     ) {
-        userService.updateUserByUsername(user);
-        return "redirect:profile";
-    }
+        if ("edit".equals(action)) {
+            user.setPassword(authenticatedUser.getPassword());
+            user.setCredit(authenticatedUser.getCredit());
 
-    @DeleteMapping("/profile")
-    public ResponseEntity<String> deleteUser(@RequestParam("username") String username, HttpServletRequest request) {
-        User currentUser = (User) userService.loadUserByUsername(username);
-
-        if (currentUser != null) {
+            userService.updateUserByUsername(user);
+            model.addAttribute("successMessage", "Your profile has been updated");
+        } else if ("delete".equals(action) && id != null) {
             try {
-                userService.deleteUser(currentUser);
-
-                HttpSession session = request.getSession(false);
-                if (session != null) {
-                    session.invalidate();
-                }
-
-                return ResponseEntity.ok("Account successfully deleted");
+                userService.removeUserById(id);
+                return "redirect:/";
             } catch (Exception e) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting account");
+                UserDetails existingUser = userService.getUserByUserId(user.getUserId());
+                model.addAttribute("user", existingUser);
+                model.addAttribute("errorMessage", "An error occurred while deleting your account. Please try again.");
             }
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+            throw new IllegalArgumentException("Invalid action!");
         }
-    }
-
-    @GetMapping("/error-profile")
-    public String userError(
-            @RequestParam(name = "error", required = false) String error,
-            Model model,
-            Principal principal
-    ) {
-
-        if (error != null) {
-            String errorMessage = "Invalid user!";
-            model.addAttribute("error", errorMessage);
-            System.out.println(model);
-        }
-
-        User user = (User) userService.loadUserByUsername(principal.getName());
-        model.addAttribute("user", user);
-
-        return "/account/profile-account";
+        return "account/profile";
     }
 }
