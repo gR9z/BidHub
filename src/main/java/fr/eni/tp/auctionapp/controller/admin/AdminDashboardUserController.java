@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -34,24 +35,19 @@ public class AdminDashboardUserController {
     @PostMapping("/users")
     public String manageUser(@RequestParam("id") int userId,
                              @RequestParam("action") String action,
-                             Model model) {
-        System.out.println(userId);
-        System.out.println(action);
-
+                             RedirectAttributes redirectAttributes
+    ) {
         if (action.equals("delete")) {
             try {
                 userService.removeUserById(userId);
-                model.addAttribute("successMessage", "User deleted successfully");
-                return "/users";
+                redirectAttributes.addFlashAttribute("successMessage", "User deleted successfully");
+                return "redirect:/admin/users";
 
             } catch (BusinessException businessException) {
-                businessException.getKeys().forEach(key -> {
-                    ObjectError error = new ObjectError("globalError", key);
-                    model.addAttribute("org.springframework.validation.BindingResult.model", error);
-                });
-                return "/users";
+                redirectAttributes.addFlashAttribute("errorMessage", businessException.getKeys());
+                return "redirect:/admin/users";
             }
         }
-        return "/users";
+        return "redirect:/admin/users";
     }
 }

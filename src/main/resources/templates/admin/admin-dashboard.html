@@ -3,8 +3,8 @@
       xmlns:th="http://www.thymeleaf.org"
       th:replace="~{layouts/layout :: layout-main(
             pageContent=~{:: .main},
-            title='Bidhub - Admin Panel',
-            cssPath='/css/home.css',
+            title='Bidhub - Admin Dashboard',
+            cssPath='/css/admin/admin-dashboard.css',
             jsPath=null
         )}"
 >
@@ -21,13 +21,16 @@
             <nav class="admin-dashboard__nav">
                 <ul class="admin-dashboard__nav-list">
                     <li class="admin-dashboard__nav-item">
-                        <a href="admin/overview" class="admin-dashboard__nav-link">Overview</a>
+                        <a href="admin/overview" class="admin-dashboard__nav-link text-stroke">Overview</a>
                     </li>
                     <li class="admin-dashboard__nav-item">
-                        <a href="admin/users" class="admin-dashboard__nav-link">Users</a>
+                        <a href="admin/users" class="admin-dashboard__nav-link text-stroke">Users</a>
                     </li>
                     <li class="admin-dashboard__nav-item">
-                        <a href="admin/categories" class="admin-dashboard__nav-link">Categories</a>
+                        <a href="admin/items" class="admin-dashboard__nav-link text-stroke">Items</a>
+                    </li>
+                    <li class="admin-dashboard__nav-item">
+                        <a href="admin/categories" class="admin-dashboard__nav-link text-stroke">Categories</a>
                     </li>
                 </ul>
             </nav>

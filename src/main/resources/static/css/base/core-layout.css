@@ -83,3 +83,34 @@ footer {
     padding-block: var(--space-3);
     border-top: 0.0625rem solid var(--text15);
 }
+
+/* ================================ */
+/* =========== ELEMENTS =========== */
+/* ================================ */
+.badge__item {
+    position: absolute;
+    text-align: center;
+    top: var(--space-3);
+    left: var(--space-3);
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--border-radius-2);
+    color: var(--bg);
+    font-size: var(--h6);
+    font-weight: var(--bold);
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+    z-index: 100;
+}
+
+.badge__item.badge__item--active {
+    background: var(--success-color);
+}
+
+.badge__item.badge__item--pending {
+    background: var(--warning-color);
+}
+
+.badge__item.badge__item--concluded {
+    background: var(--error-color);
+}
+

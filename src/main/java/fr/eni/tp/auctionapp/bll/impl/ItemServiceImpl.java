@@ -1,5 +1,6 @@
 package fr.eni.tp.auctionapp.bll.impl;
 
+import fr.eni.tp.auctionapp.bll.FileStorageService;
 import fr.eni.tp.auctionapp.bll.ItemService;
 import fr.eni.tp.auctionapp.bll.WithdrawalService;
 import fr.eni.tp.auctionapp.bo.*;
@@ -20,13 +21,13 @@ import java.util.Optional;
 public class ItemServiceImpl implements ItemService {
 
     private final ItemDao itemDao;
-    private WithdrawalDao withdrawalDao;
-    private WithdrawalService withdrawalService;
+    private final WithdrawalDao withdrawalDao;
+    private final FileStorageService fileStorageService;
 
-    public ItemServiceImpl(ItemDao itemDao, WithdrawalDao withdrawalDao, WithdrawalService withdrawalService) {
+    public ItemServiceImpl(ItemDao itemDao, WithdrawalDao withdrawalDao, FileStorageService fileStorageService) {
         this.itemDao = itemDao;
         this.withdrawalDao = withdrawalDao;
-        this.withdrawalService = withdrawalService;
+        this.fileStorageService = fileStorageService;
     }
 
     @Override
@@ -55,6 +56,11 @@ public class ItemServiceImpl implements ItemService {
         }
 
         try {
+            if(item.getImageFile() != null) {
+                String imageFileName = fileStorageService.store(item.getImageFile());
+                item.setImageUrl(imageFileName);
+            }
+
             item.setSellingPrice(item.getStartingPrice());
             itemDao.insert(item);
             Objects.requireNonNull(item).getWithdrawal().setItem(item);
@@ -87,13 +93,13 @@ public class ItemServiceImpl implements ItemService {
             seller.setUserId(sellerId);
             item.setSeller(seller);
 
-            isAuctionstarted(item);
+            isAuctionStarted(item);
             hasAuctionEnded(item);
             isUserAuthorized(item, authentication);
 
             updateItem(item);
             item.getWithdrawal().setItemId(itemId);
-            withdrawalService.updateWithdrawal(item.getWithdrawal());
+            withdrawalDao.update(item.getWithdrawal());
 
         } catch (BusinessException businessException) {
             throw businessException;
@@ -103,11 +109,11 @@ public class ItemServiceImpl implements ItemService {
         }
     }
 
-    private void isAuctionstarted(Item item) throws BusinessException {
+    private void isAuctionStarted(Item item) throws BusinessException {
         BusinessException businessException = new BusinessException();
 
         if (item.getAuctionStartingDate().isBefore(LocalDateTime.now())) {
-            businessException.addKey("You can't perform this action as the auction has already started");
+            businessException.addKey("You can't perform this action on " + item.getItemName() + " as the auction has already started");
             throw businessException;
         }
     }
@@ -116,7 +122,7 @@ public class ItemServiceImpl implements ItemService {
         BusinessException businessException = new BusinessException();
 
         if (item.getAuctionEndingDate().isBefore(LocalDateTime.now())) {
-            businessException.addKey("You can't perform this action as the auction has already ended");
+            businessException.addKey("You can't perform this action on " + item.getItemName() + " as the auction has already ended");
             throw businessException;
         }
     }
@@ -158,7 +164,7 @@ public class ItemServiceImpl implements ItemService {
                 Item item = optionalItem.get();
 
                 System.out.println(itemId);
-                isAuctionstarted(item);
+                isAuctionStarted(item);
                 hasAuctionEnded(item);
                 isUserAuthorized(item, authentication);
 
@@ -167,9 +173,6 @@ public class ItemServiceImpl implements ItemService {
 
         } catch (BusinessException businessException) {
             throw businessException;
-        } catch (Exception e) {
-            bException.addKey("An unexpected error occurred during auction creation: " + e.getMessage());
-            throw bException;
         }
     }
 
@@ -180,7 +183,9 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<Item> searchItems(String query, List<Integer> categories, int offset, int limit) {
-        return itemDao.searchItems(query, categories, offset, limit);
+        List<Item> items =  itemDao.searchItems(query, categories, offset, limit);
+        items.forEach(item -> item.setSaleStatus(calculateItemStatus(item)));
+        return items;
     }
 
     @Override

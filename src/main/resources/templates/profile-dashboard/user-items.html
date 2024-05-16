@@ -33,6 +33,7 @@
                         <th scope="col">Name</th>
                         <th scope="col">Category</th>
                         <th scope="col">Price</th>
+                        <th scope="col">Number of auctions</th>
                         <th scope="col">Action</th>
                     </tr>
                     </thead>
@@ -42,6 +43,7 @@
                         <td data-label="name"><a th:href="@{|/profile/my-items/${itemUrls[item.itemId]}|}" th:text="${item.itemName}"></a></td>
                         <td data-label="category" th:text="${item.category.label}"></td>
                         <td data-label="price" th:text="'€' + ${item.startingPrice}"></td>
+                        <td data-label="nbrOfAuctions" th:text="${#lists.size(item.getAuctions())}"></td>
 
                         <td data-label="action" class="grid__action show container">
                             <a th:href="@{|/profile/my-items/edit/${itemUrls[item.itemId]}|}">
@@ -55,16 +57,15 @@
                                     <i class="ri-delete-bin-7-line"></i>
                                 </button>
 
-                                <div th:if="${errorMessage}">
-                                    <div th:each="error : ${errorMessage}" class="alert alert-error" th:text="${error}"></div>
-                                </div>
-
                                 <p class="confirm-text visually-hidden">Confirm</p>
                             </form>
                         </td>
                     </tr>
                     </tbody>
                 </table>
+                <div th:if="${errorMessage}">
+                    <div th:each="error : ${errorMessage}" class="alert alert-error" th:text="${error}"></div>
+                </div>
             </div>
         </div>
     </section>
@@ -76,7 +77,8 @@
     <script>
         let deleteButtons = document.querySelectorAll(".delete-btn");
 
-        deleteButtons.forEach(function(button){button.addEventListener("click", function (event){
+        deleteButtons.forEach(function(button){
+            button.addEventListener("click", function (event){
                 event.preventDefault();
                 ConfirmLink(this);
 
