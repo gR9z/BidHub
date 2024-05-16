@@ -14,19 +14,43 @@
         <div class="container hero">
             <div class="hero__content">
                 <h1 class="hero__title">
-                    The <span class="text-stroke">Hottest Auctions</span> in Your Area!
+                    The <span class="text-stroke">4 Founders</span> of BidHub!
                 </h1>
 
-            </div>
-            <h2 class="hero__subtitle">New products</h2>
-            <div th:replace="~{fragments/fragment-product-list :: product-list(${items})}"></div>
+                <div class="hero__image">
+                    <img src="/images/banner.jpg"
+                         alt="BidHub founders - Cléa Le Corre AKA Loulou, Jean-Batiste Marrec AKA JBM, François Moisan AKA Francesco, Gaétan Royer AKA The Supreme Leader">
+                </div>
 
+            </div>
         </div>
     </section>
 
     <div class="container">
         <span class="separator"></span>
     </div>
+
+    <section class="section-content">
+        <div class="container home-products">
+            <div class="home-products__content">
+                <h2 class="hero__subtitle">The <span class="text-stroke">Hottest Auctions</span> in Your Area!</h2>
+                <div th:replace="~{fragments/fragment-product-list :: product-list(${items})}"></div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <span class="separator"></span>
+    </div>
+
+    <section class="section-content">
+        <div class="container cta">
+            <div class="cta__content">
+                <h2 class="cta__title">Start <span class="text-stroke">bidding</span> now!</h2>
+                <a href="/shop" class="button">Begin Bidding</a>
+            </div>
+        </div>
+    </section>
 
 </main>
 </html>
