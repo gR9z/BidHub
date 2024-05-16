@@ -41,9 +41,9 @@ public class HomeController {
                         (existingValue, newValue) -> existingValue
                 ));
 
-        model.addAttribute("Items", items);
-        model.addAttribute("Urls", itemUrls);
-        model.addAttribute("CategoryUrl", categoryUrl);
+        model.addAttribute("items", items);
+        model.addAttribute("urls", itemUrls);
+        model.addAttribute("categoryUrl", categoryUrl);
 
         System.out.println(items);
         return "home.html";
