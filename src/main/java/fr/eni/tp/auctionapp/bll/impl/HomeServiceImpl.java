@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static fr.eni.tp.auctionapp.bll.impl.ItemServiceImpl.calculateItemStatus;
+
 @Service
 public class HomeServiceImpl implements HomeService {
 
@@ -19,6 +21,7 @@ public class HomeServiceImpl implements HomeService {
     @Override
     public List<Item> findLastAddedItems() {
         List<Item> items = itemDao.findLastAddedItems();
+        items.forEach(item -> item.setSaleStatus(calculateItemStatus(item)));
         return items;
     }
 }

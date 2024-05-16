@@ -42,7 +42,7 @@ public class HomeController {
                 ));
 
         model.addAttribute("items", items);
-        model.addAttribute("urls", itemUrls);
+        model.addAttribute("itemUrls", itemUrls);
         model.addAttribute("categoryUrl", categoryUrl);
 
         System.out.println(items);
