@@ -245,7 +245,7 @@ public class ItemServiceImpl implements ItemService {
         return item;
     }
 
-    private String calculateItemStatus(Item item) {
+    static String calculateItemStatus(Item item) {
         LocalDateTime now = LocalDateTime.now();
         if (now.isBefore(item.getAuctionStartingDate())) {
             return "pending";

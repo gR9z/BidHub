@@ -18,17 +18,9 @@
                 </h1>
 
             </div>
+            <h2 class="hero__subtitle">New products</h2>
+            <div th:replace="~{fragments/fragment-product-list :: product-list(${items})}"></div>
 
-
-<!--            <div th:replace="~{fragments/fragment-product-list :: product-list(${items})}"></div>-->
-
-
-<!--            <div class="hero__image">-->
-<!--                <img-->
-<!--                        src="./images/home_hero-banner.jpg"-->
-<!--                        alt="Auction room with spotlighted art piece and excited bidders."-->
-<!--                />-->
-<!--            </div>-->
         </div>
     </section>
 
