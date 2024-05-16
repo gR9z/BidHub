@@ -60,17 +60,14 @@ public class ItemController {
 
             item.setWithdrawal(withdrawal);
 
-            List<Category> categories = categoryService.getAllCategories();
+            System.out.println(item.getAuctionStartingDate());
 
-            String formattedStartDate = formatDateTime(item.getAuctionStartingDate());
-            String formattedEndDate = formatDateTime(item.getAuctionEndingDate());
+            List<Category> categories = categoryService.getAllCategories();
 
             model.addAttribute("item", item);
             model.addAttribute("categories", categories);
             model.addAttribute("withdrawal", withdrawal);
             model.addAttribute("authenticatedUser", authenticatedUser);
-            model.addAttribute("formattedStartDate", formattedStartDate);
-            model.addAttribute("formattedEndDate", formattedEndDate);
 
             return "item/create-item.html";
         }
