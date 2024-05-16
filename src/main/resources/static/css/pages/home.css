@@ -1,7 +1,25 @@
 .hero__content {
-    max-width: var(--max-width-3);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-5);
 }
 
-.hero__title {
-    font-size: var(--h2);
+.hero__image {
+    display: flex;
+    border-radius: var(--space-2);
+    overflow: hidden;
+}
+
+.hero__subtitle {
+    margin-bottom: var(--space-7);
+    margin-inline: auto;
+    max-width: var(--max-width-4);
+    text-align: center;
+}
+
+.cta__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    align-items: center;
 }
