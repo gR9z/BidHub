@@ -27,11 +27,15 @@
                             >
                     </li>
 
+                    <li th:if="${#authorization.expression('isAuthenticated()')}"
+                        th:text="'€'+${#authentication.principal.credit}">
+                    </li>
+
                     <li th:if="${#authorization.expression('isAuthenticated()')}">
                         <a
                                 th:href="@{/profile}"
                                 class="nav__link"
-                        >My Profile</a
+                        >Profile</a
                         >
                     </li>
 
@@ -50,10 +54,6 @@
                                 class="nav__link"
                         >Admin</a
                         ></li>
-
-                    <li th:if="${#authorization.expression('isAuthenticated()')}"
-                        th:text="'€'+${#authentication.principal.credit}">
-                    </li>
 
                     <li th:if="${#authorization.expression('isAuthenticated()')}">
                         <a

@@ -325,6 +325,11 @@ body {
     color: var(--bg);
 }
 
+select option {
+    background-color: var(--text);
+    color: var(--text) ;
+}
+
 [data-theme="dark"] ::-webkit-calendar-picker-indicator {
     filter: invert(1);
 }
