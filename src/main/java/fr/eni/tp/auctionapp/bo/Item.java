@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -34,6 +35,8 @@ public class Item {
     @Pattern(regexp = ".*\\.(jpeg|jpg|png|gif|PNG)$", message = "Invalid image file format")
     private String imageUrl;
 
+    private MultipartFile imageFile;
+
     private String saleStatus;
 
     @NotNull(message = "Category cannot be null")
@@ -47,19 +50,26 @@ public class Item {
     public Item() {
     }
 
-    public Item(String itemName, String description, LocalDateTime auctionStartingDate, LocalDateTime auctionEndingDate, int startingPrice, int sellingPrice, String imageUrl) {
+    public Item(String itemName, String description, LocalDateTime auctionStartingDate, LocalDateTime auctionEndingDate, int startingPrice, int sellingPrice) {
         this.itemName = itemName;
         this.description = description;
         this.auctionStartingDate = auctionStartingDate;
         this.auctionEndingDate = auctionEndingDate;
         this.startingPrice = startingPrice;
         this.sellingPrice = sellingPrice;
-        this.imageUrl = imageUrl;
     }
 
-    public Item(int itemId, String itemName, String description, LocalDateTime auctionStartingDate, LocalDateTime auctionEndingDate, int startingPrice, int sellingPrice, String imageUrl) {
-        this(itemName, description, auctionStartingDate, auctionEndingDate, startingPrice, sellingPrice, imageUrl);
+    public Item(int itemId, String itemName, String description, LocalDateTime auctionStartingDate, LocalDateTime auctionEndingDate, int startingPrice, int sellingPrice) {
+        this(itemName, description, auctionStartingDate, auctionEndingDate, startingPrice, sellingPrice);
         this.itemId = itemId;
+    }
+
+    public MultipartFile getImageFile() {
+        return imageFile;
+    }
+
+    public void setImageFile(MultipartFile imageFile) {
+        this.imageFile = imageFile;
     }
 
     public int getItemId() {
@@ -185,6 +195,7 @@ public class Item {
                 ", startingPrice=" + startingPrice +
                 ", sellingPrice=" + sellingPrice +
                 ", imageUrl='" + imageUrl + '\'' +
+                ", imageFile='" + imageFile + '\'' +
                 ", saleStatus='" + saleStatus + '\'' +
                 ", category=" + category +
                 ", auctions=" + auctions +

@@ -1,5 +1,6 @@
 package fr.eni.tp.auctionapp.bll.impl;
 
+import fr.eni.tp.auctionapp.bll.FileStorageService;
 import fr.eni.tp.auctionapp.bll.ItemService;
 import fr.eni.tp.auctionapp.bll.WithdrawalService;
 import fr.eni.tp.auctionapp.bo.*;
@@ -20,13 +21,13 @@ import java.util.Optional;
 public class ItemServiceImpl implements ItemService {
 
     private final ItemDao itemDao;
-    private WithdrawalDao withdrawalDao;
-    private WithdrawalService withdrawalService;
+    private final WithdrawalDao withdrawalDao;
+    private final FileStorageService fileStorageService;
 
-    public ItemServiceImpl(ItemDao itemDao, WithdrawalDao withdrawalDao, WithdrawalService withdrawalService) {
+    public ItemServiceImpl(ItemDao itemDao, WithdrawalDao withdrawalDao, FileStorageService fileStorageService) {
         this.itemDao = itemDao;
         this.withdrawalDao = withdrawalDao;
-        this.withdrawalService = withdrawalService;
+        this.fileStorageService = fileStorageService;
     }
 
     @Override
@@ -55,6 +56,11 @@ public class ItemServiceImpl implements ItemService {
         }
 
         try {
+            if(item.getImageFile() != null) {
+                String imageFileName = fileStorageService.store(item.getImageFile());
+                item.setImageUrl(imageFileName);
+            }
+
             item.setSellingPrice(item.getStartingPrice());
             itemDao.insert(item);
             Objects.requireNonNull(item).getWithdrawal().setItem(item);
@@ -93,7 +99,7 @@ public class ItemServiceImpl implements ItemService {
 
             updateItem(item);
             item.getWithdrawal().setItemId(itemId);
-            withdrawalService.updateWithdrawal(item.getWithdrawal());
+            withdrawalDao.update(item.getWithdrawal());
 
         } catch (BusinessException businessException) {
             throw businessException;
@@ -177,7 +183,9 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<Item> searchItems(String query, List<Integer> categories, int offset, int limit) {
-        return itemDao.searchItems(query, categories, offset, limit);
+        List<Item> items =  itemDao.searchItems(query, categories, offset, limit);
+        items.forEach(item -> item.setSaleStatus(calculateItemStatus(item)));
+        return items;
     }
 
     @Override

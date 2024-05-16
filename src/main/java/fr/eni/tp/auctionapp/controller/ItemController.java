@@ -40,6 +40,14 @@ public class ItemController {
 
             Item item = new Item();
 
+            // TODO à faire dans TL
+            LocalDateTime now = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+            String formattedDateTime = now.format(formatter);
+
+            item.setAuctionStartingDate(LocalDateTime.parse(formattedDateTime, formatter));
+            item.setAuctionEndingDate(LocalDateTime.now().plusDays(7));
+
             Category category = new Category();
             Withdrawal withdrawal = new Withdrawal();
 
@@ -73,6 +81,7 @@ public class ItemController {
             BindingResult bindingResult,
             Model model
     ) {
+
         if (bindingResult.hasErrors()) {
             List<Category> categories = categoryService.getAllCategories();
             model.addAttribute("categories", categories);

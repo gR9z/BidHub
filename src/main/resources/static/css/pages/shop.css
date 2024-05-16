@@ -94,8 +94,16 @@ option {
     transform: translateY(-1rem);
 }
 
-.shop__item img {
+.item__image {
     border-radius: var(--border-radius-2);
+    display: flex;
+    position: relative;
+    overflow: hidden;
+}
+
+.item__image img {
+    aspect-ratio: 1/1;
+    object-fit: cover;
 }
 
 .item__info {
@@ -103,6 +111,7 @@ option {
 }
 
 .info__name {
+    color: var(--text);
     font-size: var(--h4);
 }
 
