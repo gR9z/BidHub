@@ -21,7 +21,9 @@ public class UserRefreshInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.isAuthenticated() && authentication.getPrincipal() instanceof User currentUser) {
+        if (authentication != null
+                && authentication.isAuthenticated()
+                && authentication.getPrincipal() instanceof User currentUser) {
             userDao.findById(currentUser.getId()).ifPresent(freshUser -> currentUser.setCredit(freshUser.getCredit()));
         }
         return true;

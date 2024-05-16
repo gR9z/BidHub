@@ -70,6 +70,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void updateUserByUsername(User user) {
+        userDao.updateByUsername(user);
+    }
+
+    @Override
     public void removeUserById(int userId) {
         userDao.deleteById(userId);
     }
@@ -144,6 +149,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+
     public void deleteUser(User currentUser) {
         // TODO Problème de foreign key
         Optional<User> existingUser = userDao.findById(currentUser.getUserId());
@@ -155,9 +161,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    @Override
-    public void saveUser(User testUser) {
-    }
+
 
     private void updateSessionUserCredit(User user) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -168,13 +172,9 @@ public class UserServiceImpl implements UserService {
 
     public boolean arePasswordsMatching(String password, String confirmPassword, BusinessException businessException) {
         if (!password.equals(confirmPassword)) {
-            businessException.addKey("Passwords do not match!");
+            businessException.addKey("Passwords does not match!");
             return false;
         }
         return true;
-    }
-
-    public void editUserProfile(User user) {
-        userDao.editUserProfile(user);
     }
 }

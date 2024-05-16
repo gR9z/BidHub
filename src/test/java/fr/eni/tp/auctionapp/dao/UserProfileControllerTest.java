@@ -39,7 +39,7 @@ public class UserProfileControllerTest {
                 100,
                 false
         );
-        userService.saveUser(testUser);
+        //userService.saveUser(testUser);
     }
 
     @Test

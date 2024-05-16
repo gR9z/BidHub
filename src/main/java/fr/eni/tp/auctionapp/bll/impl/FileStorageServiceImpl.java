@@ -27,11 +27,13 @@ public class FileStorageServiceImpl implements FileStorageService {
 
     @Override
     public String store(MultipartFile file) {
-        if(file == null) {
+        if (file == null) {
             return null;
         }
 
-        String fileName = UUID.randomUUID() + Objects.requireNonNull(file.getOriginalFilename()).substring(file.getOriginalFilename().lastIndexOf("."));
+        String fileName = UUID.randomUUID()
+                + Objects.requireNonNull(file.getOriginalFilename())
+                .substring(file.getOriginalFilename().lastIndexOf("."));
 
         try (InputStream inputStream = file.getInputStream()) {
             Files.copy(inputStream, this.location.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
@@ -47,5 +49,6 @@ public class FileStorageServiceImpl implements FileStorageService {
     }
 
     @Override
-    public void delete(String filename) {}
+    public void delete(String filename) {
+    }
 }

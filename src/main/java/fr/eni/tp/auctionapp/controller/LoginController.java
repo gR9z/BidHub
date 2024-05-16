@@ -3,6 +3,8 @@ package fr.eni.tp.auctionapp.controller;
 import fr.eni.tp.auctionapp.bll.UserService;
 import fr.eni.tp.auctionapp.bo.User;
 import fr.eni.tp.auctionapp.exceptions.BusinessException;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,13 +25,22 @@ public class LoginController {
     @GetMapping("/login")
     public String login(
             @RequestParam(name = "error", required = false) String error,
-            Model model
+            Model model,
+            @AuthenticationPrincipal UserDetails currentUser
     ) {
+        if (currentUser != null) {
+            return "redirect:/profile";
+        }
+
         if (error != null) {
             String errorMessage = "Invalid username or password!";
             model.addAttribute("error", errorMessage);
         }
 
+        model.addAttribute("isLoginPage", true);
+
         return "security/login";
     }
+
+
 }

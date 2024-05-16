@@ -26,6 +26,7 @@ public class SecurityConfiguration {
                             .requestMatchers("/images/**").permitAll()
                             .requestMatchers("/fonts/**").permitAll()
                             .requestMatchers(HttpMethod.DELETE, "/profile/edit-profile").authenticated()
+                            .requestMatchers("/login").anonymous()
                             .anyRequest().permitAll();
                 }
         );

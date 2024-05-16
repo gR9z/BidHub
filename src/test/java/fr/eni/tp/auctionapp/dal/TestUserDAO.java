@@ -1,7 +1,6 @@
-package fr.eni.tp.auctionapp.dao;
+package fr.eni.tp.auctionapp.dal;
 
 import fr.eni.tp.auctionapp.bo.User;
-import fr.eni.tp.auctionapp.dal.UserDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,15 +43,12 @@ public class TestUserDAO {
                 false
         );
 
-        userDao.insertUser(user);
+        userDao.insert(user);
         user.setCity("quimper");
-        userDao.editUserProfile(user);
+        userDao.updateByUsername(user);
         Optional<User> getUser = userDao.selectUserByUsername("user");
         User newUser = getUser.get();
         assertThat(newUser.getCity()).isEqualTo("quimper");
 
     }
-
 }
-
-

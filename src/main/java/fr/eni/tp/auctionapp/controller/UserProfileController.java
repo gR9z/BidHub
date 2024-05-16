@@ -2,13 +2,16 @@ package fr.eni.tp.auctionapp.controller;
 
 import fr.eni.tp.auctionapp.bll.UserService;
 import fr.eni.tp.auctionapp.bo.User;
+import fr.eni.tp.auctionapp.exceptions.BusinessException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 
@@ -43,16 +46,16 @@ public class UserProfileController {
         return "account/edit-account";
     }
 
-    @PostMapping("/profile/edit-profile")
+    @PostMapping("/profile")
     public String saveEditProfile(
             @ModelAttribute User user,
             Principal principal
     ) {
-        userService.editUserProfile(user);
-        return "redirect:/profile";
+        userService.updateUserByUsername(user);
+        return "redirect:profile";
     }
 
-    @DeleteMapping("/profile/edit-profile")
+    @DeleteMapping("/profile")
     public ResponseEntity<String> deleteUser(@RequestParam("username") String username, HttpServletRequest request) {
         User currentUser = (User) userService.loadUserByUsername(username);
 
@@ -73,7 +76,6 @@ public class UserProfileController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
         }
     }
-
 
     @GetMapping("/error-profile")
     public String userError(
