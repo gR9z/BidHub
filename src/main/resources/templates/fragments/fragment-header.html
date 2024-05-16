@@ -40,7 +40,6 @@
                     </li>
 
                     <li th:if="${#authorization.expression('isAuthenticated()')}">
-<!--                    TODO: Màj du lien @Cléa-->
                         <a
                                 th:href="@{/profile/my-items}"
                                 class="nav__link"

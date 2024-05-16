@@ -16,12 +16,14 @@
                             <div class="form-field">
                                 <input type="text" id="description" name="description"
                                           class="form-input textarea-custom" placeholder=""
-                                          th:text="${item.description}" th:readonly="true"></input>
+                                          th:text="${item.description}" th:readonly="true">
                                 <label for="description" class="form-label">Description</label>
                             </div>
 
                             <div class="form-field">
-                                <img th:src="@{item.imageUrl}" alt="Picture of the item" onerror="this.onerror=null; this.th:src='@{/images/no-image.png}';">
+<!--                                <img th:src="'./images/products/' + '@{item.imageUrl}'" alt="Picture of the item" onerror="this.onerror=null; th:src='@{/images/no-image.png}';">-->
+                                <img th:src="@{'/images/products/' + ${item.imageUrl}}" onerror="this.onerror=null; this.src='@{/images/no-image.png}'">
+
                                 <div id="image-container"></div>
                             </div>
 

@@ -44,6 +44,7 @@ public class ItemDaoImpl implements ItemDao {
     private static final String COUNT_ITEM_BY_USER_ID = "SELECT COUNT(*) AS count FROM Items WHERE userId = :userId;";
     private static final String COUNT_BY_CATEGORY_ID = "SELECT COUNT(*) AS count FROM Items WHERE categoryId = :categoryId;";
     private static final String COUNT = "SELECT COUNT(*) AS count FROM Items WHERE auctionEndingDate >= DATEADD(day, -2, GETDATE());";
+    private static final String SELECT_LAST_ADDED_ITEMS = "SELECT TOP 6 * FROM ITEMS ORDER BY itemId DESC;";
 
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private JdbcTemplate jdbcTemplate;
@@ -185,6 +186,13 @@ public class ItemDaoImpl implements ItemDao {
                 params,
                 new ItemRowMapper()
         );
+    }
+
+    @Override
+    public List<Item> findLastAddedItems() {
+        return jdbcTemplate.query(
+                SELECT_LAST_ADDED_ITEMS,
+                new ItemRowMapper());
     }
 
     @Override
