@@ -316,12 +316,12 @@ body {
 }
 
 ::selection {
-    background-color: var(--primary);
+    background-color: var(--accent);
     color: var(--bg);
 }
 
 ::-webkit-selection {
-    background-color: var(--primary);
+    background-color: var(--accent);
     color: var(--bg);
 }
 

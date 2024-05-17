@@ -38,6 +38,7 @@
     .nav__list {
         display: flex;
         padding: 0;
+        color: var(--primary);
         background-color: initial;
         gap: var(--space-4);
     }
@@ -46,7 +47,7 @@
         content: none;
     }
 
-    .nav__list a {
+    .nav__link {
         color: var(--primary);
     }
 
