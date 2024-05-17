@@ -55,7 +55,7 @@ public class UserProfileController {
         } else if ("delete".equals(action) && id != null) {
             try {
                 userService.removeUserById(id);
-                return "redirect:/";
+                return "redirect:/logout";
             } catch (Exception e) {
                 UserDetails existingUser = userService.getUserByUserId(user.getUserId());
                 model.addAttribute("user", existingUser);
