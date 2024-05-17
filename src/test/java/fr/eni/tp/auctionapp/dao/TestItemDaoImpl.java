@@ -103,7 +103,6 @@ public class TestItemDaoImpl {
         }
 
         List<Item> listItems = itemDao.findAll();
-        System.out.println(listItems);
         assertThat(listItems.size()).isEqualTo(10);
     }
 
@@ -114,7 +113,6 @@ public class TestItemDaoImpl {
         }
 
         List<Item> paginatedItems = itemDao.findAllPaginated(2, 10);
-        System.out.println(paginatedItems);
         assertThat(paginatedItems.size()).isEqualTo(10);
     }
 

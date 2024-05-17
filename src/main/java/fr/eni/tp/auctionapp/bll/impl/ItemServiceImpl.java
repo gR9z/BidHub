@@ -163,7 +163,6 @@ public class ItemServiceImpl implements ItemService {
             if (optionalItem.isPresent()) {
                 Item item = optionalItem.get();
 
-                System.out.println(itemId);
                 isAuctionStarted(item);
                 hasAuctionEnded(item);
                 isUserAuthorized(item, authentication);

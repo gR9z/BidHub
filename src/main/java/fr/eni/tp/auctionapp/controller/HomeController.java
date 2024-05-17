@@ -45,7 +45,6 @@ public class HomeController {
         model.addAttribute("itemUrls", itemUrls);
         model.addAttribute("categoryUrl", categoryUrl);
 
-        System.out.println(items);
         return "home.html";
     }
 

@@ -146,9 +146,6 @@ public class ProfileDashboardController {
 
             List<Category> categories = categoryService.getAllCategories();
 
-            System.out.println(item.getImageUrl());
-
-
             String itemUrl = URLUtils.toFriendlyURL(item.getItemName()) + "?id=" + item.getItemId();
 
             LocalDateTime localDateTime = LocalDateTime.now();

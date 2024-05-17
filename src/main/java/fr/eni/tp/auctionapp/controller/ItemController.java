@@ -61,8 +61,6 @@ public class ItemController {
 
             item.setWithdrawal(withdrawal);
 
-            System.out.println(item.getAuctionStartingDate());
-
             List<Category> categories = categoryService.getAllCategories();
 
             model.addAttribute("item", item);
