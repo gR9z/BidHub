@@ -19,7 +19,7 @@
 
                     <form method="POST" th:action="@{/create-account}" th:object="${user}" class="auth-form">
 
-                        <p class="error error--register-global" th:each="error: ${#fields.errors('global')}" th:text="${error}"></p>
+                        <p class="alert alert-error" th:each="error: ${#fields.errors('global')}" th:text="${error}"></p>
 
                         <div class="form-group">
 

@@ -51,7 +51,7 @@ public class RegistrationController {
             return "account/create-account.html";
         }
 
-        return "account/profile-account.html";
+        return "account/profile.html";
 
     }
 }
