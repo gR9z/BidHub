@@ -98,6 +98,7 @@
 }
 
 .auction__form-field input[type="number"] {
+    color: var(--text);
     -moz-appearance: textfield;
 }
 
