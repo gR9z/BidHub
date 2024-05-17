@@ -62,7 +62,7 @@ public class TestDatabaseService {
         user.setZipCode(faker.address().zipCode());
         user.setCity(faker.address().city());
         user.setPassword("password");
-        user.setCredit(faker.number().numberBetween(0, 5001));
+        user.setCredit(faker.number().numberBetween(3000, 50000));
         user.setAdmin(false);
 
         return user;
@@ -71,6 +71,7 @@ public class TestDatabaseService {
     public User createRandomAdmin() {
         User user = createRandomUser();
         user.setAdmin(true);
+        user.setCredit(200000);
 
         return user;
     }
