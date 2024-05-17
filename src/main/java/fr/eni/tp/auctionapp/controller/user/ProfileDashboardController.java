@@ -46,7 +46,7 @@ public class ProfileDashboardController {
             int userId = authenticatedUser.getUserId();
 
             List<Item> items = itemService.getByUserIdPaginated(userId, page, size);
-            List<Auction> auctions = new ArrayList<>();
+            List<Auction> auctions;
 
             for (Item item : items) {
                 Optional<Category> optionalCategory = categoryService.findCategoryById(item.getCategory().getCategoryId());
