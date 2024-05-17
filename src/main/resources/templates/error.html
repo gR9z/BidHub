@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/layout :: layout-main(
+            pageContent=~{:: .main},
+            title='BidHub - 404 Error',
+            cssPath='/css/pages/error.css',
+            jsPath=null
+        )}"
+>
+
+<main class="main">
+
+    <section class="section-content">
+
+        <div class="container error-page">
+
+            <img class="error-page__image" src="/images/404.webp" alt="404 error image">
+
+            <div class="error-page__content">
+                <h1 class="error-page__title">
+                    <span class="title-stroke">404</span> Error
+                </h1>
+
+                <h2 class="error-page__subtitle">Our Engineers are on it!</h2>
+
+                <div class="error-page__actions">
+                    <a class="button" th:href="@{/shop}">Go Shop!</a>
+                    <a class="button button--secondary" th:href="@{/}">Go Home!</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main>
+</html>

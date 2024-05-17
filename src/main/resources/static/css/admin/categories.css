@@ -1,0 +1,27 @@
+.categories__header {
+    text-align: center;
+}
+
+.categories__title {
+    font-size: var(--h2);
+}
+
+.categories__add-button {
+    margin-top: var(--space-4);
+}
+
+.categories__total-count {
+    margin-top: var(--space-3);
+}
+
+.grid__action a {
+    line-height: 1;
+}
+
+.grid__action i {
+    font-size: 1.8rem;
+}
+
+.grid__action a:first-child {
+    margin-right: var(--space-2);
+}

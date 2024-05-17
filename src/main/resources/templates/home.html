@@ -2,47 +2,55 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       th:replace="~{layouts/layout :: layout-main(
-            pageContent=~{:: .main-content},
-            title=~{:: .main-title}
+            pageContent=~{:: .main},
+            title='BidHub - Home of Exciting Online Auctions',
+            cssPath='/css/pages/home.css',
+            jsPath=null
         )}"
 >
 
-<title class="main-title">Home</title>
-<body>
-    <h1 class="main-content" th:text="#{Welcome to the Auction App}"></h1>
+<main class="main">
+    <section class="section-content">
+        <div class="container hero">
+            <div class="hero__content">
+                <h1 class="hero__title">
+                    The <span class="text-stroke">4 Founders</span> of BidHub!
+                </h1>
 
-    <h2>
-        Filtres :
-    </h2>
+                <div class="hero__image">
+                    <img src="/images/banner.jpg"
+                         alt="BidHub founders - Cléa Le Corre AKA Loulou, Jean-Batiste Marrec AKA JBM, François Moisan AKA Francesco, Gaétan Royer AKA The Supreme Leader">
+                </div>
 
-    <label for="category-select">Catégories</label>
-    <select name="categories" id="category-select">
-        <option value="">-- All categories --</option>
-        <option value="XXX">1</option>
-        <option value="XXX">1</option>
-        <option value="XXX">1</option>
-    </select>
+            </div>
+        </div>
+    </section>
 
-    <div class="input-container">
-        <img src="#">
-        <input type="search" id="search-bar" placeholder="The name of the item contains...">
+    <div class="container">
+        <span class="separator"></span>
     </div>
 
-    <button>Search</button>
-    
-    <div class="item-container">
-        <div class="left-container">
-            <img src="#" alt="item-photo">
+    <section class="section-content">
+        <div class="container home-products">
+            <div class="home-products__content">
+                <h2 class="hero__subtitle">The <span class="text-stroke">Hottest Auctions</span> in Your Area!</h2>
+                <div th:replace="~{fragments/fragment-product-list :: product-list(${items})}"></div>
+            </div>
         </div>
-        <div class="right-container">
-            <div class="title-item">AAA</div>
-            <div class="price-item">Price : </div>
-            <div class="rank-item">Rank : </div>
-            <div class="endDate-item">End of auction : </div>
-            <div class="adress-item">Pick-up point : </div>
-            <div class="seller-name">Seller :</div>
-        </div>
+    </section>
+
+    <div class="container">
+        <span class="separator"></span>
     </div>
 
-</body>
+    <section class="section-content">
+        <div class="container cta">
+            <div class="cta__content">
+                <h2 class="cta__title">Start <span class="text-stroke">bidding</span> now!</h2>
+                <a href="/shop" class="button">Begin Bidding</a>
+            </div>
+        </div>
+    </section>
+
+</main>
 </html>

@@ -1,0 +1,516 @@
+/* ============================= */
+/* =========== FONTS =========== */
+/* ============================= */
+@font-face {
+    font-family: 'Geomanist';
+    src: local('Geomanist Bold'), local('Geomanist-Bold'),
+    url('../../fonts/geomanist/geomanist-bold.woff2') format('woff2'),
+    url('../../fonts/geomanist/geomanist-bold.woff') format('woff');
+    font-weight: 600;
+}
+
+@font-face {
+    font-family: 'Geomanist';
+    src: local('Geomanist Regular'), local('Geomanist-Regular'),
+    url('../../fonts/geomanist/geomanist-regular.woff2') format('woff2'),
+    url('../../fonts/geomanist/geomanist-regular.woff') format('woff');
+    font-weight: 400;
+}
+
+/* ===================================== */
+/* =========== VARIABLES CSS =========== */
+/* ===================================== */
+:root {
+    /* ===== Width =====*/
+    --container-width: 1366px;
+
+    /* ===== Fonts =====*/
+    --heading-font: 'Geomanist', sans-serif;
+    --body-font: 'Geomanist', sans-serif;
+
+    /* ==================== FONT SIZE ==================== */
+    /* =================================================== */
+    /* ========= RATIO MIN = MINOR THIRD (1.2)  ========== */
+    /* ====== RATIO MAX = AUGMENTED FOURTH (1.414) ======= */
+    /* =================================================== */
+    --h1: clamp(2.98rem, -0.606rem + 9.562vw, 8rem);
+    --h2: clamp(2.5rem, 0.246rem + 6.011vw, 5.656rem);
+    --h3: clamp(2.1rem, 0.743rem + 3.619vw, 4rem);
+    --h4: clamp(1.728rem, 0.942rem + 2.095vw, 2.828rem);
+    --h5: clamp(1.44rem, 1.04rem + 1.067vw, 2rem);
+    --h6: clamp(1.2rem, 1.047rem + 0.408vw, 1.414rem);
+
+    /* ===== Body Font Size ===== */
+    --body-fs: clamp(1.7rem, 1.629rem + 0.19vw, 1.8rem);
+
+    /* ===== Small Text ====== */
+    --text-small: clamp(1.5rem, 1.429rem + 0.19vw, 1.6rem);
+
+    /* ===== Font Weight ===== */
+    --bold: 600;
+    --regular: 400;
+
+    /* ===== Line Height ===== */
+    --line-height-heading: 1.1;
+    --line-height-base: 1.7;
+
+    /* ==================== SPACING ===================== */
+    /* ================================================== */
+    /* ======= RATIO MIN = PERFECT FOURTH (1.333) ======= */
+    /* ======== RATIO MAX = GOLDEN RATIO (1.618) ======== */
+    /* ================================================== */
+    --space-1: clamp(0.375rem, 0.286rem + 0.238vw, 0.5rem);
+    --space-2: clamp(0.667rem, 0.566rem + 0.27vw, 0.809rem);
+    --space-3: clamp(0.889rem, 0.589rem + 0.8vw, 1.309rem);
+    --space-4: clamp(1.185rem, 0.519rem + 1.777vw, 2.118rem);
+    --space-5: clamp(1.58rem, 0.262rem + 3.514vw, 3.425rem);
+    --space-6: clamp(2.107rem, -0.347rem + 6.545vw, 5.543rem);
+    --space-7: clamp(2.809rem, -1.59rem + 11.731vw, 8.968rem);
+    --space-8: clamp(3.745rem, -3.945rem + 20.507vw, 14.511rem);
+    --space-9: clamp(4.993rem, -8.211rem + 35.211vw, 23.479rem);
+    --space-10: clamp(6.657rem, -15.724rem + 59.682vw, 37.99rem);
+
+    /* ===== Border Radius ===== */
+    --border-radius-1: 0.25rem;
+    --border-radius-2: 0.5rem;
+    --border-radius-3: 0.75rem;
+    --border-radius-4: 1rem;
+    --border-radius-5: 1.5rem;
+    --border-radius-6: 2rem;
+    --border-radius-7: 3rem;
+    --border-radius-8: 6rem;
+    --border-radius-circle: 50%;
+
+    /* ===== Max Width ===== */
+    --max-width-1: 16rem;
+    --max-width-2: 32rem;
+    --max-width-3: 48rem;
+    --max-width-4: 64rem;
+}
+
+/* ========================================== */
+/* =========== LIGHT THEME COLORS =========== */
+/* ========================================== */
+:root[data-theme='light'] {
+    --text: #130f0c;
+    --bg: #f9f4f1;
+    --primary: #6a3b20;
+    --secondary: #e39568;
+    --accent: #e76113;
+    --textcontrast: #64d97b;
+    --bgcontrast: #64d97b;
+    --primarycontrast: #64d97b;
+    --secondarycontrast: #64d97b;
+    --accentcontrast: #ffdd00;
+    --text5: hsl(26, 23%, 6%, 5%);
+    --text10: hsl(26, 23%, 6%, 10%);
+    --text15: hsl(26, 23%, 6%, 15%);
+    --text20: hsl(26, 23%, 6%, 20%);
+    --text25: hsl(26, 23%, 6%, 25%);
+    --text30: hsl(26, 23%, 6%, 30%);
+    --text35: hsl(26, 23%, 6%, 35%);
+    --text40: hsl(26, 23%, 6%, 40%);
+    --text45: hsl(26, 23%, 6%, 45%);
+    --text50: hsl(26, 23%, 6%, 50%);
+    --text55: hsl(26, 23%, 6%, 55%);
+    --text60: hsl(26, 23%, 6%, 60%);
+    --text65: hsl(26, 23%, 6%, 65%);
+    --text70: hsl(26, 23%, 6%, 70%);
+    --text75: hsl(26, 23%, 6%, 75%);
+    --text80: hsl(26, 23%, 6%, 80%);
+    --text85: hsl(26, 23%, 6%, 85%);
+    --text90: hsl(26, 23%, 6%, 90%);
+    --text95: hsl(26, 23%, 6%, 95%);
+    --primary5: hsl(22, 54%, 27%, 5%);
+    --primary10: hsl(22, 54%, 27%, 10%);
+    --primary15: hsl(22, 54%, 27%, 15%);
+    --primary20: hsl(22, 54%, 27%, 20%);
+    --primary25: hsl(22, 54%, 27%, 25%);
+    --primary30: hsl(22, 54%, 27%, 30%);
+    --primary35: hsl(22, 54%, 27%, 35%);
+    --primary40: hsl(22, 54%, 27%, 40%);
+    --primary45: hsl(22, 54%, 27%, 45%);
+    --primary50: hsl(22, 54%, 27%, 50%);
+    --primary55: hsl(22, 54%, 27%, 55%);
+    --primary60: hsl(22, 54%, 27%, 60%);
+    --primary65: hsl(22, 54%, 27%, 65%);
+    --primary70: hsl(22, 54%, 27%, 70%);
+    --primary75: hsl(22, 54%, 27%, 75%);
+    --primary80: hsl(22, 54%, 27%, 80%);
+    --primary85: hsl(22, 54%, 27%, 85%);
+    --primary90: hsl(22, 54%, 27%, 90%);
+    --primary95: hsl(22, 54%, 27%, 95%);
+    --secondary5: hsl(22, 69%, 65%, 5%);
+    --secondary10: hsl(22, 69%, 65%, 10%);
+    --secondary15: hsl(22, 69%, 65%, 15%);
+    --secondary20: hsl(22, 69%, 65%, 20%);
+    --secondary25: hsl(22, 69%, 65%, 25%);
+    --secondary30: hsl(22, 69%, 65%, 30%);
+    --secondary35: hsl(22, 69%, 65%, 35%);
+    --secondary40: hsl(22, 69%, 65%, 40%);
+    --secondary45: hsl(22, 69%, 65%, 45%);
+    --secondary50: hsl(22, 69%, 65%, 50%);
+    --secondary55: hsl(22, 69%, 65%, 55%);
+    --secondary60: hsl(22, 69%, 65%, 60%);
+    --secondary65: hsl(22, 69%, 65%, 65%);
+    --secondary70: hsl(22, 69%, 65%, 70%);
+    --secondary75: hsl(22, 69%, 65%, 75%);
+    --secondary80: hsl(22, 69%, 65%, 80%);
+    --secondary85: hsl(22, 69%, 65%, 85%);
+    --secondary90: hsl(22, 69%, 65%, 90%);
+    --secondary95: hsl(22, 69%, 65%, 95%);
+    --accent5: hsl(22, 85%, 49%, 5%);
+    --accent10: hsl(22, 85%, 49%, 10%);
+    --accent15: hsl(22, 85%, 49%, 15%);
+    --accent20: hsl(22, 85%, 49%, 20%);
+    --accent25: hsl(22, 85%, 49%, 25%);
+    --accent30: hsl(22, 85%, 49%, 30%);
+    --accent35: hsl(22, 85%, 49%, 35%);
+    --accent40: hsl(22, 85%, 49%, 40%);
+    --accent45: hsl(22, 85%, 49%, 45%);
+    --accent50: hsl(22, 85%, 49%, 50%);
+    --accent55: hsl(22, 85%, 49%, 55%);
+    --accent60: hsl(22, 85%, 49%, 60%);
+    --accent65: hsl(22, 85%, 49%, 65%);
+    --accent70: hsl(22, 85%, 49%, 70%);
+    --accent75: hsl(22, 85%, 49%, 75%);
+    --accent80: hsl(22, 85%, 49%, 80%);
+    --accent85: hsl(22, 85%, 49%, 85%);
+    --accent90: hsl(22, 85%, 49%, 90%);
+    --accent95: hsl(22, 85%, 49%, 95%);
+
+    /* ===== Alert Colors ===== */
+    --success-color: #5AAC53;
+    --warning-color: #ED851D;
+    --error-color: #CD656A;
+
+
+    /* ===== Box Shadow ===== */
+    --box-shadow: 0px 2px 3.6px rgba(0, 0, 0, 0.024),
+    0px 5.6px 10px rgba(0, 0, 0, 0.035),
+    0px 13.6px 24.1px rgba(0, 0, 0, 0.046),
+    0px 45px 80px rgba(0, 0, 0, 0.07);
+}
+
+/* ========================================= */
+/* =========== DARK THEME COLORS =========== */
+/* ========================================= */
+:root[data-theme='dark'] {
+    --text: #f3efec;
+    --bg: #0e0906;
+    --primary: #dfb095;
+    --secondary: #97491c;
+    --accent: #ec6618;
+    --textcontrast: #64d97b;
+    --bgcontrast: #64d97b;
+    --primarycontrast: #64d97b;
+    --secondarycontrast: #ffdd00;
+    --accentcontrast: #ffdd00;
+    --text5: hsl(26, 23%, 94%, 5%);
+    --text10: hsl(26, 23%, 94%, 10%);
+    --text15: hsl(26, 23%, 94%, 15%);
+    --text20: hsl(26, 23%, 94%, 20%);
+    --text25: hsl(26, 23%, 94%, 25%);
+    --text30: hsl(26, 23%, 94%, 30%);
+    --text35: hsl(26, 23%, 94%, 35%);
+    --text40: hsl(26, 23%, 94%, 40%);
+    --text45: hsl(26, 23%, 94%, 45%);
+    --text50: hsl(26, 23%, 94%, 50%);
+    --text55: hsl(26, 23%, 94%, 55%);
+    --text60: hsl(26, 23%, 94%, 60%);
+    --text65: hsl(26, 23%, 94%, 65%);
+    --text70: hsl(26, 23%, 94%, 70%);
+    --text75: hsl(26, 23%, 94%, 75%);
+    --text80: hsl(26, 23%, 94%, 80%);
+    --text85: hsl(26, 23%, 94%, 85%);
+    --text90: hsl(26, 23%, 94%, 90%);
+    --text95: hsl(26, 23%, 94%, 95%);
+    --primary5: hsl(22, 54%, 73%, 5%);
+    --primary10: hsl(22, 54%, 73%, 10%);
+    --primary15: hsl(22, 54%, 73%, 15%);
+    --primary20: hsl(22, 54%, 73%, 20%);
+    --primary25: hsl(22, 54%, 73%, 25%);
+    --primary30: hsl(22, 54%, 73%, 30%);
+    --primary35: hsl(22, 54%, 73%, 35%);
+    --primary40: hsl(22, 54%, 73%, 40%);
+    --primary45: hsl(22, 54%, 73%, 45%);
+    --primary50: hsl(22, 54%, 73%, 50%);
+    --primary55: hsl(22, 54%, 73%, 55%);
+    --primary60: hsl(22, 54%, 73%, 60%);
+    --primary65: hsl(22, 54%, 73%, 65%);
+    --primary70: hsl(22, 54%, 73%, 70%);
+    --primary75: hsl(22, 54%, 73%, 75%);
+    --primary80: hsl(22, 54%, 73%, 80%);
+    --primary85: hsl(22, 54%, 73%, 85%);
+    --primary90: hsl(22, 54%, 73%, 90%);
+    --primary95: hsl(22, 54%, 73%, 95%);
+    --secondary5: hsl(22, 69%, 35%, 5%);
+    --secondary10: hsl(22, 69%, 35%, 10%);
+    --secondary15: hsl(22, 69%, 35%, 15%);
+    --secondary20: hsl(22, 69%, 35%, 20%);
+    --secondary25: hsl(22, 69%, 35%, 25%);
+    --secondary30: hsl(22, 69%, 35%, 30%);
+    --secondary35: hsl(22, 69%, 35%, 35%);
+    --secondary40: hsl(22, 69%, 35%, 40%);
+    --secondary45: hsl(22, 69%, 35%, 45%);
+    --secondary50: hsl(22, 69%, 35%, 50%);
+    --secondary55: hsl(22, 69%, 35%, 55%);
+    --secondary60: hsl(22, 69%, 35%, 60%);
+    --secondary65: hsl(22, 69%, 35%, 65%);
+    --secondary70: hsl(22, 69%, 35%, 70%);
+    --secondary75: hsl(22, 69%, 35%, 75%);
+    --secondary80: hsl(22, 69%, 35%, 80%);
+    --secondary85: hsl(22, 69%, 35%, 85%);
+    --secondary90: hsl(22, 69%, 35%, 90%);
+    --secondary95: hsl(22, 69%, 35%, 95%);
+    --accent5: hsl(22, 85%, 51%, 5%);
+    --accent10: hsl(22, 85%, 51%, 10%);
+    --accent15: hsl(22, 85%, 51%, 15%);
+    --accent20: hsl(22, 85%, 51%, 20%);
+    --accent25: hsl(22, 85%, 51%, 25%);
+    --accent30: hsl(22, 85%, 51%, 30%);
+    --accent35: hsl(22, 85%, 51%, 35%);
+    --accent40: hsl(22, 85%, 51%, 40%);
+    --accent45: hsl(22, 85%, 51%, 45%);
+    --accent50: hsl(22, 85%, 51%, 50%);
+    --accent55: hsl(22, 85%, 51%, 55%);
+    --accent60: hsl(22, 85%, 51%, 60%);
+    --accent65: hsl(22, 85%, 51%, 65%);
+    --accent70: hsl(22, 85%, 51%, 70%);
+    --accent75: hsl(22, 85%, 51%, 75%);
+    --accent80: hsl(22, 85%, 51%, 80%);
+    --accent85: hsl(22, 85%, 51%, 85%);
+    --accent90: hsl(22, 85%, 51%, 90%);
+    --accent95: hsl(22, 85%, 51%, 95%);
+
+    /* ===== Alert Colors ===== */
+    --success-color: #5BAC53;
+    --warning-color: #E27A12;
+    --error-color: #9A3237;
+
+    /* ===== Box Shadow ===== */
+    --box-shadow: 0px 2px 3.6px rgba(255, 255, 255, 0.024),
+    0px 5.6px 10px rgba(255, 255, 255, 0.035),
+    0px 13.6px 24.1px rgba(255, 255, 255, 0.046),
+    0px 45px 80px rgba(255, 255, 255, 0.07);
+}
+
+
+/* ==================================== */
+/* =============== BASE =============== */
+/* ==================================== */
+html, body {
+    font-size: 62.5%;
+}
+
+body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-size: var(--body-fs);
+    font-family: var(--body-font);
+    line-height: var(--line-height-base);
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh;
+    transition: all 0.3s ease;
+}
+
+::selection {
+    background-color: var(--accent);
+    color: var(--bg);
+}
+
+::-webkit-selection {
+    background-color: var(--accent);
+    color: var(--bg);
+}
+
+select option {
+    background-color: var(--text);
+    color: var(--text) ;
+}
+
+[data-theme="dark"] ::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--heading-font);
+    font-weight: var(--bold);
+    line-height: var(--line-height-heading);
+}
+
+h1 {
+    font-size: var(--h1);
+}
+
+h2 {
+    font-size: var(--h2);
+}
+
+h3 {
+    font-size: var(--h3);
+}
+
+h4 {
+    font-size: var(--h4);
+}
+
+h5 {
+    font-size: var(--h5);
+}
+
+h6 {
+    font-size: var(--h6);
+}
+
+a {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+/* ====================================== */
+/* ======== REUSABLE CSS CLASSES ======== */
+/* ====================================== */
+.h1 {
+    font-size: var(--h1);
+}
+
+.h2 {
+    font-size: var(--h2);
+}
+
+.h3 {
+    font-size: var(--h3);
+}
+
+.h4 {
+    font-size: var(--h4);
+}
+
+.h5 {
+    font-size: var(--h5);
+}
+
+.h6 {
+    font-size: var(--h6);
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    border: 0;
+    padding: 0;
+    white-space: nowrap;
+    clip-path: inset(50%);
+    clip: rect(0 0 0 0);
+    overflow: hidden;
+}
+
+.container {
+    max-width: var(--container-width);
+    padding-inline: var(--space-4);
+    margin-inline: auto;
+}
+
+.section-content {
+    margin-block: var(--space-8);
+}
+
+.grid {
+    display: grid;
+    gap: var(--space-4);
+}
+
+.button {
+    display: inline-flex;
+    transition: all .3s ease-in-out;
+    border: none;
+    padding: var(--space-3) var(--space-5);
+    border-radius: var(--border-radius-8);
+    box-shadow: 0 0.625rem 1.25rem 0 rgba(0, 0, 0, 0.15);
+    font-size: var(--h5);
+    background: var(--accent);
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: var(--bold);
+    line-height: 1;
+    color: var(--bg);
+}
+
+.button--secondary {
+    background: var(--primary);
+    border: none;
+}
+
+.button:hover {
+    transform: translateY(-0.25rem);
+    box-shadow: 0 0.938rem 1.875rem 0 rgba(0, 0, 0, 0.25);
+}
+
+.button:active {
+    transform: scale(0.98);
+}
+
+.action__form {
+    display: inline;
+}
+
+.action__button-link {
+    transition: all 0.3s ease;
+    color: var(--primary);
+    padding: 0;
+    margin: 0;
+    background: none;
+    border: 0;
+    display: inline-flex;
+    cursor: pointer;
+}
+
+.action__button-link:hover {
+    transform: scale(1.15);
+}
+
+.separator {
+    display: block;
+    border-bottom: 0.0625rem solid var(--text15);
+}
+
+.text-stroke {
+    color: transparent;
+    -webkit-text-stroke: clamp(0.15rem, 0.111rem + 0.104vw, 0.2rem) var(--secondary);
+}
+
+.alert {
+    display: inline-flex;
+    font-weight: var(--bold);
+    padding: var(--space-1) var(--space-4);
+    border-radius: var(--border-radius-1);
+}
+
+.alert-error {
+    background-color: var(--error-color);
+}
+
+.alert-success {
+    background-color: var(--success-color)
+}
+
+.alert-warning {
+    background-color: var(--warning-color);
+}
+
+.error--form {
+    margin-top: var(--space-4);
+}
+
+.error--register-global {
+    margin-bottom: var(--space-6);
+}

@@ -1,0 +1,20 @@
+.users__header {
+    text-align: center;
+}
+
+.users__title {
+    margin-inline: auto;
+    text-align: center;
+}
+
+.users .alert {
+    margin-top: var(--space-4);
+}
+
+.users__total-count {
+    margin-top: var(--space-3);
+}
+
+.users__add-button {
+    margin-top: var(--space-4);
+}

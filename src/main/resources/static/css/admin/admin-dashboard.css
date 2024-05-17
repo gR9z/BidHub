@@ -1,0 +1,24 @@
+.admin-dashboard {
+    text-align: center;
+}
+
+.admin-dashboard__nav-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-5);
+    margin-top: var(--space-6);
+}
+
+.admin-dashboard__nav-link {
+    transition: all .3s ease-in-out;
+    font-size: var(--h4);
+    border-radius: var(--border-radius-2);
+    padding: var(--space-5);
+    box-shadow: var(--box-shadow);
+    display: block;
+    width: 100%;
+}
+
+.admin-dashboard__nav-link:hover {
+    transform: translateY(-0.5rem);
+}

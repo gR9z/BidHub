@@ -2,33 +2,45 @@
 <html
         xmlns:th="http://www.thymeleaf.org"
         lang="en"
-        th:fragment="layout-main(pageContent, title)"
+        th:fragment="layout-main(pageContent, title, cssPath, jsPath)"
 >
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title th:replace="${title} ?: ~{}">Auction</title>
-<!--    <link rel="stylesheet" th:href="@{./css/style.css}"/>-->
-<!--    <link rel="stylesheet" th:href="@{./css/remixicon.css}"/>-->
-        <link rel="stylesheet" href="./css/style.css"/>
-        <link rel="stylesheet" href="./css/remixicon.css"/>
+    <title th:text="${title} ?: 'BidHub - Your Auction Platform'"></title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" th:href="@{/css/utils/remixicon.css}"/>
+    <link th:if="${cssPath}" rel="stylesheet" th:href="@{${cssPath}}"/>
+    <link rel="stylesheet" th:href="@{/css/base/responsive.css}">
+    <script th:src="@{/js/main.js}" type="module"></script>
+    <script th:if="${jsPath}" th:src="@{${jsPath}}" type="module"></script>
 </head>
 
 <body>
-    
-    <header>
-        <div th:replace="~{fragments/fragment-navigation :: frag-navigation}"></div>
-    </header>
-    
-    <main th:replace="${pageContent} ?: ~{}">
-        Contenu de la page
-    </main>
-    
-    <footer>
-        <div th:replace="~{fragments/fragment-footer :: frag-footer}"></div>
-    </footer>
-    
-    <script src="/static/js/main.js" type="module"></script>
-    <script src="/static/js/common/show-password-form.js" type="module"></script>
+
+<div th:replace="~{fragments/fragment-header :: frag-header}"></div>
+
+<main th:replace="${pageContent} ?: ~{}">
+    Contenu de la page
+</main>
+
+<div th:replace="~{fragments/fragment-footer :: frag-footer}"></div>
+
 </body>
+
+<!--
+                      /^--^\     /^--^\     /^--^\
+                      \____/     \____/     \____/
+                     /      \   /      \   /      \
+                    |        | |        | |        |
+                     \__  __/   \__  __/   \__  __/
+|^|^|^|^|^|^|^|^|^|^|^|^\ \^|^|^|^/ /^|^|^|^|^\ \^|^|^|^|^|^|^|^|^|^|^|^|
+| | | | | | | | | | | | |\ \| | |/ /| | | | | | \ \ | | | | | | | | | | |
+########################/ /######\ \###########/ /#######################
+| | | | | | | | | | | | \/| | | | \/| | | | | |\/ | | | | | | | | | | | |
+|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|
+
+
+
+-->
 </html>

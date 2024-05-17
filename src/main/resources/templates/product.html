@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/layout :: layout-main(
+            pageContent=~{:: .main},
+            title='Let\'s buy ' + ${item.itemName} + ' on BidHub!',
+            cssPath='/css/pages/product.css',
+            jsPath=null
+        )}"
+>
+
+<main class="main">
+
+    <section class="section-content">
+        <div class="container product">
+            <div class="product__content">
+                <div class="product__image">
+                    <img th:src="'/images/products/' + ${item.imageUrl}" th:alt="${item.itemName}">
+                    <span th:if="${item.saleStatus == 'pending'}" class="badge__item badge__item--pending" th:text="${item.saleStatus}"></span>
+                    <span th:if="${item.saleStatus == 'active'}" class="badge__item badge__item--active" th:text="${item.saleStatus}"></span>
+                    <span th:if="${item.saleStatus == 'concluded'}" class="badge__item badge__item--concluded" th:text="${item.saleStatus}"></span>
+                </div>
+
+                <div class="product__info">
+
+                    <h1 class="product__title" th:text="${item.itemName}"></h1>
+
+                    <p class="product__description" th:text="${item.description}"></p>
+
+                    <p class="product__category">
+                        Category:
+                        <a th:href="|/category/${categoryUrl[item.category.categoryId]}|"
+                           th:text="${item.category.label}"></a>
+                    </p>
+
+                    <p class="product__starting-price" th:text="'Starting: €' + ${item.startingPrice}"></p>
+                    <p class="product__actual-price">
+                        <strong th:text="'€' + ${item.sellingPrice}"></strong>
+                    </p>
+
+                    <p class="product__last-bid-user"
+                       th:utext="${#lists.isEmpty(bids) ? 'No bids yet' : 'Last bidder: <strong>' + bids[0].lastBidUser + '</strong>'}"></p>
+
+                    <div class="product__auction-dates">
+                        <p class="product__auction-dates-starting">
+                            Starting:
+                            <span class="product__auction-dates-value"
+                                  th:text="${T(fr.eni.tp.auctionapp.utils.DateUtils).formatDateTime(item.auctionStartingDate)}"></span>
+                        </p>
+
+                        <p class="product__auction-dates-ending">
+                            Ending:
+                            <strong class="product__auction-dates-value"
+                                    th:text="${T(fr.eni.tp.auctionapp.utils.DateUtils).formatDateTime(item.auctionEndingDate)}">
+                            </strong>
+                        </p>
+                    </div>
+
+                    <div class="product__withdrawal">
+                        <p>Withdrawal Address:<br>
+                            <span th:text="${item.withdrawal.street}"></span>
+                            <br>
+                            <span th:text="${item.withdrawal.zipCode}"></span>,
+                            <strong><span th:text="${item.withdrawal.city}"></span></strong>
+                        </p>
+                    </div>
+
+                    <div th:if="${successMessage}">
+                        <div class="alert alert-success" th:text="${successMessage}"></div>
+                    </div>
+
+                    <div th:if="${errorMessage}">
+                        <div th:each="error : ${errorMessage}" class="alert alert-error" th:text="${error}"></div>
+                    </div>
+
+                    <form class="auction__form" th:action="@{${requestURI}(id=${item.itemId})}" method="POST"
+                          th:object="${auction}">
+                        <p class="alert alert-error" th:each="error : ${#fields.errors('global')}"
+                           th:text="${error}"></p>
+
+                        <div th:if="${#authorization.expression('isAuthenticated()') && item.saleStatus == 'active'}" class="auction__form-group">
+                            <div class="auction__form-field">
+                                <input type="number" class="auction__form-input"
+                                       th:min="${auction.bidAmount}"
+                                       th:field="${auction.bidAmount}" placeholder=""
+                                />
+
+                                <input type="hidden" th:field="${auction.userId}"/>
+                                <input type="hidden" th:field="${auction.itemId}"/>
+                            </div>
+
+                            <div class="auction__form-actions">
+                                <button class="button" type="submit">Bid now!</button>
+                            </div>
+
+                        </div>
+
+                        <a href="/login" class="button" th:if="${!#authorization.expression('isAuthenticated()')}">Please
+                            log in to bid</a>
+
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <div class="container">
+        <span class="separator"></span>
+    </div>
+
+    <section class="section-content">
+        <div class="container related-product">
+            <h1 class="related-product__title">
+                <span class="text-stroke">Related product for</span>
+                <span th:text="${item.category.label}"></span>!
+            </h1>
+
+            <div th:replace="~{fragments/fragment-product-list :: product-list(${items})}"></div>
+        </div>
+    </section>
+
+    <div class="container">
+        <span class="separator"></span>
+    </div>
+
+    <section class="section-content">
+
+        <div class="container bid-history">
+            <div class="bid-history__content">
+                <h2 class="bid-history__title">Auction History</h2>
+                <p class="bid-history__total-count">
+                    This auction counts
+                    <strong th:text="${#lists.isEmpty(bids) ? 0 : bids[0].totalCount}">0</strong> bids
+                </p>
+                <div class="bid-history__grid">
+                    <table th:if="${!#lists.isEmpty(bids)}">
+                        <thead>
+                        <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">User</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="bid : ${bids}">
+                            <td data-label="Date"
+                                th:text="${T(fr.eni.tp.auctionapp.utils.DateUtils).formatDateTime(bid.auctionDate)}"></td>
+                            <td data-label="Amount"><strong th:text="'€' + ${bid.bidAmount}"></strong></td>
+                            <td data-label="User" th:text="${bid.username}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+</main>
+</html>
