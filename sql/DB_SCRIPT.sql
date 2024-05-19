@@ -9,10 +9,10 @@ ALTER TABLE CATEGORIES ADD CONSTRAINT category_pk PRIMARY KEY (categoryId);
 
 
 CREATE TABLE AUCTIONS (
-    auctionId INTEGER NOT NULL,
+    auctionId INTEGER IDENTITY(1,1) NOT NULL,
     userId   INTEGER NOT NULL,
     itemId       INTEGER NOT NULL,
-    auctionDate     datetime NULL DEFAULT CURRENT_TIMESTAMP,
+    auctionDate     DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
 	bidAmount  INTEGER NOT NULL
 );
 ALTER TABLE AUCTIONS ADD CONSTRAINT auction_pk PRIMARY KEY (auctionId);
@@ -48,8 +48,8 @@ CREATE TABLE ITEMS (
     itemId                    INTEGER IDENTITY(1,1) NOT NULL,
     itemName                   VARCHAR(30) NOT NULL,
     [description]                   VARCHAR(255) NOT NULL,
-	auctionStartingDate           DATE NOT NULL,
-    auctionEndingDate             DATE NOT NULL,
+	auctionStartingDate           DATETIME NOT NULL,
+    auctionEndingDate             DATETIME NOT NULL,
     startingPrice                  INTEGER,
     sellingPrice                    INTEGER,
     imageUrl VARCHAR(255) NOT NULL,
@@ -69,9 +69,11 @@ ON DELETE NO ACTION
 ON UPDATE no action; 
 
 ALTER TABLE WITHDRAWALS
-ADD CONSTRAINT withdrawals_items_fk FOREIGN KEY (itemId) REFERENCES ITEMS (itemId)
-ON DELETE NO ACTION 
-ON UPDATE no action; 
+ADD CONSTRAINT withdrawals_items_fk
+FOREIGN KEY (itemId)
+REFERENCES ITEMS (itemId)
+ON DELETE CASCADE
+ON UPDATE NO ACTION;
 
 ALTER TABLE ITEMS
 ADD CONSTRAINT items_categories_fk FOREIGN KEY (categoryId) REFERENCES CATEGORIES (categoryId)
@@ -82,4 +84,3 @@ ALTER TABLE ITEMS
 ADD CONSTRAINT sales_user_fk FOREIGN KEY (userId) REFERENCES users (userId)
 ON DELETE NO ACTION 
 ON UPDATE no action;
-
