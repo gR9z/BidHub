@@ -31,14 +31,8 @@ public class AuctionServiceImpl implements AuctionService {
         this.auctionDao = auctionDao;
         this.itemDao = itemDao;
         this.userDao = userDao;
-
         this.itemService = itemService;
         this.userService = userService;
-    }
-
-    @Override
-    public void createAuction(Auction auction) {
-        auctionDao.insert(auction);
     }
 
     @Override
@@ -105,6 +99,11 @@ public class AuctionServiceImpl implements AuctionService {
         });
 
         return optionalLastAuction;
+    }
+
+    @Override
+    public void createAuction(Auction auction) {
+        auctionDao.insert(auction);
     }
 
     @Override

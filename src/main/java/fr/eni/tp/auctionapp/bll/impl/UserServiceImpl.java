@@ -149,7 +149,6 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-
     public void deleteUser(User currentUser) {
         // TODO Problème de foreign key
         Optional<User> existingUser = userDao.findById(currentUser.getUserId());

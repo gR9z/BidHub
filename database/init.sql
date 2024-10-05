@@ -1,3 +1,9 @@
+IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = 'AuctionApp')
+BEGIN
+    CREATE DATABASE AuctionApp;
+END
+GO
+
 USE AuctionApp;
 Go
 

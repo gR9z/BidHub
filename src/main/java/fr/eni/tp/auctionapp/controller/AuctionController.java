@@ -18,37 +18,39 @@ import java.time.LocalDateTime;
 @Controller
 public class AuctionController {
 
+    // Déclaration des services nécessaires pour la gestion des enchères, des items et des utilisateurs.
     AuctionService auctionService;
-    ItemService itemService;
-    UserService userService;
 
-    public AuctionController(AuctionService auctionService, ItemService itemService, UserService userService) {
+    // Constructeur pour initialiser les services via l'injection de dépendances.
+    public AuctionController(AuctionService auctionService) {
         this.auctionService = auctionService;
-        this.itemService = itemService;
-        this.userService = userService;
     }
 
+    // Méthode pour créer une nouvelle enchère via une requête POST.
     @PostMapping("/products/{categorySlug}/{itemName}")
     public String createAuction(
-            @ModelAttribute("auction") Auction auction,
-            @ModelAttribute("item") Item item,
-            RedirectAttributes redirectAttributes,
-            @PathVariable String categorySlug,
-            @PathVariable String itemName,
-            Authentication authentication
+            @ModelAttribute("auction") Auction auction, // Objet Auction lié à la requête.
+            @ModelAttribute("item") Item item, // Objet Item lié à la requête.
+            RedirectAttributes redirectAttributes, // Pour stocker les messages de succès ou d'erreur à rediriger.
+            @PathVariable String categorySlug, // Slug de la catégorie du produit depuis l'URL.
+            @PathVariable String itemName, // Nom de l'item depuis l'URL.
+            Authentication authentication // Informations d'authentification de l'utilisateur.
     ) {
+        // Construction de l'URL de redirection après la création de l'enchère.
         String redirectUrl = "redirect:/products/" + categorySlug + "/" + itemName + "?id=" + auction.getItemId();
+        // Définition de la date de l'enchère à l'heure actuelle.
         auction.setAuctionDate(LocalDateTime.now());
-
         try {
+            // Appel du service pour gérer la création de l'enchère.
             auctionService.handleAuctionCreation(auction, authentication);
-
+            // Si la création réussit, ajout d'un message de succès à la redirection.
             redirectAttributes.addFlashAttribute("successMessage", "Auction created successfully!");
         } catch (BusinessException businessException) {
+            // En cas d'erreur métier, ajout du message d'erreur et redirection vers l'URL.
             redirectAttributes.addFlashAttribute("errorMessage", businessException.getKeys());
-            return redirectUrl;
+            return redirectUrl; // Redirection avec message d'erreur.
         }
-
+        // Redirection vers l'URL avec succès.
         return redirectUrl;
     }
 }
