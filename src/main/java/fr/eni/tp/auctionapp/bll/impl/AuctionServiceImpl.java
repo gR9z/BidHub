@@ -44,24 +44,35 @@ public class AuctionServiceImpl implements AuctionService {
     @Override
     @Transactional
     public void handleAuctionCreation(Auction auction, Authentication authentication) throws BusinessException {
+        // Crée une instance de BusinessException pour collecter les erreurs potentielles liées à la logique métier.
         BusinessException bException = new BusinessException();
         try {
+            // Met à jour l'objet Item associé à l'enchère après la création de l'enchère.
             Item item = itemService.updateItemAfterAuction(auction, auction.getItemId());
 
+            // Valide les horaires de l'enchère par rapport à l'objet Item.
             validateAuctionTiming(item);
 
+            // Valide le montant de l'enchère en s'assurant qu'il est supérieur d'au moins 10% à l'enchère précédente.
             Optional<Auction> lastAuction = validateAuctionAmount(item.getItemId(), auction);
+
+            // Si une enchère précédente existe, rembourse l'utilisateur qui a fait cette enchère.
             lastAuction.ifPresent(la -> {
                 userService.refundUser(la.getUserId(), la.getBidAmount());
             });
 
+            // Débite le crédit de l'utilisateur authentifié pour la nouvelle enchère.
+            // Cette méthode vérifie également que l'utilisateur a suffisamment de crédit pour placer l'enchère.
             userService.debitUserCredit(authentication, auction);
 
+            // Insère la nouvelle enchère dans la base de données.
             auctionDao.insert(auction);
 
         } catch (BusinessException businessException) {
+            // Relance l'exception BusinessException si elle est levée, permettant à l'appelant de gérer les erreurs spécifiques.
             throw businessException;
         } catch (Exception e) {
+            // En cas d'exception inattendue, ajoute un message d'erreur à BusinessException et la relance.
             bException.addKey("An unexpected error occurred during auction creation: " + e.getMessage());
             throw bException;
         }

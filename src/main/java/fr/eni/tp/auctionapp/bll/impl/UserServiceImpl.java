@@ -161,8 +161,6 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-
-
     private void updateSessionUserCredit(User user) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && auth.getPrincipal() instanceof User authenticatedUser) {
