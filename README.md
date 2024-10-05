@@ -17,9 +17,25 @@ BidHub is an auction creation application developed as part of a project for the
 ### Setup
 1. Ensure Java SE 17 and SQL Server are installed on your system.
 2. Clone or download the project to your local machine.
-3. Configure the database settings in `application.properties`.
-4. Run the application using your IDE or by executing `mvn spring-boot:run`.
+3. Create a `.env` file based on `.env.example` in the project root.
+4. Add your own environment variables in the `.env` file
+5. Run the application using your IDE.
 
+### Managing Environment Variables
+
+To avoid pushing sensitive information like credentials, follow these steps for managing environment variables:
+
+1. **Create a `.env.example` file**  
+   In the project root, create a `.env.example` file containing placeholders for required environment variables:
+   ```bash
+   DB_USER=your_db_username
+   DB_PASS=your_db_password
+2. **Add .env to `.gitignore`**  
+   Ensure that the .env file, which will store actual credentials, is not committed by adding it to the `.gitignore` file:
+   ```bash
+   # .gitignore
+   .env
+   
 ### Technologies Used
 - **Java Spring Boot:** For developing the backend and RESTful APIs.
 - **Spring Security:** For securing the application.
@@ -51,8 +67,23 @@ BidHub est une application de création d'enchères développée dans le cadre d
 ### Configuration
 1. Assurez-vous que Java SE 17 et SQL Server sont installés sur votre système.
 2. Clonez ou téléchargez le projet sur votre machine locale.
-3. Configurez les paramètres de la base de données dans `application.properties`.
-4. Exécutez l'application en utilisant votre IDE ou en exécutant `mvn spring-boot:run`.
+3. Créez un fichier `.env` basé sur `.env.example` dans le répertoire du projet.
+4. Ajoutez vos propres variables d'environnement dans le fichier `.env`.
+5. Exécutez l'application en utilisant votre IDE.
+
+### Gestion des Variables d'Environnement
+Pour éviter de pousser des informations sensibles comme des identifiants, suivez ces étapes pour gérer les variables d'environnement :
+
+1. **Créez un fichier `.env.example`**  
+   Dans le répertoire du projet, créez un fichier `.env.example` contenant des espaces réservés pour les variables d'environnement requises :
+   ```bash
+   DB_USER=your_db_username
+   DB_PASS=your_db_password
+2. **joutez .env à `.gitignore`**  
+   Assurez-vous que le fichier .env, qui stockera les identifiants réels, n'est pas commis en l'ajoutant au fichier `.gitignore` :
+   ```bash
+   # .gitignore
+   .env
 
 ### Technologies Utilisées
 - **Java Spring Boot:** Pour développer le backend et les API RESTful.
